@@ -94,5 +94,5 @@ const GNOMEeMailer = new Lang.Class ({
 let app = new GNOMEeMailer ();
 app.application.run (ARGV);
 
-// changes? in cola?
+// changes? in cola?... nope...
 
