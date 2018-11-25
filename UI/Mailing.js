@@ -204,12 +204,11 @@ this.data.connect('Updated_sig', Lang.bind(this, function() {
                         weight: Pango.Weight.BOLD });
 
                 // Create the columns for the address book
-                let k;
                 for (k=0; k<this.data.headers.length; k++){
                         print('***key is : ' + k + ', val is : ' + this.data.headers[k] + ' of type : ' + typeof(this.data.headers[k]));
-                        
-                        col=k;
-                        let col = new Gtk.TreeViewColumn ({ title: this.data.headers[k] });
+
+                        let col=k;
+                        col = new Gtk.TreeViewColumn ({ title: this.data.headers[k] });
                         col.pack_start (normal, true);
                         if(k==0){
                                 col.add_attribute (bold, "text", k);

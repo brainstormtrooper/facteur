@@ -4,14 +4,18 @@ Template object.
 Handle templates for mailings.
 */
 
-var Template = {
+const Template =  new Lang.Class ({
+    Name: 'Template Class',
 
     // VARS
 
-    key: "",
-    vala: {},
-    tpltxt: "",
-    tplhtml: "";
+    key: 'foo',
+    vala: [],
+
+    tpltxt: 'bar',
+
+    tplhtml: 'baz',
+
     stra: {},
 
 
@@ -19,7 +23,13 @@ var Template = {
 
     Template: function( ) {
 
-        return true;
+        Signals.addSignalMethods(Template.prototype);
+        this.parent();
+
+
+        //print('Methods in Data class : ' + this.getMethods(this).join("\n"));
+
+        this.emit('bob', false);
 
     },
 
@@ -46,4 +56,4 @@ var Template = {
         return true;
 
     },
-};
+});

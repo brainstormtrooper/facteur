@@ -1,9 +1,8 @@
-//bob="bob";
 
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
-const Webkit = imports.gi.WebKit;
+const Webkit = imports.gi.WebKit2;
 
 
 const UIstack = new Lang.Class ({
@@ -18,8 +17,8 @@ const UIstack = new Lang.Class ({
 
 	this._Stack = new Gtk.Stack();
 
-        this._Stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);
-        this._Stack.set_transition_duration(1000);
+    this._Stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);
+    this._Stack.set_transition_duration(1000);
 
 	/*
 	CONTENT PANELS
@@ -29,13 +28,9 @@ const UIstack = new Lang.Class ({
 	// 1. Mailing Settings
 	//
 
-        const Mailing = imports.UI.Mailing; // import awesome.js from current directory
+    const Mailing = imports.UI.Mailing; // import awesome.js from current directory
 	this.mailing = new Mailing.UImailing();
-	//this.mailing._buildUI();
-
-	//this._SettingsVbox = new Gtk.VBox({spacing: 6});
-	//this._checkbutton = new Gtk.CheckButton({label: "Setup!"});
-        this._Stack.add_titled(this.mailing._buildUI(), "setup", "Mailing Settings");
+    this._Stack.add_titled(this.mailing._buildUI(), "setup", "Mailing Settings");
 
 
 	//
@@ -43,7 +38,7 @@ const UIstack = new Lang.Class ({
 	//
 
 	this._checkbutton = new Gtk.CheckButton({label: "Template!"});
-        this._Stack.add_titled(this._checkbutton, "template", "Template Settings");
+    this._Stack.add_titled(this._checkbutton, "template", "Template Settings");
 
 
 
@@ -53,7 +48,7 @@ const UIstack = new Lang.Class ({
 	//
 
 	this._checkbutton = new Gtk.CheckButton({label: "Results"});
-        this._Stack.add_titled(this._checkbutton, "results", "Mailing Results");
+    this._Stack.add_titled(this._checkbutton, "results", "Mailing Results");
 
 
 	/*

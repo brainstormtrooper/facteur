@@ -1,9 +1,3 @@
-const GLib = imports.gi.GLib;
-const Lang = imports.lang;
-const Gio   = imports.gi.Gio;
-
-
-
 
 
 /**
@@ -19,7 +13,7 @@ const Data = new Lang.Class ({
         //
 
         // data stuff from the cvs file... will need to be cleaned up...
-        csvstr: "", // if (str.length == 0)
+        csvstr: '', // if (str.length == 0)
         csva: [],
         csvj: "",
         res: "",
@@ -247,5 +241,17 @@ const Data = new Lang.Class ({
 
     }
     */
+    /*
+
+(?<CLASS>\S+)[ |\t]*[=][ |\t]*new[ |\t]*[\S]*[ |\t]*Class[ |\t]*[(].*\R?[ |\t]*[\S+]+[ |\t]*[:][ |\t]*['|"](?<PROP>\S+)['|"]
+[[ |\t]*(?<METHOD>\S+)[ |\t]*[:][ |\t]*function[ |\t]*[(]
+
+(?<Class>[A-Za-z0-9._$\#\(\)]+)[ |\t]*[=][ |\t]*new[ |\t]*[\S]*[ |\t]*Class[ |\t]*[(]
+
+[\S+]+[ |\t]*[:][ |\t]*['|"](?<PROP>\S+)['|"]
+*/
+
+
+
 
 });
