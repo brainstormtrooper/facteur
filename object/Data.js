@@ -44,21 +44,7 @@ const Data = new Lang.Class ({
 
                 this.emit('bob', false);
         },
-        /*
-        getMethods: function (obj) {
-                var result = [];
-                for (var id in obj) {
-                        try {
-                                if (typeof(obj[id]) == "function") {
-                                        result.push(id + ": " + obj[id].toString());
-                                }
-                        } catch (err) {
-                                result.push(id + ": inaccessible");
-                        }
-                }
-                return result;
-        },
-        */
+
         emit_updated: function ( ) {
                 print('emitting signal...');
                 this.emit('Updated_sig');
@@ -139,7 +125,7 @@ const Data = new Lang.Class ({
                 for(var k=0; k<this.csva.length; k++){
                         print('Trimming... : ' + this.csva[k]);
                         if(this.csva[k][0].length==0){
-                                print('deleting row : ' + k); 
+                                print('deleting row : ' + k);
                                 delete(this.csva[k]);
                         }
                 }
@@ -230,27 +216,6 @@ const Data = new Lang.Class ({
         return true;
 
     },
-        /*
-    GetVal : function () {
-
-        try {
-            GLib.spawn_command_line_async( cmdstr, e );
-        } catch ( e ) {
-            throw e;
-        }
-
-    }
-    */
-    /*
-
-(?<CLASS>\S+)[ |\t]*[=][ |\t]*new[ |\t]*[\S]*[ |\t]*Class[ |\t]*[(].*\R?[ |\t]*[\S+]+[ |\t]*[:][ |\t]*['|"](?<PROP>\S+)['|"]
-[[ |\t]*(?<METHOD>\S+)[ |\t]*[:][ |\t]*function[ |\t]*[(]
-
-(?<Class>[A-Za-z0-9._$\#\(\)]+)[ |\t]*[=][ |\t]*new[ |\t]*[\S]*[ |\t]*Class[ |\t]*[(]
-
-[\S+]+[ |\t]*[:][ |\t]*['|"](?<PROP>\S+)['|"]
-*/
-
 
 
 

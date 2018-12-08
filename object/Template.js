@@ -54,6 +54,5 @@ const Template =  new Lang.Class ({
     Compile: function( ) {
 
         return true;
-
     },
 });

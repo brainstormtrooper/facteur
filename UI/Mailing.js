@@ -27,6 +27,7 @@ const UImailing = new Lang.Class ({
 
 
     this.vBox = new Gtk.VBox({spacing: 6});
+    this.hBox = new Gtk.HBox();
 
     //
     // choose the csv file for recipients and variables
@@ -136,10 +137,9 @@ this.data.connect('Updated_sig', Lang.bind(this, function() {
 
 
 
-
-
-    this.vBox.pack_start(this.chooselabel, true, true, 0);
-    this.vBox.pack_start(this.choosebutton, true, true, 0);
+    this.hBox.pack_start(this.chooselabel, false, false, 0);
+    this.vBox.pack_start(this.hBox, false, false, 0);
+    this.vBox.pack_start(this.choosebutton, false, false, 0);
     this.vBox.pack_start(this._grid, true, true, 0);
 
     /*
@@ -185,15 +185,6 @@ this.data.connect('Updated_sig', Lang.bind(this, function() {
                 }
                 this._listStore.set_column_types (coltypes);
 
-
-                // Put the data in the phonebook
-                /*
-                for (let i = 0; i < phonebook.length; i++ ) {
-                    let contact = phonebook [i];
-                    this._listStore.set (this._listStore.append(), this.data.dataHeadings.keys(),
-                        [contact.address, contact.rname, contact.likes]);
-                }
-                */
                 // Create the treeview
                 this._treeView = new Gtk.TreeView ({
                     expand: true,
@@ -259,12 +250,6 @@ this.data.connect('Updated_sig', Lang.bind(this, function() {
 
     },
 
-
-    /*
-                                this.buffer.delete(this.buffer.get_iter_at_offset(0),
-                                               this.buffer.get_iter_at_offset(this.buffer.get_char_count()));
-                                this.buffer.insert_at_cursor(this.contents.toString() + '\n', -1);
-                                */
 
 });
 

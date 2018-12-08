@@ -69,14 +69,14 @@ const GNOMEeMailer = new Lang.Class ({
 
 	// Vbox to hold the switcher and stack.
 	this._Vbox = new Gtk.VBox({spacing: 6});
-
-	//imports.searchPath.unshift(".");
+  this._Hbox = new Gtk.HBox({spacing: 6, homogeneous: true});
 
 	const UI = imports.UI.UI; // import awesome.js from current directory
 	this.ui = new UI.UIstack();
 	this.ui._buildStack();
 
-        this._Vbox.pack_start(this.ui._stack_switcher, true, true, 0);
+        this._Hbox.pack_start(this.ui._stack_switcher, true, true, 0);
+        this._Vbox.pack_start(this._Hbox, false, false, 0);
         this._Vbox.pack_start(this.ui._Stack, true, true, 0);
 
 	// Show the vbox widget
