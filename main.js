@@ -11,6 +11,9 @@ Signals = imports.signals;
 GObject = imports.gi.GObject;
 Pango = imports.gi.Pango;
 
+
+let TO, FROM, SUBJECT, HTML, TEXT
+
 //
 // add app folder to path
 //

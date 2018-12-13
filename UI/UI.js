@@ -34,11 +34,12 @@ const UIstack = new Lang.Class ({
 
 
 	//
-	// 2. Template Settings
+	// 2. HTML Settings
 	//
 
-	this._checkbutton = new Gtk.CheckButton({label: "Template!"});
-    this._Stack.add_titled(this._checkbutton, "template", "Template Settings");
+  const Html = imports.UI.html;
+	this.html = new Html.UIhtml();
+    this._Stack.add_titled(this.html._buildUI(), "HTML", "HTML/Template Settings");
 
 
 

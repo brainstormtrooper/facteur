@@ -1,5 +1,5 @@
 /**
-UI for displaying mailing data
+UI for displaying mailing list data
 */
 
 
