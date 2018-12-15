@@ -12,7 +12,15 @@ GObject = imports.gi.GObject;
 Pango = imports.gi.Pango;
 
 
-let TO, FROM, SUBJECT, HTML, TEXT
+TO = '';
+FROM = '';
+SUBJECT = '';
+HTML = '';
+TEXT = '';
+
+stdout = new Gio.DataOutputStream({
+    base_stream: new Gio.UnixOutputStream({ fd: 1 })
+});
 
 //
 // add app folder to path

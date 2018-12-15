@@ -10,7 +10,6 @@ const UIhtml = new Lang.Class ({
     Name: 'UIhtml',
     	// Build the application's UI
 
-
     _buildUI: function () {
       const vBox = new Gtk.VBox({spacing: 6});
       const hBox = new Gtk.HBox();
@@ -23,17 +22,21 @@ const UIhtml = new Lang.Class ({
     	const htmlNotebook = new Gtk.Notebook();
       const pageCode = new Gtk.VBox({spacing: 6});
     	const pagePreview = new Gtk.VBox({spacing: 6});
-    	this.htmlBuffer = new GtkSource.Buffer();
-    	const messagehtml = new GtkSource.View({ buffer: this.htmlBuffer });
-    	this.webView = new Webkit.WebView({ vexpand: true });
+    	const htmlBuffer = new GtkSource.Buffer();
+    	const messagehtml = new GtkSource.View({ buffer: htmlBuffer });
+    	const webView = new Webkit.WebView({ vexpand: true });
 
-      this.htmlBuffer.connect('changed', this.upDateWebView)
+      stdout.write(`>>> THIS = ${this}`, null);
 
-      this.webView.load_html('<h1>bob</h1><p>this is text</p>', null);
+      htmlBuffer.connect('changed', function () {
+        webView.load_html(htmlBuffer.text, null);
+      });
+
+      webView.load_html('<h1>bob</h1><p>this is text</p>', null);
       htmlNotebook.append_page(pagePreview, new Gtk.Label({label: "Preview"}));
       htmlNotebook.append_page(pageCode, new Gtk.Label({label: "Code"}));
       pageCode.pack_start(messagehtml, true, true, 0);
-      pagePreview.pack_start(this.webView, true, true, 0);
+      pagePreview.pack_start(webView, true, true, 0);
     	pageHtml.pack_start(htmlNotebook, true, true, 0);
     	hBox.pack_start(checkbutton, false, false, 0);
       vBox.pack_start(hBox, false, false, 0);
@@ -45,9 +48,5 @@ const UIhtml = new Lang.Class ({
 
       return vBox;
     },
-
-    upDateWebView: function () {
-      this.webView.load_html(this.htmlBuffer.text);
-    }
 
 });
