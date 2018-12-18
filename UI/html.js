@@ -26,9 +26,9 @@ const UIhtml = new Lang.Class ({
     	const messagehtml = new GtkSource.View({ buffer: htmlBuffer });
     	const webView = new Webkit.WebView({ vexpand: true });
 
-      stdout.write(`>>> THIS = ${this}`, null);
+      // stdout.write(`>>> THIS = ${this}`, null);
 
-      htmlBuffer.connect('changed', function () {
+      htmlBuffer.connect('changed', () => {
         webView.load_html(htmlBuffer.text, null);
       });
 

@@ -24,13 +24,21 @@ const UIstack = new Lang.Class ({
 	CONTENT PANELS
 	*/
 
+  //
+  // 1. Settings ()
+  //
+
+  const Settings = imports.UI.Settings; // import awesome.js from current directory
+	this.settings = new Settings.UIsettings();
+  this._Stack.add_titled(this.settings._buildUI(), "settings", "Mailing Settings");
+
 	//
 	// 1. Mailing Settings
 	//
 
-    const Mailing = imports.UI.Mailing; // import awesome.js from current directory
+  const Mailing = imports.UI.Mailing; // import awesome.js from current directory
 	this.mailing = new Mailing.UImailing();
-    this._Stack.add_titled(this.mailing._buildUI(), "setup", "Mailing Settings");
+  this._Stack.add_titled(this.mailing._buildUI(), "setup", "Mailing Recipients");
 
 
 	//
