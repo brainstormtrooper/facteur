@@ -17,6 +17,9 @@ FROM = '';
 SUBJECT = '';
 HTML = '';
 TEXT = '';
+USER = '';
+PASS = '';
+HOST = '';
 
 stdout = new Gio.DataOutputStream({
     base_stream: new Gio.UnixOutputStream({ fd: 1 })
