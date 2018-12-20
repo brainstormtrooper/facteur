@@ -14,19 +14,34 @@ const UIhtml = new Lang.Class ({
       const vBox = new Gtk.VBox({spacing: 6});
       const hBox = new Gtk.HBox();
       const buttonBox = new Gtk.HBox();
-    	const checkbutton = new Gtk.CheckButton({label: "Use HTML"});
+    	// const checkbutton = new Gtk.CheckButton({label: "Use HTML"});
     	const button = new Gtk.Button({label: "Save"});
     	const notebook = new Gtk.Notebook();
     	const pageText = new Gtk.VBox({spacing: 6});
     	const pageHtml = new Gtk.VBox({spacing: 6});
+    	const messageText = new GtkSource.View();
     	const htmlNotebook = new Gtk.Notebook();
       const pageCode = new Gtk.VBox({spacing: 6});
     	const pagePreview = new Gtk.VBox({spacing: 6});
     	const htmlBuffer = new GtkSource.Buffer();
     	const messagehtml = new GtkSource.View({ buffer: htmlBuffer });
     	const webView = new Webkit.WebView({ vexpand: true });
+      const choosebutton = new Gtk.FileChooserButton({title:'Select a Template'});
+      const chooselabel = new Gtk.Label({ halign: Gtk.Align.START, label: 'Open a file...'});
 
-      // stdout.write(`>>> THIS = ${this}`, null);
+
+      choosebutton.set_action(Gtk.FileChooserAction.OPEN);
+
+      choosebutton.connect('file-set', Lang.bind(this, function() {
+          const path = this.choosebutton.get_file().get_path();
+          // do something with path
+
+          // this.data.Import(path);
+          print('Changed is : ' + path);
+          //print('================= \n imported : \n' + data.csvstr );
+
+      }));
+
 
       htmlBuffer.connect('changed', () => {
         webView.load_html(htmlBuffer.text, null);
@@ -38,7 +53,9 @@ const UIhtml = new Lang.Class ({
       pageCode.pack_start(messagehtml, true, true, 0);
       pagePreview.pack_start(webView, true, true, 0);
     	pageHtml.pack_start(htmlNotebook, true, true, 0);
-    	hBox.pack_start(checkbutton, false, false, 0);
+    	pageText.pack_start(messageText, true, true, 0);
+    	hBox.pack_start(chooselabel, false, false, 0);
+    	hBox.pack_start(choosebutton, false, false, 0);
       vBox.pack_start(hBox, false, false, 0);
       notebook.append_page(pageText, new Gtk.Label({label: "Plain text"}));
       notebook.append_page(pageHtml, new Gtk.Label({label: "Html content"}));
