@@ -5,6 +5,9 @@ Data object.
 
 Handle CSV data for mailings.
 */
+
+const myFile = imports.lib.file;
+
 const Data = new Lang.Class ({
         Name: 'objectData',
 
@@ -51,56 +54,17 @@ const Data = new Lang.Class ({
         },
 
 
-        Import: function( path ) {
 
-        //this.csvstr="tom";
-        //this.msgcompiled = "--" + this.boundary + this.txt + "--" + this.boundary + this.html;
-        //return this.msgcompiled;
-                let file;
-                print('reading file from ' + path);
-                file = Gio.File.new_for_path(path);
+        Import: async function (path) {
+          const str = await myFile.Import(path);
+          print(`>>> str = ${str}`);
+          this.csva = this.CSVToArray(str);
+          this.dataHeadings();
+          this.trimData();
+          this.emit_updated();
 
+        },
 
-                // asynchronous file loading...
-                file.load_contents_async(null, Lang.bind(this, function(file, res) {
-
-                        try {
-                                // read the file into a variable...
-                                this.contents = file.load_contents_finish(res)[1];
-                                this.csvstr = this.contents.toString();
-                                // create an array...
-                                this.csva = this.CSVToArray(this.csvstr);
-
-                                this.dataHeadings();
-                                this.trimData();
-
-                                // print('csvstr is now : ' + this.csvstr);
-                                this.emit_updated();
-
-                        } catch (e) {
-                                print('Error loading selected data file : ' + e);
-                                return;
-                        }
-
-                }));
-
-
-
-    this.file.query_info_async('standard::type,stand   ard::size',
-        Gio.FileQueryInfoFlags.NONE, GLib.PRIORITY_LOW, null,
-        Lang.bind(this, function(source, async) {
-
-            let info, type, size, text;
-
-            info = source.query_info_finish(async);
-            type = info.get_file_type();
-            size = info.get_size();
-
-            text = 'File info type: ' + type + ', size: ' + size;
-            this.fileData = text;
-        }));
-
-    },
         /**
         Sets the data for the gtk listview column count and headings
         based on first row of the CSV data array.

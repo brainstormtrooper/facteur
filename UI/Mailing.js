@@ -10,14 +10,6 @@ const myData = imports.object.Data; // import awesome.js from current directory
 const UImailing = new Lang.Class ({
     	Name: 'UImailing',
 
-   // data: new myData(),
-
-
-    openFile: function(fname) {
-
-
-    },
-
 
     // Build the application's UI
     _buildUI: function () {
