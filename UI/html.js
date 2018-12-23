@@ -27,9 +27,7 @@ const UIhtml = new Lang.Class ({
     const pageCode = new Gtk.VBox({spacing: 6});
   	const pagePreview = new Gtk.VBox({spacing: 6});
   	const langManager = new GtkSource.LanguageManager();
-  	// const html = new GtkSource.Language({ name: 'html' });
   	const htmlBuffer = new GtkSource.Buffer({ language: langManager.get_language('html') });
-  	// htmlBuffer.set_language({ language: 'html' });
   	const messagehtml = new GtkSource.View({ buffer: htmlBuffer });
   	const webView = new Webkit.WebView({ vexpand: true });
     const choosebutton = new Gtk.FileChooserButton({title:'Select a Template'});

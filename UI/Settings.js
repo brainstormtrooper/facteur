@@ -13,6 +13,7 @@ const UIsettings = new Lang.Class ({
     const userBox = new Gtk.HBox({spacing: 6});
     const passBox = new Gtk.HBox({spacing: 6});
     const subjectBox = new Gtk.HBox({spacing: 6});
+    const headerBox = new Gtk.HBox({spacing: 6});
     const buttonBox = new Gtk.HBox({spacing: 6});
 
     const fromField = new Gtk.Entry({placeholder_text: "From email"});
@@ -20,6 +21,7 @@ const UIsettings = new Lang.Class ({
     const userField = new Gtk.Entry({placeholder_text: "smtp user"});
     const passField = new Gtk.Entry({placeholder_text: "smtp password", visibility: false, input_purpose: "password"});
     const subjectField = new Gtk.Entry({placeholder_text: "email subject"});
+    const headerButton = new Gtk.CheckButton({label: "CSV 1st row is header"});
     const saveButton = new Gtk.Button({label: "Save"});
 
     fromBox.pack_start(fromField, false, false, 0);
@@ -27,6 +29,7 @@ const UIsettings = new Lang.Class ({
     userBox.pack_start(userField, false, false, 0);
     passBox.pack_start(passField, false, false, 0);
     subjectBox.pack_start(subjectField, false, false, 0);
+    headerBox.pack_start(headerButton, false, false, 0);
     buttonBox.pack_end(saveButton, false, false, 0);
 
     vBox.pack_start(fromBox, false, false, 0);
@@ -34,6 +37,7 @@ const UIsettings = new Lang.Class ({
     vBox.pack_start(userBox, false, false, 0);
     vBox.pack_start(passBox, false, false, 0);
     vBox.pack_start(subjectBox, false, false, 0);
+    vBox.pack_start(headerBox, false, false, 0);
     vBox.pack_end(buttonBox, false, false, 0);
 
     saveButton.connect('clicked', () => {
@@ -41,6 +45,7 @@ const UIsettings = new Lang.Class ({
       PASS = passField.get_text();
       HOST = smtpField.get_text();
       SUBJECT = subjectField.get_text();
+      HEADER_ROW = (headerButton.Active ? true : false);
       FROM = fromField.get_text();
     });
 

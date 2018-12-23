@@ -12,17 +12,24 @@ GObject = imports.gi.GObject;
 Pango = imports.gi.Pango;
 
 
-TO = '';
 FROM = '';
-SUBJECT = '';
-HTML = '';
-TEXT = '';
 USER = '';
 PASS = '';
 HOST = '';
+HEADER_ROW = false;
+
+SUBJECT = '';
+HTML = '';
+TEXT = '';
+
+TO = [];
+CSVA = [];
+VARS = [];
+
+
 
 stdout = new Gio.DataOutputStream({
-    base_stream: new Gio.UnixOutputStream({ fd: 1 })
+    base_stream: new Gio.UnixOutputStream({ fd: 1 });
 });
 
 //

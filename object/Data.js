@@ -61,8 +61,11 @@ const Data = new Lang.Class ({
           this.csva = this.CSVToArray(str);
           this.dataHeadings();
           this.trimData();
+          if (HEADER_ROW) {
+            this.csva.shift();
+          }
+          CSVA = this.csva;
           this.emit_updated();
-
         },
 
         /**
