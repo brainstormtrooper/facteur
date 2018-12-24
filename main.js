@@ -16,7 +16,6 @@ FROM = '';
 USER = '';
 PASS = '';
 HOST = '';
-HEADER_ROW = false;
 
 SUBJECT = '';
 HTML = '';
@@ -29,7 +28,7 @@ VARS = [];
 
 
 stdout = new Gio.DataOutputStream({
-    base_stream: new Gio.UnixOutputStream({ fd: 1 });
+    base_stream: new Gio.UnixOutputStream({ fd: 1 })
 });
 
 //
