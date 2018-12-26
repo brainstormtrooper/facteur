@@ -72,7 +72,7 @@ const Data = new Lang.Class ({
         dataHeadings: function(){
           this.headers = this.csva[0];
           VARS = this.headers;
-          VARS.shift();
+          // VARS.shift();
           print('headers are : ' + this.headers);
           this.colcount=Object.keys(this.headers).length;
           print('got ' + this.colcount + ' keys.');

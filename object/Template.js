@@ -35,8 +35,7 @@ const Template =  new Lang.Class ({
 
     Create: function( path ) {
 
-        this.msgcompiled = "--" + this.boundary + this.txt + "--" + this.boundary + this.html;
-        return this.msgcompiled;
+
 
     },
 

@@ -1,6 +1,5 @@
 #!/usr/bin/gjs
 
-//__GNOME__={};
 
 Gio   = imports.gi.Gio;
 GLib = imports.gi.GLib;
@@ -24,7 +23,7 @@ TEXT = '';
 TO = [];
 CSVA = [];
 VARS = [];
-
+MAILINGS = [];
 
 
 stdout = new Gio.DataOutputStream({
