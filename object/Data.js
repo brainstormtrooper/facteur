@@ -61,6 +61,7 @@ const Data = new Lang.Class ({
           this.csva = this.CSVToArray(str);
           this.dataHeadings();
           this.trimData();
+          CSVA = this.csva;
           TO = this.csva.map(x => x[0]);
           this.emit_updated();
         },

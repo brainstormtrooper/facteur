@@ -21,7 +21,7 @@ const Template =  new Lang.Class ({
 
     // METHODS
 
-    Template: function( ) {
+    Template: function () {
 
         Signals.addSignalMethods(Template.prototype);
         this.parent();
@@ -33,25 +33,25 @@ const Template =  new Lang.Class ({
 
     },
 
-    Create: function( path ) {
+    Create: function (path) {
 
-
-
-    },
-
-    Destroy: function( ) {
-
-        return true;
+      return true;
 
     },
 
-    Use: function( ) {
+    Destroy: function () {
 
-        return true;
+      return true;
+
     },
 
-    Compile: function( ) {
+    Use: function () {
 
-        return true;
+      return true;
+    },
+
+    Compile: function (row) {
+
+      return true;
     },
 });
