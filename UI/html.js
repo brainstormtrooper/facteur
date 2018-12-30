@@ -72,6 +72,11 @@ const UIhtml = new Lang.Class ({
     buttonBox.pack_end(button, false, false, 0);
     vBox.pack_start(buttonBox, false, false, 0);
 
+    button.connect('clicked', () => {
+      HTML = htmlBuffer.text;
+      TEXT = messageText.text;
+    });
+
     return vBox;
   },
 

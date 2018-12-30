@@ -47,7 +47,7 @@ const UIstack = new Lang.Class ({
 
   const Html = imports.UI.html;
 	this.html = new Html.UIhtml();
-    this._Stack.add_titled(this.html._buildUI(), "HTML", "HTML/Template Settings");
+  this._Stack.add_titled(this.html._buildUI(), "HTML", "HTML/Template Settings");
 
 
 
@@ -56,8 +56,9 @@ const UIstack = new Lang.Class ({
 	// 3. Results / reporting...
 	//
 
-	this._checkbutton = new Gtk.CheckButton({label: "Results"});
-    this._Stack.add_titled(this._checkbutton, "results", "Mailing Results");
+  const Results = imports.UI.Results;
+	this.results = new Results.UIresults();
+  this._Stack.add_titled(this.results._buildUI(), "Results", "Resuls/Reporting");
 
 
 	/*
@@ -65,7 +66,7 @@ const UIstack = new Lang.Class ({
 	*/
 
 	this._stack_switcher = new Gtk.StackSwitcher();
-        this._stack_switcher.set_stack(this._Stack);
+  this._stack_switcher.set_stack(this._Stack);
 
 
 
