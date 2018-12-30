@@ -1,7 +1,7 @@
 /**
 UI for displaying html message interface
 */
-
+// const GtkText = imports.gi.GtkText;
 const GtkSource = imports.gi.GtkSource;
 const myContent = imports.object.Content; // import awesome.js from current directory
 const Content = new myContent.Content();
@@ -22,7 +22,8 @@ const UIhtml = new Lang.Class ({
   	const notebook = new Gtk.Notebook();
   	const pageText = new Gtk.VBox({spacing: 6});
   	const pageHtml = new Gtk.VBox({spacing: 6});
-  	const messageText = new GtkSource.View();
+  	const textBuffer = new Gtk.TextBuffer();
+  	const messageText = new Gtk.TextView({ buffer: textBuffer, editable: true });
   	const htmlNotebook = new Gtk.Notebook();
     const pageCode = new Gtk.VBox({spacing: 6});
   	const pagePreview = new Gtk.VBox({spacing: 6});
@@ -74,7 +75,7 @@ const UIhtml = new Lang.Class ({
 
     button.connect('clicked', () => {
       HTML = htmlBuffer.text;
-      TEXT = messageText.text;
+      TEXT = textBuffer.text;
     });
 
     return vBox;
