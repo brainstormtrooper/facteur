@@ -57,12 +57,13 @@ const Data = new Lang.Class ({
 
         Import: async function (path) {
           const str = await myFile.Import(path);
-          print(`>>> str = ${str}`);
+          // print(`>>> str = ${str}`);
           this.csva = this.CSVToArray(str);
           this.dataHeadings();
           this.trimData();
+          CSVA = this.csva;
+          TO = this.csva.map(x => x[0]);
           this.emit_updated();
-
         },
 
         /**
@@ -70,30 +71,30 @@ const Data = new Lang.Class ({
         based on first row of the CSV data array.
         */
         dataHeadings: function(){
-                this.headers=this.csva[0];
-                print('headers are : ' + this.headers);
-                this.colcount=Object.keys(this.headers).length;
-                print('got ' + this.colcount + ' keys.');
+          this.headers = this.csva[0];
+          VARS = this.headers;
+          // VARS.shift();
+          print('headers are : ' + this.headers);
+          this.colcount=Object.keys(this.headers).length;
+          print('got ' + this.colcount + ' keys.');
+
         },
 
         /**
         Removes empty rows from the csv data array.
-
         http://www.electrictoolbox.com/loop-key-value-pairs-associative-array-javascript/
-
-        Also removes the first row since it is only used for headers...
-
+        Also removes the first row since it is only used for headers and vars...
         */
         trimData: function(){
-                this.csva.shift();
-                for(var k=0; k<this.csva.length; k++){
-                        print('Trimming... : ' + this.csva[k]);
-                        if(this.csva[k][0].length==0){
-                                print('deleting row : ' + k);
-                                delete(this.csva[k]);
-                        }
-                }
-                print('Trimmed data is now : ' + this.csva);
+          this.csva.shift();
+          for(var k=0; k<this.csva.length; k++){
+            print('Trimming... : ' + this.csva[k]);
+            if(this.csva[k][0].length==0){
+              print('deleting row : ' + k);
+              delete(this.csva[k]);
+            }
+          }
+          print('Trimmed data is now : ' + this.csva);
         },
 
 

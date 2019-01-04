@@ -1,7 +1,7 @@
 /**
 UI for displaying html message interface
 */
-
+// const GtkText = imports.gi.GtkText;
 const GtkSource = imports.gi.GtkSource;
 const myContent = imports.object.Content; // import awesome.js from current directory
 const Content = new myContent.Content();
@@ -22,14 +22,13 @@ const UIhtml = new Lang.Class ({
   	const notebook = new Gtk.Notebook();
   	const pageText = new Gtk.VBox({spacing: 6});
   	const pageHtml = new Gtk.VBox({spacing: 6});
-  	const messageText = new GtkSource.View();
+  	const textBuffer = new Gtk.TextBuffer();
+  	const messageText = new Gtk.TextView({ buffer: textBuffer, editable: true });
   	const htmlNotebook = new Gtk.Notebook();
     const pageCode = new Gtk.VBox({spacing: 6});
   	const pagePreview = new Gtk.VBox({spacing: 6});
   	const langManager = new GtkSource.LanguageManager();
-  	// const html = new GtkSource.Language({ name: 'html' });
   	const htmlBuffer = new GtkSource.Buffer({ language: langManager.get_language('html') });
-  	// htmlBuffer.set_language({ language: 'html' });
   	const messagehtml = new GtkSource.View({ buffer: htmlBuffer });
   	const webView = new Webkit.WebView({ vexpand: true });
     const choosebutton = new Gtk.FileChooserButton({title:'Select a Template'});
@@ -73,6 +72,11 @@ const UIhtml = new Lang.Class ({
     vBox.pack_start(notebook, true, true, 0);
     buttonBox.pack_end(button, false, false, 0);
     vBox.pack_start(buttonBox, false, false, 0);
+
+    button.connect('clicked', () => {
+      HTML = htmlBuffer.text;
+      TEXT = textBuffer.text;
+    });
 
     return vBox;
   },

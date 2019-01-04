@@ -1,6 +1,5 @@
 #!/usr/bin/gjs
 
-//__GNOME__={};
 
 Gio   = imports.gi.Gio;
 GLib = imports.gi.GLib;
@@ -12,14 +11,20 @@ GObject = imports.gi.GObject;
 Pango = imports.gi.Pango;
 
 
-TO = '';
 FROM = '';
-SUBJECT = '';
-HTML = '';
-TEXT = '';
 USER = '';
 PASS = '';
 HOST = '';
+
+SUBJECT = '';
+HTML = '';
+TEXT = '';
+
+TO = [];
+CSVA = [];
+VARS = [];
+MAILINGS = [];
+
 
 stdout = new Gio.DataOutputStream({
     base_stream: new Gio.UnixOutputStream({ fd: 1 })

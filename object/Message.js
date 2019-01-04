@@ -37,7 +37,7 @@ var Message = {
 
     },
 
-    Send : function () {
+    Send : function (compiled) {
 
         try {
             GLib.spawn_command_line_async( cmdstr, e );
