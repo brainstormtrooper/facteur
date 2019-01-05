@@ -24,8 +24,11 @@ var Message = {
 
     },
 
-    Build: function( ) {
-
+    Build: function(t, h) {
+        // SUBJECT="$SUBJECT\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=$BOUNDRY\n\n"
+        const subBlock = `${SUBJECT}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
+        // "--$BOUNDRY\nContent-Type: text/plain; charset=utf-8\n\n$t\n--$BOUNDRY\nContent-Type: text/html; charset=utf-8\n$h\n--$BOUNDRY--"
+        const msgBlock = `--${this.boundary}\nContent-Type: text/plain; charset=utf-8\n\n${t}\n--${this.boundary}\nContent-Type: text/html; charset=utf-8\n${h}\n--${this.boundary}--"`;
         this.msgcompiled = "--" + this.boundary + this.txt + "--" + this.boundary + this.html;
         return this.msgcompiled;
 
