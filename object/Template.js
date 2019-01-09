@@ -22,7 +22,14 @@ const Template =  new Lang.Class ({
     },
 
     Compile: function () {
-      myTemplate.iterRows();
+      return new Promise((resolve, reject) => {
+        const res = myTemplate.iterRows();
+        if (res) {
+          resolve(res);
+        } else {
+          reject('Failed to iterate over rows.');
+        }
+      });
     },
 
     Run: function () {

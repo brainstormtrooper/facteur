@@ -1,6 +1,7 @@
 const myTemplate = imports.object.Template;
 const myMessage = imports.object.Message;
 const Template = new myTemplate.Template();
+const Message = new myMessage.Message();
 // this.mailing = new Mailing.UImailing();
 
 const UIresults = new Lang.Class ({
@@ -18,8 +19,14 @@ const UIresults = new Lang.Class ({
     vBox.pack_start(checkboxRow, false, false, 0);
     vBox.pack_end(SendbuttonRow, false, false, 0);
 
-    sendButton.connect('clicked', () => {
-      Template.Compile();
+    sendButton.connect('clicked', async () => {
+      const res = await Template.Compile();
+      if (res) {
+        const sent = Message.SendAll();
+      } else {
+        print('Failed...');
+      }
+      // Message.SendAll();
     });
 
     return vBox;
