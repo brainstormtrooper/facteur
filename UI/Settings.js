@@ -42,7 +42,8 @@ const UIsettings = new Lang.Class ({
       HOST = smtpField.get_text();
       SUBJECT = subjectField.get_text();
       FROM = fromField.get_text();
-    });
+      print(` >>> VARS : "${USER}", "${HOST}", "${SUBJECT}", "${FROM}"...`);
+    })
 
     return vBox;
   }
