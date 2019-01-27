@@ -44,62 +44,80 @@ const Message = new Lang.Class ({
     },
     //
     // https://stackoverflow.com/questions/47533683/writing-a-native-messaging-host-in-gjs
+    // https://www.mailjet.com/feature/smtp-relay/
     //
-    Send : async function (msgObj, to) {
+    Send : async function (msgObj, to, cancellable = null) {
         // cat fifo | mail -s "$(echo -e $SUBJECT)" -r $FROM$SMTPs$SMTPu$SMTPp$i
-        const cmdstr = `mail -V \
-        -s \"$(echo -e ${msgObj.subBlock})\" \
-        -r${to} \
-        -S smtp=${HOST} \
-        -S smtp-use-starttls \
-        -S smtp-auth=login \
-        -S smtp-auth-user=${USER} \
-        -S smtp-auth-password=${PASS} \
-        ${FROM} <<< "${msgObj.msgBlock}"`;
-        try {
-          print('---');
-          /*
-          const reader = new Spawn.SpawnReader();
-          reader.spawn('./', [cmdstr], (res) => {
-            print(`res = "${res}"`);
-          });
-          */
+         try {
+        let proc = new Gio.Subprocess({
+            argv: ['mail',
+                   '-v',
+                   // Option switches and values are separate args
+                   '-s', `"${msgObj.subBlock}"`,
+                   '-r', FROM,
+                   '-S', `smtp=${HOST}`,
+                   '-S', 'smtp-use-starttls',
+                   '-S', 'smtp-auth=login',
+                   '-S', 'ssl-verify=ignore',
+                   '-S', `smtp-auth-user=${USER}`,
+                   '-S', `smtp-auth-password=${PASS}`,
+                   to
+            ],
+            flags: Gio.SubprocessFlags.STDIN_PIPE |
+                   Gio.SubprocessFlags.STDOUT_PIPE |
+                   Gio.SubprocessFlags.STDERR_MERGE
+        });
+        // Classes that implement GInitable must be initialized before use, but
+        // you could use Gio.Subprocess.new(argv, flags) which will call this for you
+        proc.init(cancellable);
 
-          const [res, pid, in_fd, out_fd, err_fd] = await GLib.spawn_async_with_pipes('/bin',
-                                                  ['mail',
-                                                  '-V',
-                                                  `-s"${msgObj.subBlock}"`,
-                                                  `-r${to}`,
-                                                  `-S smtp=${HOST}`,
-                                                  '-S smtp-use-starttls',
-                                                  '-S smtp-auth=login',
-                                                  `-S smtp-auth-user=${USER}`,
-                                                  `-S smtp-auth-password=${PASS}`,
-                                                  FROM,
-                                                  ], null, 0, null);
-          const in_reader = new Gio.DataOutputStream({
-            base_stream: new Gio.UnixOutputStream({fd: in_fd})
-          });
-          var feedRes = in_reader.put_string(msgObj.msgBlock, null);
-          const out_reader = new Gio.DataInputStream({
-            base_stream: new Gio.UnixInputStream({fd: out_fd})
-          });
-          const err_reader = new Gio.DataInputStream({
-            base_stream: new Gio.UnixInputStream({fd: err_fd})
-          });
-          var out = out_reader.read_until("", null);
-          var err = err_reader.read_until("", null);
+        // We're going to wrap a GLib async function in a Promise so we can
+        // use it like a native JavaScript async function.
+        //
+        // You could alternatively return this Promise instead of awaiting it
+        // here, but that's up to you.
+        let stdout = await new Promise((resolve, reject) => {
 
-          print(` > out : "${out}"`);
-          print(` > res : "${res}"`);
-          print(` > feedRes : "${feedRes}"`);
-          print(` > err : "${feedRes}"`);
-          print('---');
-        } catch ( e ) {
-          print('ERROR : ');
-          print(e);
-          throw e;
-        }
+            // communicate_utf8() returns a string, communicate() returns a
+            // a GLib.Bytes and there are "headless" functions available as well
+            proc.communicate_utf8_async(
+                // This is your stdin, which can just be a JS string
+                msgObj.msgBlock,
+
+                // we've been passing this around from the function args; you can
+                // create a Gio.Cancellable and call `cancellable.cancel()` to
+                // stop the command or any other operation you've passed it to at
+                // any time, which will throw an "Operation Cancelled" error.
+                cancellable,
+
+                // This is the GAsyncReady callback, which works like any other
+                // callback, but we need to ensure we catch errors so we can
+                // propagate them with `reject()` to make the Promise work
+                // properly
+                (proc, res) => {
+                    try {
+                        let [ok, stdout, stderr] = proc.communicate_utf8_finish(res);
+                        // Because we used the STDERR_MERGE flag stderr will be
+                        // included in stdout. Obviously you could also call
+                        // `resolve([stdout, stderr])` if you wanted to keep both
+                        // and separate them.
+                        //
+                        // This won't affect whether the proc actually return non-
+                        // zero causing the Promise to reject()
+                        resolve(stdout);
+                    } catch (e) {
+                        reject(e);
+                    }
+                }
+            );
+        });
+        print (`>>> RES >>> : ${stdout}`);
+        return stdout;
+    } catch (e) {
+        // This could be any number of errors, but probably it will be a GError
+        // in which case it will have `code` property carrying a GIOErrorEnum
+        // you could use to programmatically respond to, if desired.
+        logError(e);
     }
-
+    }
 });
