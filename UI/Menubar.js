@@ -1,7 +1,6 @@
 
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
-const File = imports.lib.file;
 
 const PopWidget = function (properties) {
 
@@ -39,18 +38,18 @@ const PopWidget = function (properties) {
 
     headerStart = new Gtk.Grid({ column_spacing: headerBar.spacing });
 
-    // this.widgetOpen = new PopWidget({ label: "Open", widget: this.getPopOpen() });
+    this.widgetOpen = new PopWidget({ label: "Open", widget: this.getPopOpen() });
 
-    imageNew = new Gtk.Image ({ icon_name: 'document-open-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
+    imageNew = new Gtk.Image ({ icon_name: 'tab-new-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
     buttonNew = new Gtk.Button({ image: imageNew });
     buttonNew.connect ('clicked', () => { this.printText('Button new'); });
 
-    // headerStart.attach(this.widgetOpen.button, 0, 0, 1, 1);
+    headerStart.attach(this.widgetOpen.button, 0, 0, 1, 1);
     headerStart.attach(buttonNew, 1, 0, 1, 1);
     headerBar.pack_start(headerStart);
 
     popMenu = new Gtk.Popover();
-    imageMenu = new Gtk.Image ({ icon_name: 'document-save-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
+    imageMenu = new Gtk.Image ({ icon_name: 'open-menu-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
     buttonMenu = new Gtk.MenuButton({ image: imageMenu });
     buttonMenu.set_popover(popMenu);
     popMenu.set_size_request(-1, -1);
@@ -112,41 +111,27 @@ const getMenu = function () { /* GMenu popover */
     // Set menu actions
     let actionSaveAs = new Gio.SimpleAction ({ name: 'saveAs' });
         actionSaveAs.connect('activate', () => {
-                const saver = new Gtk.FileChooserDialog({title:'Select a destination'});
-                saver.set_action(Gtk.FileChooserAction.SAVE);
-                saver.add_button('save', Gtk.ResponseType.ACCEPT);
-                saver.add_button('cancel', Gtk.ResponseType.CANCEL);
-                const res = saver.run();
-                if (res == Gtk.ResponseType.ACCEPT) {
-                  const filename = saver.get_filename();
-                  print(filename);
-                  const data = File.rollUp();
-                  File.save(filename, data);
-                  // let data = JSON.stringify(<FILE DATA>, null, '\t');
-                  // GLib.file_set_contents(filename, data);
-                }
-                saver.destroy();
-              });
-        APP.add_action(actionSaveAs);
-
+                this.printText('Action save as');
+            });
+        app.add_action(actionSaveAs);
 
     let actionSaveAll = new Gio.SimpleAction ({ name: 'saveAll' });
         actionSaveAll.connect('activate', () => {
-                Gtk.FileChooserAction.OPEN
+                this.printText('Action save all');
             });
-        APP.add_action(actionSaveAll);
+        this.application.add_action(actionSaveAll);
 
     let actionClose1 = new Gio.SimpleAction ({ name: 'close1' });
         actionClose1.connect('activate', () => {
                 this.printText('Action close all');
             });
-        APP.add_action(actionClose1);
+        this.application.add_action(actionClose1);
 
     let actionClose2 = new Gio.SimpleAction ({ name: 'close2' });
         actionClose2.connect('activate', () => {
                 this.printText('Action close');
             });
-        APP.add_action(actionClose2);
+        this.application.add_action(actionClose2);
 
     let actionToggle = new Gio.SimpleAction ({ name: 'toggle', state: new GLib.Variant('b', true) });
         actionToggle.connect('activate', (action) => {
@@ -158,7 +143,7 @@ const getMenu = function () { /* GMenu popover */
                 }
                 this.printText('View ' + state);
             });
-        APP.add_action(actionToggle);
+        this.application.add_action(actionToggle);
 
     let variant = new GLib.Variant('s', 'one');
     let actionSelect = new Gio.SimpleAction ({ name: 'select', state: variant, parameter_type: variant.get_type() });
@@ -175,7 +160,7 @@ const getMenu = function () { /* GMenu popover */
                 }
                 this.printText('Selection ' + str);
             });
-        APP.add_action(actionSelect);
+        this.application.add_action(actionSelect);
 
     return menu;
  };

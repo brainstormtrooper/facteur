@@ -25,6 +25,7 @@ CSVA = [];
 VARS = [];
 MAILINGS = [];
 
+FILE = null;
 APP = new Gtk.Application ();
 
 stdout = new Gio.DataOutputStream({
