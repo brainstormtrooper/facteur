@@ -94,6 +94,15 @@ const GNOMEeMailer = new Lang.Class ({
   const Menubar = imports.lib.menubar;
   this._window.set_titlebar(Menubar.getHeader());
 
+    Signals.addSignalMethods(Menubar);
+    Menubar.connect('update_ui',() => {
+      try {
+        print('>>> updating UI');
+        this.ui.updateUI();
+      } catch (e) {
+        print(e);
+      }
+    });
 
 	// Vbox to hold the switcher and stack.
 	this._Vbox = new Gtk.VBox({spacing: 6});
@@ -114,6 +123,7 @@ const GNOMEeMailer = new Lang.Class ({
         this._window.show_all();
 
     },
+
 
 });
 
