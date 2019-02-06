@@ -25,6 +25,8 @@ CSVA = [];
 VARS = [];
 MAILINGS = [];
 
+FILE = null;
+APP = new Gtk.Application ();
 
 stdout = new Gio.DataOutputStream({
     base_stream: new Gio.UnixOutputStream({ fd: 1 })
@@ -58,7 +60,7 @@ const GNOMEeMailer = new Lang.Class ({
 
     // Create the application itself
     _init: function () {
-        this.application = new Gtk.Application ();
+        this.application = APP;
 
         // Connect 'activate' and 'startup' signals to the callback functions
         this.application.connect('activate', Lang.bind(this, this._onActivate));
@@ -86,6 +88,22 @@ const GNOMEeMailer = new Lang.Class ({
             default_width: 400,
             window_position: Gtk.WindowPosition.CENTER });
 
+  //
+  // menu bar
+  //
+  const Menubar = imports.lib.menubar;
+  this._window.set_titlebar(Menubar.getHeader());
+
+    Signals.addSignalMethods(Menubar);
+    Menubar.connect('update_ui',() => {
+      try {
+        print('>>> updating UI');
+        this.ui.updateUI();
+      } catch (e) {
+        print(e);
+      }
+    });
+
 	// Vbox to hold the switcher and stack.
 	this._Vbox = new Gtk.VBox({spacing: 6});
   this._Hbox = new Gtk.HBox({spacing: 6, homogeneous: true});
@@ -106,11 +124,12 @@ const GNOMEeMailer = new Lang.Class ({
 
     },
 
+
 });
 
 
 // Run the application
-let app = new GNOMEeMailer ();
+const app = new GNOMEeMailer ();
 app.application.run (ARGV);
 
 // changes? in cola?... nope...

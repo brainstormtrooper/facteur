@@ -10,6 +10,14 @@ const Content = new myContent.Content();
 const UIhtml = new Lang.Class ({
   Name: 'UIhtml',
 
+  _updateUI: function () {
+    print("updating html content...");
+    let len = encodeURI(HTML).split(/%..|./).length - 1;
+    this.htmlBuffer.set_text(HTML, len);
+    len = encodeURI(TEXT).split(/%..|./).length - 1;
+    this.textBuffer.set_text(TEXT, len);
+  },
+
   _buildUI: function () {
     const vBox = new Gtk.VBox({spacing: 6});
     const hBox = new Gtk.HBox();
@@ -22,14 +30,14 @@ const UIhtml = new Lang.Class ({
   	const notebook = new Gtk.Notebook();
   	const pageText = new Gtk.VBox({spacing: 6});
   	const pageHtml = new Gtk.VBox({spacing: 6});
-  	const textBuffer = new Gtk.TextBuffer();
-  	const messageText = new Gtk.TextView({ buffer: textBuffer, editable: true });
+  	this.textBuffer = new Gtk.TextBuffer();
+  	const messageText = new Gtk.TextView({ buffer: this.textBuffer, editable: true });
   	const htmlNotebook = new Gtk.Notebook();
     const pageCode = new Gtk.VBox({spacing: 6});
   	const pagePreview = new Gtk.VBox({spacing: 6});
   	const langManager = new GtkSource.LanguageManager();
-  	const htmlBuffer = new GtkSource.Buffer({ language: langManager.get_language('html') });
-  	const messagehtml = new GtkSource.View({ buffer: htmlBuffer });
+  	this.htmlBuffer = new GtkSource.Buffer({ language: langManager.get_language('html') });
+  	const messagehtml = new GtkSource.View({ buffer: this.htmlBuffer });
   	const webView = new Webkit.WebView({ vexpand: true });
     const choosebutton = new Gtk.FileChooserButton({title:'Select a Template'});
     const chooselabel = new Gtk.Label({ halign: Gtk.Align.START, label: 'Open a file...'});
@@ -44,14 +52,14 @@ const UIhtml = new Lang.Class ({
         const content = await Content.Import(path);
         // print('Changed is : ' + content);
         const len = encodeURI(content).split(/%..|./).length - 1;
-        htmlBuffer.set_text(content, len);
+        this.htmlBuffer.set_text(content, len);
         //print('================= \n imported : \n' + data.csvstr );
 
     });
 
 
-    htmlBuffer.connect('changed', () => {
-      webView.load_html(htmlBuffer.text, null);
+    this.htmlBuffer.connect('changed', () => {
+      webView.load_html(this.htmlBuffer.text, null);
     });
 
     webView.load_html('<h1>bob</h1><p>this is text</p>', null);
@@ -74,8 +82,8 @@ const UIhtml = new Lang.Class ({
     vBox.pack_start(buttonBox, false, false, 0);
 
     button.connect('clicked', () => {
-      HTML = htmlBuffer.text;
-      TEXT = textBuffer.text;
+      HTML = this.htmlBuffer.text;
+      TEXT = this.textBuffer.text;
     });
 
     return vBox;

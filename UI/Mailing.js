@@ -163,7 +163,11 @@ this.data.connect('Updated_sig', Lang.bind(this, function() {
 
         return this.vBox;
 },
-
+_updateUI: function(){
+  this.data.csva = CSVA;
+  this.data.headers = VARS;
+  this.updateTable();
+},
         updateTable: function (){
 
                 let phonebook = this.data.csva;
@@ -187,7 +191,7 @@ this.data.connect('Updated_sig', Lang.bind(this, function() {
                         weight: Pango.Weight.BOLD });
 
                 // Create the columns for the address book
-                for (k=0; k<this.data.headers.length; k++){
+                for (k = 0; k<this.data.headers.length - 1; k++){
                         print('***key is : ' + k + ', val is : ' + this.data.headers[k] + ' of type : ' + typeof(this.data.headers[k]));
 
                         let col=k;
@@ -207,7 +211,7 @@ this.data.connect('Updated_sig', Lang.bind(this, function() {
 
                 // Put the data in the phonebook
                 let i;
-                for (i = 0; i < this.data.csva.length; i++ ) {
+                for (i = 0; i < this.data.csva.length - 1; i++ ) {
 
 
 

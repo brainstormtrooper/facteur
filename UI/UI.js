@@ -8,6 +8,15 @@ const Webkit = imports.gi.WebKit2;
 const UIstack = new Lang.Class ({
     	Name: 'UIstack',
 
+    // Update
+
+    updateUI: function () {
+    print('here in UI');
+      this.settings._updateUI();
+      this.mailing._updateUI();
+      this.html._updateUI();
+
+    },
 
     // Build the application's UI
     _buildStack: function () {
@@ -67,7 +76,6 @@ const UIstack = new Lang.Class ({
 
 	this._stack_switcher = new Gtk.StackSwitcher();
   this._stack_switcher.set_stack(this._Stack);
-
 
 
 
