@@ -103,6 +103,14 @@ const GNOMEeMailer = new Lang.Class ({
         print(e);
       }
     });
+    Menubar.connect('filename_changed',() => {
+      print('>>> filename_changed');
+      try {
+        this._window.get_titlebar().set_subtitle(FILENAME);
+      } catch (e) {
+        print(e);
+      }
+    });
 
 	// Vbox to hold the switcher and stack.
 	this._Vbox = new Gtk.VBox({spacing: 6});
