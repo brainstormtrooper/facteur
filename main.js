@@ -25,7 +25,7 @@ CSVA = [];
 VARS = [];
 MAILINGS = [];
 
-FILE = null;
+FILENAME = null;
 APP = new Gtk.Application ();
 
 stdout = new Gio.DataOutputStream({
@@ -99,6 +99,14 @@ const GNOMEeMailer = new Lang.Class ({
       try {
         print('>>> updating UI');
         this.ui.updateUI();
+      } catch (e) {
+        print(e);
+      }
+    });
+    Menubar.connect('filename_changed',() => {
+      print('>>> filename_changed');
+      try {
+        this._window.get_titlebar().set_subtitle(FILENAME);
       } catch (e) {
         print(e);
       }
