@@ -63,7 +63,7 @@ this.data.connect('Updated_sig', Lang.bind(this, function() {
                 coltypes.push(GObject.TYPE_STRING);
         }
         this._listStore.set_column_types (coltypes);
-
+/*
         // Data to go in the phonebook
         let phonebook = {"address":"No Data","name":"","likes":""};
 
@@ -73,16 +73,11 @@ this.data.connect('Updated_sig', Lang.bind(this, function() {
             this._listStore.set (this._listStore.append(), [0, 1, 2],
                 [contact.address, contact.rname, contact.likes]);
         }
-
+*/
         // Create the treeview
         this._treeView = new Gtk.TreeView ({
             expand: true,
             model: this._listStore });
-
-        // Create the columns for the address book
-        let address = new Gtk.TreeViewColumn ({ title: "Address" });
-        let rname = new Gtk.TreeViewColumn ({ title: "Name" });
-        let likes = new Gtk.TreeViewColumn ({ title: "Likes" });
 
         // Create a cell renderer for when bold text is needed
         let bold = new Gtk.CellRendererText ({
@@ -91,20 +86,24 @@ this.data.connect('Updated_sig', Lang.bind(this, function() {
         // Create a cell renderer for normal text
         let normal = new Gtk.CellRendererText ();
 
+
+        // Create the columns for the address book
+        let address = new Gtk.TreeViewColumn ({ title: "No Data" });
+
+
         // Pack the cell renderers into the columns
         address.pack_start (bold, true);
-        rname.pack_start (normal, true);
-        likes.pack_start (normal, true);
+
 
         // Set each column to pull text from the TreeView's model
         address.add_attribute (bold, "text", 0);
-        rname.add_attribute (normal, "text", 1);
-        likes.add_attribute (normal, "text", 2);
+
 
         // Insert the columns into the treeview
         this._treeView.insert_column (address, 0);
-        this._treeView.insert_column (rname, 1);
-        this._treeView.insert_column (likes, 2);
+
+
+
 
         // Create the label that shows details for the name you select
         this._label = new Gtk.Label ({ label: "" });
@@ -169,41 +168,50 @@ _updateUI: function(){
   this.updateTable();
 },
         updateTable: function (){
-
+                // this._grid.remove(this._treeView);
                 let phonebook = this.data.csva;
                 let k;
-                //this._listStore = new Gtk.ListStore ();
+                this._listStore = new Gtk.ListStore ();
 
 
                 let coltypes = [];
-                for (k in this.data.headers){
-                        coltypes.push(GObject.TYPE_STRING);
-                }
-                this._listStore.set_column_types (coltypes);
+                this.data.headers.forEach((h) => {
 
-                // Create the treeview
+                  coltypes.push(GObject.TYPE_STRING);
+
+                });
+
+
+                this._listStore.set_column_types(coltypes);
+
+                // Replace the treeview
                 this._treeView = new Gtk.TreeView ({
                     expand: true,
                     model: this._listStore });
-                // Create a cell renderer for normal text
+                // Create cell renderers
                 let normal = new Gtk.CellRendererText ();
                 let bold = new Gtk.CellRendererText ({
                         weight: Pango.Weight.BOLD });
 
                 // Create the columns for the address book
-                for (k = 0; k<this.data.headers.length - 1; k++){
+
+                for (k = 0; k < this.data.headers.length; k++){
                         print('***key is : ' + k + ', val is : ' + this.data.headers[k] + ' of type : ' + typeof(this.data.headers[k]));
 
-                        let col=k;
-                        col = new Gtk.TreeViewColumn ({ title: this.data.headers[k] });
-                        col.pack_start (normal, true);
+                        // let col=k;
+                        this[`col_${k}`] = new Gtk.TreeViewColumn ({ title: this.data.headers[k] });
+                        this[`col_${k}`].pack_start (normal, true);
                         if(k==0){
-                                col.add_attribute (bold, "text", k);
+                                this[`col_${k}`].add_attribute (normal, "text", k);
                         }else{
-                                col.add_attribute (normal, "text", k);
+                                this[`col_${k}`].add_attribute (normal, "text", k);
+                        }
+                        try {
+                          this._treeView.insert_column (this[`col_${k}`], k);
+                        } catch (err) {
+                          print(err);
                         }
 
-                        this._treeView.insert_column (col, k);
                 }
 
 
@@ -222,14 +230,16 @@ _updateUI: function(){
                         print('trying to push : ' + contact[0].toString());
                         print('... the data is of type : ' + typeof(contact[1]));
                         let iter = this._listStore.append();
-                        /*
-                        this._listStore.set (k, [0, 1, 2],
-                        [{contact[0].toString(), contact[1].toString(), contact[2].toString()}]);
-                        */
+
+                        // this._listStore.set (iter, [0, 1, 2],
+                        // [contact[0].toString(), contact[1].toString(), contact[2].toString()]);
+
                         this._listStore.set (iter, Object.keys(this.data.headers), contact);
 
                 }
 
+            // this._grid.attach (this._treeView, 0, 0, 1, 1);
+            // this._window.show_all();
         },
 
    _onSelectionChanged: function () {
