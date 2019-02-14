@@ -89,7 +89,7 @@ const Data = new Lang.Class ({
           this.csva.shift();
           for(var k=0; k<this.csva.length; k++){
             print('Trimming... : ' + this.csva[k]);
-            if(this.csva[k][0].length==0 || this.csva[k] == null){
+            if(this.csva[k] == [] || this.csva[k] == null){
               print('deleting row : ' + k);
               delete(this.csva[k]);
             }
@@ -146,6 +146,8 @@ const Data = new Lang.Class ({
                         // Now that we have our value string, let's add
                         // it to the data array.
                         arrData[arrData.length - 1].push(strMatchedValue);
+
+
 
                 }
                 // Return the parsed data.

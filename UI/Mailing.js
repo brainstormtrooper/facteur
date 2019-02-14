@@ -58,10 +58,7 @@ this.data.connect('Updated_sig', Lang.bind(this, function() {
         this._listStore = new Gtk.ListStore ();
 
 
-        let coltypes = [];
-        for (heading in this.data.dataHeadings){
-                coltypes.push(GObject.TYPE_STRING);
-        }
+        let coltypes = [GObject.TYPE_STRING];
         this._listStore.set_column_types (coltypes);
 /*
         // Data to go in the phonebook
@@ -88,19 +85,19 @@ this.data.connect('Updated_sig', Lang.bind(this, function() {
 
 
         // Create the columns for the address book
-        let address = new Gtk.TreeViewColumn ({ title: "No Data" });
+        let defCol = new Gtk.TreeViewColumn ({ title: "No Data" });
 
 
         // Pack the cell renderers into the columns
-        address.pack_start (bold, true);
+        defCol.pack_start (bold, true);
 
 
         // Set each column to pull text from the TreeView's model
-        address.add_attribute (bold, "text", 0);
+        defCol.add_attribute (bold, "text", 0);
 
 
         // Insert the columns into the treeview
-        this._treeView.insert_column (address, 0);
+        this._treeView.insert_column (defCol, 0);
 
 
 
@@ -148,17 +145,6 @@ this.data.connect('Updated_sig', Lang.bind(this, function() {
     print('Changed is : ' + this.choosebutton.selection_changed);
     //print('Filename is : ' + this.choosebutton.get_filename().get_path());
 
-    //
-    // or type a list of addresses
-    //
-
-    //
-    // type the txt message (main)
-    //
-
-    //
-    // attach file(s)
-    //
 
         return this.vBox;
 },
@@ -169,8 +155,10 @@ _updateUI: function(){
 },
         updateTable: function (){
                 // this._grid.remove(this._treeView);
+                // this.vBox.remove(this._grid);
                 let phonebook = this.data.csva;
                 let k;
+                delete(this._listStore);
                 this._listStore = new Gtk.ListStore ();
 
 
@@ -181,13 +169,17 @@ _updateUI: function(){
 
                 });
 
-
+                print(coltypes);
                 this._listStore.set_column_types(coltypes);
 
                 // Replace the treeview
+
+                this._treeView.set_model(this._listStore);
+                /*
                 this._treeView = new Gtk.TreeView ({
                     expand: true,
                     model: this._listStore });
+                   */
                 // Create cell renderers
                 let normal = new Gtk.CellRendererText ();
                 let bold = new Gtk.CellRendererText ({
@@ -219,27 +211,27 @@ _updateUI: function(){
 
                 // Put the data in the phonebook
                 let i;
-                for (i = 0; i < this.data.csva.length - 1; i++ ) {
+                for (i = 0; i < this.data.csva.length; i++ ) {
 
 
 
 
 
 
-                        let contact = this.data.csva[i];
-                        print('trying to push : ' + contact[0].toString());
-                        print('... the data is of type : ' + typeof(contact[1]));
+                        let row = this.data.csva[i];
+                        print('trying to push : ' + row[0].toString());
+                        print('... the data is of type : ' + typeof(row[1]));
                         let iter = this._listStore.append();
 
                         // this._listStore.set (iter, [0, 1, 2],
                         // [contact[0].toString(), contact[1].toString(), contact[2].toString()]);
 
-                        this._listStore.set (iter, Object.keys(this.data.headers), contact);
+                        this._listStore.set (iter, Object.keys(this.data.headers), row);
 
                 }
 
             // this._grid.attach (this._treeView, 0, 0, 1, 1);
-            // this._window.show_all();
+            // this.vBox.pack_start(this._treeView, true, true, 0);
         },
 
    _onSelectionChanged: function () {
