@@ -39,35 +39,35 @@ const UIstack = new Lang.Class ({
 
   const Settings = imports.UI.Settings; // import awesome.js from current directory
 	this.settings = new Settings.UIsettings();
-  this._Stack.add_titled(this.settings._buildUI(), "settings", "Mailing Settings");
+  this._Stack.add_titled(this.settings._buildUI(), "settings", "Settings");
 
 	//
-	// 1. Mailing Settings
+	// 2. Recipients
 	//
 
   const Mailing = imports.UI.Mailing; // import awesome.js from current directory
 	this.mailing = new Mailing.UImailing();
-  this._Stack.add_titled(this.mailing._buildUI(), "setup", "Mailing Recipients");
+  this._Stack.add_titled(this.mailing._buildUI(), "recipients", "Recipients");
 
 
 	//
-	// 2. HTML Settings
+	// 3. Contents
 	//
 
   const Html = imports.UI.html;
 	this.html = new Html.UIhtml();
-  this._Stack.add_titled(this.html._buildUI(), "HTML", "HTML/Template Settings");
+  this._Stack.add_titled(this.html._buildUI(), "contents", "Contents");
 
 
 
 
 	//
-	// 3. Results / reporting...
+	// 4. Results...
 	//
 
   const Results = imports.UI.Results;
 	this.results = new Results.UIresults();
-  this._Stack.add_titled(this.results._buildUI(), "Results", "Resuls/Reporting");
+  this._Stack.add_titled(this.results._buildUI(), "Results", "Resuls");
 
 
 	/*

@@ -11,10 +11,10 @@ const UIresults = new Lang.Class ({
     const vBox = new Gtk.VBox({spacing: 6});
     const checkboxRow = new Gtk.HBox();
     const SendbuttonRow = new Gtk.HBox();
-    const checkbutton = new Gtk.CheckButton({label: "Use HTML"});
+    // const checkbutton = new Gtk.CheckButton({label: "Use HTML"});
     const sendButton = new Gtk.Button({label: "Send"});
 
-    checkboxRow.pack_start(checkbutton, false, false, 0);
+    // checkboxRow.pack_start(checkbutton, false, false, 0);
     SendbuttonRow.pack_end(sendButton, false, false, 0);
     vBox.pack_start(checkboxRow, false, false, 0);
     vBox.pack_end(SendbuttonRow, false, false, 0);
