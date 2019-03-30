@@ -40,7 +40,7 @@ const UImailing = new Lang.Class({
 
     this.data.connect('Updated_sig', Lang.bind(this, function() {
 
-      print('================= \n imported : \n' + this.data.csva);
+      app.ui.results._LOG('================= \n imported : \n' + this.data.csva);
       // Data to go in the phonebook
       //this._listStore.clear();
       this.updateTable();
@@ -120,7 +120,7 @@ const UImailing = new Lang.Class({
 
     //fname = gtk_file_chooser_get_filename(GtkFileChooser, this.choosebutton);
     //fname = this.choosebutton.gtk_file_chooser_get_filename();
-    print('Changed is : ' + this.choosebutton.selection_changed);
+    app.ui.results._LOG('You selected : ' + this.choosebutton.selection_changed);
     //print('Filename is : ' + this.choosebutton.get_filename().get_path());
 
     return this.vBox;

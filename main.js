@@ -111,6 +111,12 @@ const GNOMEeMailer = new Lang.Class ({
         print(e);
       }
     });
+    Menubar.connect('Log', (msg) => {
+      print('>>> Log Entry');
+      //  const iter = this.textBuffer.get_end_iter();
+      // this.textBuffer.insert(iter, msg);
+    });
+
 
 	// Vbox to hold the switcher and stack.
 	this._Vbox = new Gtk.VBox({spacing: 6});
@@ -137,7 +143,7 @@ const GNOMEeMailer = new Lang.Class ({
 
 
 // Run the application
-const app = new GNOMEeMailer ();
+app = new GNOMEeMailer ();
 app.application.run (ARGV);
 
 // changes? in cola?... nope...
