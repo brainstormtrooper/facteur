@@ -11,7 +11,7 @@ const UIhtml = new Lang.Class ({
   Name: 'UIhtml',
 
   _updateUI: function () {
-    print("updating html content...");
+    app.ui.results._LOG("updating html content...");
     let len = encodeURI(HTML).split(/%..|./).length - 1;
     this.htmlBuffer.set_text(HTML, len);
     len = encodeURI(TEXT).split(/%..|./).length - 1;
@@ -48,7 +48,7 @@ const UIhtml = new Lang.Class ({
     choosebutton.connect('file-set', async () => {
         const path = choosebutton.get_file().get_path();
         // do something with path
-
+        app.ui.results._LOG(`Importing template from : ${path}`);
         const content = await Content.Import(path);
         // print('Changed is : ' + content);
         const len = encodeURI(content).split(/%..|./).length - 1;
@@ -62,7 +62,7 @@ const UIhtml = new Lang.Class ({
       webView.load_html(this.htmlBuffer.text, null);
     });
 
-    webView.load_html('<h1>bob</h1><p>this is text</p>', null);
+    webView.load_html('<h1>Hi!</h1><p>this is text</p>', null);
     htmlNotebook.append_page(pagePreview, new Gtk.Label({label: "Preview"}));
     htmlNotebook.append_page(pageCode, new Gtk.Label({label: "Code"}));
     scrollText.add(messageText);

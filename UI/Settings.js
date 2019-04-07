@@ -3,7 +3,13 @@ UI for displaying mailing settings
 */
 
 const UIsettings = new Lang.Class ({
-  Name: 'UImailing',
+  Name: 'UIsettings',
+  // Implements: [Signals.WithSignals],
+
+  _init: function() {
+
+    // Signals.addSignalMethods(this);
+  },
 
   _updateUI() {
   print('here');
@@ -19,6 +25,7 @@ const UIsettings = new Lang.Class ({
   },
 
   _buildUI: function () {
+    // this.parent();
     const vBox = new Gtk.VBox({spacing: 6});
 
     const fromBox = new Gtk.HBox({spacing: 6});
@@ -55,7 +62,12 @@ const UIsettings = new Lang.Class ({
       HOST = this.smtpField.get_text();
       SUBJECT = this.subjectField.get_text();
       FROM = this.fromField.get_text();
-      print(` >>> VARS : "${USER}", "${HOST}", "${SUBJECT}", "${FROM}"...`);
+      const str = ` >>> SETTINGS: "${USER}", "${HOST}", "${SUBJECT}", "${FROM}"...`;
+
+      app.ui.results._LOG(str);
+      // Signals.addSignalMethods(this);
+      // this.emit('Log', str);
+      // print(str);
     })
 
     return vBox;
