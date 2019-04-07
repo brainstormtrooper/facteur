@@ -33,14 +33,14 @@ const UImailing = new Lang.Class({
       // do something with path
 
       this.data.Import(path);
-      print('Changed is : ' + path);
+      app.ui.results._LOG('CSV File path is : ' + path);
       //print('================= \n imported : \n' + data.csvstr );
 
     }));
 
     this.data.connect('Updated_sig', Lang.bind(this, function() {
 
-      app.ui.results._LOG('================= \n imported : \n' + this.data.csva);
+      app.ui.results._LOG('imported.');
       // Data to go in the phonebook
       //this._listStore.clear();
       this.updateTable();
@@ -120,7 +120,7 @@ const UImailing = new Lang.Class({
 
     //fname = gtk_file_chooser_get_filename(GtkFileChooser, this.choosebutton);
     //fname = this.choosebutton.gtk_file_chooser_get_filename();
-    app.ui.results._LOG('You selected : ' + this.choosebutton.selection_changed);
+    print('You selected : ' + this.choosebutton.selection_changed);
     //print('Filename is : ' + this.choosebutton.get_filename().get_path());
 
     return this.vBox;

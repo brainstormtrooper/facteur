@@ -31,7 +31,8 @@ const Message = new Lang.Class ({
         // SUBJECT="$SUBJECT\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=$BOUNDRY\n\n"
         const subBlock = `${SUBJECT}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
         // "--$BOUNDRY\nContent-Type: text/plain; charset=utf-8\n\n$t\n--$BOUNDRY\nContent-Type: text/html; charset=utf-8\n$h\n--$BOUNDRY--"
-        const msgBlock = `--${this.boundary}\nContent-Type: text/plain; charset=utf-8\n\n${t}\n--${this.boundary}\nContent-Type: text/html; charset=utf-8\n${h}\n--${this.boundary}--`;
+        const msgBlock = `--${this.boundary}\nContent-Type: text/plain; charset=utf-8\n${t}\n--${this.boundary}\nContent-Type: text/html; charset=utf-8\n${h}\n--${this.boundary}--`;
+        print(msgBlock);
         const res = { subBlock, msgBlock };
         return res;
 
@@ -53,7 +54,7 @@ const Message = new Lang.Class ({
             argv: ['mail',
                    '-v',
                    // Option switches and values are separate args
-                   '-s', `"${msgObj.subBlock}"`,
+                   '-s', msgObj.subBlock,
                    '-r', FROM,
                    '-S', `smtp=${HOST}`,
                    '-S', 'smtp-use-starttls',
@@ -83,7 +84,6 @@ const Message = new Lang.Class ({
             proc.communicate_utf8_async(
                 // This is your stdin, which can just be a JS string
                 msgObj.msgBlock,
-
                 // we've been passing this around from the function args; you can
                 // create a Gio.Cancellable and call `cancellable.cancel()` to
                 // stop the command or any other operation you've passed it to at
