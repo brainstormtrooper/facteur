@@ -3,7 +3,7 @@ Message object.
 
 Create and send a compiled message.
 */
-// const Spawn = imports.assets.spawn;
+
 
 
 const Message = new Lang.Class ({
@@ -29,7 +29,7 @@ const Message = new Lang.Class ({
 
     Build: function(t, h) {
         // SUBJECT="$SUBJECT\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=$BOUNDRY\n\n"
-        const subBlock = `${SUBJECT}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
+        const subBlock = `Subject: ${SUBJECT}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
         // "--$BOUNDRY\nContent-Type: text/plain; charset=utf-8\n\n$t\n--$BOUNDRY\nContent-Type: text/html; charset=utf-8\n$h\n--$BOUNDRY--"
         const msgBlock = `--${this.boundary}\nContent-Type: text/plain; charset=utf-8\n${t}\n--${this.boundary}\nContent-Type: text/html; charset=utf-8\n${h}\n--${this.boundary}--`;
         print(msgBlock);
@@ -46,23 +46,21 @@ const Message = new Lang.Class ({
     //
     // https://stackoverflow.com/questions/47533683/writing-a-native-messaging-host-in-gjs
     // https://www.mailjet.com/feature/smtp-relay/
+    // https://stackoverflow.com/questions/44728855/curl-send-html-email-with-embedded-image-and-attachment
     //
     Send : async function (msgObj, to, cancellable = null) {
         // cat fifo | mail -s "$(echo -e $SUBJECT)" -r $FROM$SMTPs$SMTPu$SMTPp$i
          try {
         let proc = new Gio.Subprocess({
-            argv: ['mail',
-                   '-v',
+            argv: ['curl',
+                   '-svk',
+                   '--ssl-reqd',
                    // Option switches and values are separate args
-                   '-s', msgObj.subBlock,
-                   '-r', FROM,
-                   '-S', `smtp=${HOST}`,
-                   '-S', 'smtp-use-starttls',
-                   '-S', 'smtp-auth=login',
-                   '-S', 'ssl-verify=ignore',
-                   '-S', `smtp-auth-user=${USER}`,
-                   '-S', `smtp-auth-password=${PASS}`,
-                   to
+                   '--mail-from', FROM,
+                   '--url', HOST,
+                   '--mail-rcpt', to,
+                   '-T', '-',
+                   '--user', `${USER}:${PASS}`
             ],
             flags: Gio.SubprocessFlags.STDIN_PIPE |
                    Gio.SubprocessFlags.STDOUT_PIPE |
@@ -83,7 +81,7 @@ const Message = new Lang.Class ({
             // a GLib.Bytes and there are "headless" functions available as well
             proc.communicate_utf8_async(
                 // This is your stdin, which can just be a JS string
-                msgObj.msgBlock,
+                `${msgObj.subBlock} ${msgObj.msgBlock}`,
                 // we've been passing this around from the function args; you can
                 // create a Gio.Cancellable and call `cancellable.cancel()` to
                 // stop the command or any other operation you've passed it to at
