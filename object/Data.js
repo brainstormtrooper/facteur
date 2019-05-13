@@ -88,7 +88,8 @@ const Data = new Lang.Class ({
         trimData: function(){
           this.csva.shift();
           for(var k=0; k<this.csva.length; k++){
-            print('Trimming... : ' + this.csva[k]);
+            // print('Trimming... : ' + this.csva[k]);
+            app.ui.results._LOG('Trimming... : ' + this.csva[k]);
             if(this.csva[k] == [] || this.csva[k] == null){
               print('deleting row : ' + k);
               delete(this.csva[k]);
