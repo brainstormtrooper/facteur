@@ -9,6 +9,7 @@ Webkit = imports.gi.WebKit2;
 Signals = imports.signals;
 GObject = imports.gi.GObject;
 Pango = imports.gi.Pango;
+Gettext = imports.gettext;
 
 
 FROM = '';
@@ -31,6 +32,10 @@ APP = new Gtk.Application ();
 stdout = new Gio.DataOutputStream({
     base_stream: new Gio.UnixOutputStream({ fd: 1 })
 });
+
+Gettext.bindtextdomain('gnome-emailer-0.1', '/usr/share/locale');
+Gettext.textdomain('gnome-emailer-0.1');
+
 
 //
 // add app folder to path
