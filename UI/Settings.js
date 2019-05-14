@@ -12,7 +12,7 @@ const UIsettings = new Lang.Class ({
   },
 
   _updateUI() {
-  print('here');
+  print('Updating UI');
     try {
       this.userField.set_text(USER);
       this.passField.set_text(PASS);
@@ -35,12 +35,12 @@ const UIsettings = new Lang.Class ({
     const subjectBox = new Gtk.HBox({spacing: 6});
     const buttonBox = new Gtk.HBox({spacing: 6});
 
-    this.fromField = new Gtk.Entry({placeholder_text: "From email"});
-    this.smtpField = new Gtk.Entry({placeholder_text: "smtp host"});
-    this.userField = new Gtk.Entry({placeholder_text: "smtp user"});
-    this.passField = new Gtk.Entry({placeholder_text: "smtp password", visibility: false, input_purpose: "password"});
-    this.subjectField = new Gtk.Entry({placeholder_text: "email subject"});
-    const saveButton = new Gtk.Button({label: "Save"});
+    this.fromField = new Gtk.Entry({placeholder_text: Gettext.gettext('From e-mail')});
+    this.smtpField = new Gtk.Entry({placeholder_text: Gettext.gettext('Smtp host')});
+    this.userField = new Gtk.Entry({placeholder_text: Gettext.gettext('Smtp user')});
+    this.passField = new Gtk.Entry({placeholder_text: Gettext.gettext('Smtp password'), visibility: false, input_purpose: "password"});
+    this.subjectField = new Gtk.Entry({placeholder_text: Gettext.gettext('E-mail subject')});
+    const saveButton = new Gtk.Button({label: Gettext.gettext('Save')});
 
     fromBox.pack_start(this.fromField, false, false, 0);
     smtpBox.pack_start(this.smtpField, false, false, 0);
