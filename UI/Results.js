@@ -16,7 +16,7 @@ const UIresults = new Lang.Class ({
     this.textBuffer = new Gtk.TextBuffer();
     const logText = new Gtk.TextView({ buffer: this.textBuffer, editable: false });
     // const checkbutton = new Gtk.CheckButton({label: "Use HTML"});
-    const sendButton = new Gtk.Button({label: "Send"});
+    const sendButton = new Gtk.Button({label: Gettext.gettext('Send')});
 
     // checkboxRow.pack_start(checkbutton, false, false, 0);
     logWindow.add(logText);

@@ -39,7 +39,7 @@ const UIstack = new Lang.Class ({
 
   const Settings = imports.UI.Settings; // import awesome.js from current directory
 	this.settings = new Settings.UIsettings();
-  this._Stack.add_titled(this.settings._buildUI(), "settings", "Settings");
+  this._Stack.add_titled(this.settings._buildUI(), "settings", Gettext.gettext('Settings'));
 
 	//
 	// 2. Recipients
@@ -47,7 +47,7 @@ const UIstack = new Lang.Class ({
 
   const Mailing = imports.UI.Mailing; // import awesome.js from current directory
 	this.mailing = new Mailing.UImailing();
-  this._Stack.add_titled(this.mailing._buildUI(), "recipients", "Recipients");
+  this._Stack.add_titled(this.mailing._buildUI(), "recipients", Gettext.gettext('Recipients'));
 
 
 	//
@@ -56,7 +56,7 @@ const UIstack = new Lang.Class ({
 
   const Html = imports.UI.html;
 	this.html = new Html.UIhtml();
-  this._Stack.add_titled(this.html._buildUI(), "contents", "Contents");
+  this._Stack.add_titled(this.html._buildUI(), "contents", Gettext.gettext('Contents'));
 
 
 
@@ -67,7 +67,7 @@ const UIstack = new Lang.Class ({
 
   const Results = imports.UI.Results;
 	this.results = new Results.UIresults();
-  this._Stack.add_titled(this.results._buildUI(), "Results", "Resuls");
+  this._Stack.add_titled(this.results._buildUI(), "Results", Gettext.gettext('Results'));
 
 
 	/*

@@ -26,7 +26,7 @@ const UIhtml = new Lang.Class ({
     const scrollPrev = new Gtk.ScrolledWindow({ vexpand: true });
     const buttonBox = new Gtk.HBox();
   	// const checkbutton = new Gtk.CheckButton({label: "Use HTML"});
-  	const button = new Gtk.Button({label: "Save"});
+  	const button = new Gtk.Button({label: Gettext.gettext('Save')});
   	const notebook = new Gtk.Notebook();
   	const pageText = new Gtk.VBox({spacing: 6});
   	const pageHtml = new Gtk.VBox({spacing: 6});
@@ -39,8 +39,8 @@ const UIhtml = new Lang.Class ({
   	this.htmlBuffer = new GtkSource.Buffer({ language: langManager.get_language('html') });
   	const messagehtml = new GtkSource.View({ buffer: this.htmlBuffer });
   	const webView = new Webkit.WebView({ vexpand: true });
-    const choosebutton = new Gtk.FileChooserButton({title:'Select a Template'});
-    const chooselabel = new Gtk.Label({ halign: Gtk.Align.START, label: 'Open a file...'});
+    const choosebutton = new Gtk.FileChooserButton({title: Gettext.gettext('Select a template')});
+    const chooselabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('Open a file')});
 
 
     choosebutton.set_action(Gtk.FileChooserAction.OPEN);
@@ -63,8 +63,8 @@ const UIhtml = new Lang.Class ({
     });
 
     webView.load_html('<h1>Hi!</h1><p>this is text</p>', null);
-    htmlNotebook.append_page(pagePreview, new Gtk.Label({label: "Preview"}));
-    htmlNotebook.append_page(pageCode, new Gtk.Label({label: "Code"}));
+    htmlNotebook.append_page(pagePreview, new Gtk.Label({label: Gettext.gettext('Preview')}));
+    htmlNotebook.append_page(pageCode, new Gtk.Label({label: Gettext.gettext('Code')}));
     scrollText.add(messageText);
     scrollHtml.add(messagehtml);
     scrollPrev.add(webView);
@@ -75,8 +75,8 @@ const UIhtml = new Lang.Class ({
   	hBox.pack_start(chooselabel, false, false, 0);
   	hBox.pack_start(choosebutton, false, false, 0);
     vBox.pack_start(hBox, false, false, 0);
-    notebook.append_page(pageText, new Gtk.Label({label: "Plain text"}));
-    notebook.append_page(pageHtml, new Gtk.Label({label: "Html content"}));
+    notebook.append_page(pageText, new Gtk.Label({label: Gettext.gettext('Plain text')}));
+    notebook.append_page(pageHtml, new Gtk.Label({label: Gettext.gettext('HTML Content')}));
     vBox.pack_start(notebook, true, true, 0);
     buttonBox.pack_end(button, false, false, 0);
     vBox.pack_start(buttonBox, false, false, 0);

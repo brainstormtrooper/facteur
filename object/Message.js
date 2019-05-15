@@ -11,7 +11,7 @@ const Message = new Lang.Class ({
     // VARS
 
     Name: 'Message',
-    boundary: "qeq65er15v61e6qr156ve1",
+    boundary: [...Array(16)].map(() => Math.random().toString(36)[2]).join(''),
 
 
     // METHODS
@@ -32,7 +32,8 @@ const Message = new Lang.Class ({
         const subBlock = `Subject: ${SUBJECT}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
         // "--$BOUNDRY\nContent-Type: text/plain; charset=utf-8\n\n$t\n--$BOUNDRY\nContent-Type: text/html; charset=utf-8\n$h\n--$BOUNDRY--"
         const msgBlock = `--${this.boundary}\nContent-Type: text/plain; charset=utf-8\n${t}\n--${this.boundary}\nContent-Type: text/html; charset=utf-8\n${h}\n--${this.boundary}--`;
-        print(msgBlock);
+        // print(msgBlock);
+        app.ui.results._LOG('Current message is : ' + msgBlock);
         const res = { subBlock, msgBlock };
         return res;
 

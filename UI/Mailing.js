@@ -24,7 +24,7 @@ const UImailing = new Lang.Class({
     this.data = new myData.Data();
 
     this.choosebutton = new Gtk.FileChooserButton({
-      title: 'Select a File'
+      title: Gettext.gettext('Select a file')
     });
     this.choosebutton.set_action(Gtk.FileChooserAction.OPEN);
 
@@ -49,7 +49,7 @@ const UImailing = new Lang.Class({
 
     this.chooselabel = new Gtk.Label({
       halign: Gtk.Align.START,
-      label: 'Open a file...'
+      label: Gettext.gettext('Open a file')
     });
 
     // Create the underlying liststore for the table
@@ -75,7 +75,7 @@ const UImailing = new Lang.Class({
 
     // Create the columns for the address book
     let defCol = new Gtk.TreeViewColumn({
-      title: "No Data"
+      title: Gettext.gettext('No data')
     });
 
     // Pack the cell renderers into the columns
