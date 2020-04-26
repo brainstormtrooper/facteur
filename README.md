@@ -32,8 +32,8 @@ In the Settings tab, fill in the account information, hit the Save button on the
 In the Recipients tab, import your CSV file
 
 In the Contents tab, open or create your template, hit the Save button on the editing form
-    * Use {{variable}} to include one of your named variables in your template
-    
+* Use {{variable}} to include one of your named variables in your template
+
 In the Results tab, hit the Send button. The rusults of the mailing will be displayed.
 
 ### Opening and saving your mailings
