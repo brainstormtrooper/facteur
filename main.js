@@ -26,6 +26,7 @@ CSVA = [];
 VARS = [];
 MAILINGS = [];
 
+HASH = 'bobhash1';
 FILENAME = null;
 APP = new Gtk.Application ();
 

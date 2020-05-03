@@ -26,6 +26,7 @@ const UIsettings = new Lang.Class ({
 
   _buildUI: function () {
     // this.parent();
+    // https://developer.gnome.org/gtk3/stable/GtkEntry.html
     const vBox = new Gtk.VBox({spacing: 6});
 
     const fromBox = new Gtk.HBox({spacing: 6});
