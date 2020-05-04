@@ -130,6 +130,7 @@ const UImailing = new Lang.Class({
     this.data.headers = VARS;
     this.updateTable();
   },
+  
   updateTable: function() {
     // this._grid.remove(this._treeView);
     /*

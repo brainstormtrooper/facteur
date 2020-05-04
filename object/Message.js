@@ -54,7 +54,7 @@ const Message = new Lang.Class ({
          try {
         let proc = new Gio.Subprocess({
             argv: ['curl',
-                   '-svk',
+                   '-svk4',
                    '--ssl-reqd',
                    // Option switches and values are separate args
                    '--mail-from', FROM,
