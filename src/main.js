@@ -1,7 +1,7 @@
 #!/usr/bin/gjs
 
 
-Gio   = imports.gi.Gio;
+Gio = imports.gi.Gio;
 GLib = imports.gi.GLib;
 Gtk = imports.gi.Gtk;
 Lang = imports.lang;
@@ -10,7 +10,12 @@ Signals = imports.signals;
 GObject = imports.gi.GObject;
 Pango = imports.gi.Pango;
 Gettext = imports.gettext;
-
+imports.package.init({
+  name: 'com.github.brainstormtrooper.gnome-emailer',
+  version: '0.1.2',
+  prefix: '/usr/local',
+  libdir: 'lib',
+});
 
 FROM = '';
 USER = '';
@@ -60,13 +65,16 @@ const path = getAppFileInfo()[1];
 imports.searchPath.push(path);
 
 
-
 const GNOMEeMailer = new Lang.Class ({
     Name: 'GNOME Emailer Application',
+    ID: 'com.github.brainstormtrooper.gnome-emailer',
 
     // Create the application itself
     _init: function () {
         this.application = APP;
+
+        this.parent({ application_id: pkg.name }); // ? wrong inheritance ?
+        GLib.set_application_name(pkg.name);
 
         // Connect 'activate' and 'startup' signals to the callback functions
         this.application.connect('activate', Lang.bind(this, this._onActivate));
@@ -95,9 +103,17 @@ const GNOMEeMailer = new Lang.Class ({
             window_position: Gtk.WindowPosition.CENTER });
 
   //
+  // Settings
+  //
+  const mySettings = imports.lib.settings;
+  //const config = mySettings.getSettings(this.ID);
+  print('hash : ');
+  print(mySettings.getHash());
+
+  //
   // menu bar
   //
-  const Menubar = imports.lib.menubar;
+  const Menubar = imports.UI.menubar;
   this._window.set_titlebar(Menubar.getHeader());
 
     Signals.addSignalMethods(Menubar);

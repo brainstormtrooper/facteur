@@ -72,5 +72,29 @@ const UIsettings = new Lang.Class ({
     })
 
     return vBox;
+  },
+
+  _buildModal: function () {
+    const vBox = new Gtk.VBox({spacing: 6});
+
+    const hashBox = new Gtk.HBox({spacing: 6});
+    const ipv4Box = new Gtk.HBox({spacing: 6});
+    // const buttonBox = new Gtk.HBox({spacing: 6});
+
+    this.hashField = new Gtk.Entry({placeholder_text: Gettext.gettext('Password Hash')});
+    this.ipv4Field = new Gtk.CheckButton ({label: Gettext.gettext('Force ipv4')});
+    // const saveButton = new Gtk.Button({label: Gettext.gettext('Save')});
+    // const cancelButton = new Gtk.Button({label: Gettext.gettext('Cancel')});
+
+    hashBox.pack_start(this.hashField, false, false, 0);
+    ipv4Box.pack_start(this.ipv4Field, false, false, 0);
+    // buttonBox.pack_start(cancelButton, false, false, 0);
+    // buttonBox.pack_end(saveButton, false, false, 0);
+
+    vBox.pack_start(hashBox, false, false, 0);
+    vBox.pack_start(ipv4Box, false, false, 0);
+    // vBox.pack_end(buttonBox, false, false, 0);
+
+    return vBox;
   }
 });

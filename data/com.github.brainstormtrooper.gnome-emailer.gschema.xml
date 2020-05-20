@@ -1,0 +1,18 @@
+<schemalist gettext-domain="com.github.brainstormtrooper.gnome-emailer">
+  <schema id="com.github.brainstormtrooper.gnome-emailer" path="/com/github/brainstormtrooper/gnome-emailer/">
+    <key name="force-ipv4" type="b">
+      <default>false</default>
+      <summary>Force ipv4</summary>
+      <description>
+        Force using only ipv4 address resolution.
+      </description>
+    </key>
+    <key name="password-hash" type="s">
+      <default>"gnome-emailer"</default>
+      <summary>Master password hash</summary>
+      <description>
+        Used to hash service/account passwords.
+      </description>
+    </key>
+  </schema>
+</schemalist>

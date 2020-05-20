@@ -21,20 +21,6 @@ const Import = function(path) {
       }
     });
   });
-
-  file.query_info_async('standard::type,standard::size',
-    Gio.FileQueryInfoFlags.NONE, GLib.PRIORITY_LOW, null,
-    Lang.bind(this, function(source, async) {
-
-      let info, type, size, text;
-
-      info = source.query_info_finish(async);
-      type = info.get_file_type();
-      size = info.get_size();
-
-      text = 'File info type: ' + type + ', size: ' + size;
-      // this.fileData = text;
-    }));
 }
 
 const save = function(path, data) {

@@ -2,6 +2,8 @@
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const File = imports.lib.file;
+const Settings = imports.UI.Settings;
+const Config = imports.lib.settings;
 
 const PopWidget = function (properties) {
 
@@ -78,8 +80,17 @@ const PopWidget = function (properties) {
     buttonMenu = new Gtk.MenuButton({ image: imageMenu });
     buttonMenu.set_popover(popMenu);
     popMenu.set_size_request(-1, -1);
-    buttonMenu.set_menu_model(this.getMenu());
+    buttonMenu.set_menu_model(this.getFileMenu());
 
+
+    var configMenu = new Gtk.Popover();
+    var imageConfig = new Gtk.Image ({ icon_name: 'open-menu-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
+    var buttonConfig = new Gtk.MenuButton({ image: imageConfig });
+    buttonConfig.set_popover(configMenu);
+    configMenu.set_size_request(-1, -1);
+    buttonConfig.set_menu_model(this.getSettingsMenu());
+
+    headerBar.pack_end(buttonConfig);
     headerBar.pack_end(buttonMenu);
 
     return headerBar;
@@ -133,7 +144,81 @@ const saveAs = function () {
   saver.destroy();
 }
 
-const getMenu = function () { /* GMenu popover */
+const config = function () {
+          // Create the dialog
+          this._dialog = new Gtk.Dialog ({ transient_for: app._window,
+            modal: true,
+            title: "App settings" });
+
+  // Create the dialog's content area, which contains a message
+  this._contentArea = this._dialog.get_content_area();
+  this._message = new Gtk.Label ({label: "This demonstrates a dialog with a label"});
+  this.settings = new Settings.UIsettings();
+
+  this.configFields = this.settings._buildModal(); 
+  this.settings.hashField.set_text(Config.getHash());
+  const ipv4 = Config.getIpv4();
+  print(ipv4);
+  if (ipv4) {
+    this.settings.ipv4Field.set_active(true);
+  }
+  this._contentArea.add (this._message);
+  this._contentArea.add (configFields);
+
+  // Create the dialog's action area, which contains a stock OK button
+  this._actionArea = this._dialog.get_action_area();
+  this.cancelButton = Gtk.Button.new_from_stock (Gtk.STOCK_CANCEL);
+  this._actionArea.add (this.cancelButton);
+  this.saveButton = new Gtk.Button({label: Gettext.gettext('Save')});
+  this._actionArea.add (this.saveButton);
+
+  // Connect the button to the function that handles what it does
+  this.cancelButton.connect ("clicked", this._OKHandler.bind(this));
+  this.saveButton.connect ("clicked", this._saveHandler.bind(this));
+
+  this._dialog.show_all();
+}
+
+_OKHandler = function(dialog, response_id) {
+
+  // Destroy the dialog
+  this._dialog.destroy();
+}
+
+_saveHandler = function(dialog, response_id) {
+  var ipv4 = false;
+  print(this.settings.hashField.get_text());
+  Config.setHash(this.settings.hashField.get_text());
+  ipv4 = this.settings.ipv4Field.get_active();
+  //ipv4 = Config.getIpv4();
+  print(ipv4);
+  Config.setIpv4(ipv4);
+  // Destroy the dialog
+  this._dialog.destroy();
+}
+
+
+
+const getSettingsMenu = function () {
+  let menu, section;
+  menu = new Gio.Menu();
+  section = new Gio.Menu();
+  section.append("Preferences", 'app.preferences');
+  section.append("About", 'app.about');
+  menu.append_section(null, section);
+
+  // Set menu actions
+  let actionConfig = new Gio.SimpleAction ({ name: 'preferences' });
+  actionConfig.connect('activate', () => {
+          config();
+          // this.emit('filename_changed', true);
+        });
+  APP.add_action(actionConfig);
+
+  return menu;
+}
+
+const getFileMenu = function () { /* GMenu popover */
 
     let menu, section, submenu;
 

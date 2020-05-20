@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/com/github/brainstormtrooper/gnome-emailer/js">
+    <file>html.js</file>
+    <file>Mailing.js</file>
+    <file>menubar.js</file>
+    <file>Results.js</file>
+    <file>Settings.js</file>
+    <file>UI.js</file>
+  </gresource>
+</gresources>
