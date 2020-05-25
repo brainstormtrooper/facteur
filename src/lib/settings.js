@@ -1,4 +1,4 @@
-// const Gio = imports.gi.Gio;
+const Gio = imports.gi.Gio;
 const System = imports.system;
 // const pkg = imports.package;
 
@@ -8,9 +8,7 @@ function getSettings(schemaId, path) {
 
   if (!pkg.moduledir.startsWith('resource://')) {
     // Running from the source tree
-    print('running from source tree');
-    print(`Looking for : ${pkg.pkgdatadir}`);
-    print(`moduledir : ${pkg.moduledir}`);
+    log('running from source tree');
     schemaSource = GioSSS.new_from_directory(pkg.pkgdatadir,
                                                GioSSS.get_default(),
                                                false);
@@ -25,7 +23,6 @@ function getSettings(schemaId, path) {
   }
 
 
-
   if (path === undefined)
 
     return new Gio.Settings({ settings_schema: schemaObj });
@@ -37,16 +34,15 @@ function getSettings(schemaId, path) {
 }
 
 function getHash() {
+  // log('getHash');
   const config = getSettings(app.ID);
-  print('hash : ');
-  print(config.get_string('password-hash'));
 
   return config.get_string('password-hash');
 }
 
 function setHash(hash) {
   const config = getSettings(app.ID);
-  print('setting hash...');
+  // print('setting hash...');
   config.set_string('password-hash', hash);
 }
 
@@ -59,5 +55,5 @@ function getIpv4() {
 function setIpv4(val) {
   const config = getSettings(app.ID);
 
-  return config.set_boolean('force-ipv4', val);
+  config.set_boolean('force-ipv4', val);
 }

@@ -3,10 +3,11 @@ Template object.
 
 Handle templates for mailings.
 */
-
-
+const Lang = imports.lang;
+const Signals = imports.signals;
 const myTemplate = imports.lib.template;
-const Template =  new Lang.Class ({
+
+var Template =  new Lang.Class ({
     Name: 'Template Class',
 
 

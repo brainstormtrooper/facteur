@@ -1,10 +1,15 @@
 /**
 UI for displaying mailing list data
 */
+const Gtk = imports.gi.Gtk;
+const Gettext = imports.gettext;
+const Lang = imports.lang;
+const GObject = imports.gi.GObject;
+const Pango = imports.gi.Pango;
 const myData = imports.object.Data; // import awesome.js from current directory
 //this.mailing = new Mailing.UImailing();
 
-const UImailing = new Lang.Class({
+var UImailing = new Lang.Class({
   Name: 'UImailing',
 
   // Build the application's UI
@@ -120,14 +125,17 @@ const UImailing = new Lang.Class({
 
     //fname = gtk_file_chooser_get_filename(GtkFileChooser, this.choosebutton);
     //fname = this.choosebutton.gtk_file_chooser_get_filename();
-    print('You selected : ' + this.choosebutton.selection_changed);
+    if (this.choosebutton.selection_changed) {
+      log('You selected : ' + this.choosebutton.selection_changed);
+    }
+    
     //print('Filename is : ' + this.choosebutton.get_filename().get_path());
 
     return this.vBox;
   },
   _updateUI: function() {
-    this.data.csva = CSVA;
-    this.data.headers = VARS;
+    this.data.csva = app.Data.CSVA;
+    this.data.headers = app.Data.VARS;
     this.updateTable();
   },
   
@@ -153,7 +161,7 @@ const UImailing = new Lang.Class({
 
     });
 
-    print(coltypes);
+    // print(coltypes);
     this._listStore.set_column_types(coltypes);
 
     // Replace the treeview
@@ -175,7 +183,7 @@ const UImailing = new Lang.Class({
     // Create the columns for the address book
 
     for (k = 0; k < this.data.headers.length; k++) {
-      print('***key is : ' + k + ', val is : ' + this.data.headers[k] + ' of type : ' + typeof(this.data.headers[k]));
+      // print('***key is : ' + k + ', val is : ' + this.data.headers[k] + ' of type : ' + typeof(this.data.headers[k]));
 
       // let col=k;
       this[`col_${k}`] = new Gtk.TreeViewColumn({
@@ -190,7 +198,7 @@ const UImailing = new Lang.Class({
       try {
         this._treeView.insert_column(this[`col_${k}`], k);
       } catch (err) {
-        print(err);
+        log(err);
       }
 
     }
@@ -200,8 +208,8 @@ const UImailing = new Lang.Class({
     for (i = 0; i < this.data.csva.length; i++) {
 
       let row = this.data.csva[i];
-      print('trying to push : ' + row[0].toString());
-      print('... the data is of type : ' + typeof(row[1]));
+      // print('trying to push : ' + row[0].toString());
+      // print('... the data is of type : ' + typeof(row[1]));
       let iter = this._listStore.append();
 
       // this._listStore.set (iter, [0, 1, 2],

@@ -1,17 +1,18 @@
 
-const GLib = imports.gi.GLib;
+// const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
-const Webkit = imports.gi.WebKit2;
+const Gettext = imports.gettext;
+// const Webkit = imports.gi.WebKit2;
 
 
-const UIstack = new Lang.Class ({
+var UIstack = new Lang.Class ({
     	Name: 'UIstack',
 
     // Update
 
     updateUI: function () {
-    print('here in UI');
+    log('here in updateUI (UI)');
       this.settings._updateUI();
       this.mailing._updateUI();
       this.html._updateUI();

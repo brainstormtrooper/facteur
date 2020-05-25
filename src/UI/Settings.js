@@ -1,8 +1,11 @@
 /**
 UI for displaying mailing settings
 */
+const Gtk = imports.gi.Gtk;
+const Lang = imports.lang;
+const Gettext = imports.gettext;
 
-const UIsettings = new Lang.Class ({
+var UIsettings = new Lang.Class ({
   Name: 'UIsettings',
   // Implements: [Signals.WithSignals],
 
@@ -12,15 +15,15 @@ const UIsettings = new Lang.Class ({
   },
 
   _updateUI() {
-  print('Updating UI');
+  log('Updating UI (settings)');
     try {
-      this.userField.set_text(USER);
-      this.passField.set_text(PASS);
-      this.smtpField.set_text(HOST);
-      this.subjectField.set_text(SUBJECT);
-      this.fromField.set_text(FROM);
+      this.userField.set_text(app.Data.USER);
+      this.passField.set_text(app.Data.PASS);
+      this.smtpField.set_text(app.Data.HOST);
+      this.subjectField.set_text(app.Data.SUBJECT);
+      this.fromField.set_text(app.Data.FROM);
     } catch (err) {
-      print (err);
+      log (err);
     }
   },
 
@@ -58,12 +61,12 @@ const UIsettings = new Lang.Class ({
     vBox.pack_end(buttonBox, false, false, 0);
 
     saveButton.connect('clicked', () => {
-      USER = this.userField.get_text();
-      PASS = this.passField.get_text();
-      HOST = this.smtpField.get_text();
-      SUBJECT = this.subjectField.get_text();
-      FROM = this.fromField.get_text();
-      const str = ` >>> SETTINGS: "${USER}", "${HOST}", "${SUBJECT}", "${FROM}"...`;
+      app.Data.USER = this.userField.get_text();
+      app.Data.PASS = this.passField.get_text();
+      app.Data.HOST = this.smtpField.get_text();
+      app.Data.SUBJECT = this.subjectField.get_text();
+      app.Data.FROM = this.fromField.get_text();
+      const str = ` >>> SETTINGS: "${app.Data.USER}", "${app.Data.HOST}", "${app.Data.SUBJECT}", "${app.Data.FROM}"...`;
 
       app.ui.results._LOG(str);
       // Signals.addSignalMethods(this);

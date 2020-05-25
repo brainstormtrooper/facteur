@@ -1,9 +1,13 @@
-var crypto = imports.lib.aes;
+const Gio = imports.gi.Gio;
+const GLib = imports.gi.GLib;
+const crypto = imports.lib.aes;
+// const crypto = imports.lib.crypto_js['crypto-js'];
+const settings = imports.lib.settings;
 
-const Import = function(path) {
+var Import = function(path) {
   return new Promise((resolve, reject) => {
     let file = Gio.File.new_for_path(path);
-    print('reading file from ' + path);
+    log('reading file from ' + path);
     // asynchronous file loading...
     file.load_contents_async(null, (file, res) => {
 
@@ -16,14 +20,14 @@ const Import = function(path) {
         resolve(dataString);
 
       } catch (e) {
-        print('Error loading data file : ' + e);
+        log('Error loading data file : ' + e);
         reject(e);
       }
     });
   });
 }
 
-const save = function(path, data) {
+var save = function(path, data) {
   let dataStr = JSON.stringify(data, null, '\t');
   GLib.file_set_contents(path, dataStr);
 }
@@ -31,31 +35,43 @@ const save = function(path, data) {
 // https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
 // https://stackoverflow.com/questions/21291279/how-to-convert-to-string-and-back-again-with-cryptojs
 // replace with : https://github.com/brix/crypto-js ?
-const rollUp = function() {
-  PASS = crypto.CryptoJS.AES.encrypt(PASS, HASH).toString();
-
-  return { FROM, USER, PASS, HOST, SUBJECT, HTML, TEXT, TO, CSVA, VARS };
+var rollUp = function() {
+  const HASH = settings.getHash().toString();
+  const roll = {
+    FROM: app.Data.FROM,
+    USER: app.Data.USER,
+    PASS: crypto.CryptoJS.AES.encrypt(app.Data.PASS, HASH).toString(),
+    HOST: app.Data.HOST,
+    SUBJECT: app.Data.SUBJECT,
+    HTML: app.Data.HTML,
+    TEXT: app.Data.TEXT,
+    TO: app.Data.TO,
+    CSVA: app.Data.CSVA,
+    VARS: app.Data.VARS,
+  };
+  return roll;
 }
 
-const unRoll = function(data) {
+var unRoll = function(data) {
+  const HASH = settings.getHash().toString();
   try {
-    const passwd = (data.PASS ? crypto.CryptoJS.AES.decrypt(data.PASS, HASH).toString(crypto.CryptoJS.enc.Utf8) : '');
-    FROM = data.FROM;
-    USER = data.USER;
-    PASS = passwd;
-    HOST = data.HOST;
-    SUBJECT = data.SUBJECT;
-    HTML = data.HTML;
-    TEXT = data.TEXT;
-    TO = data.TO;
-    CSVA = data.CSVA;
-    VARS = data.VARS;
+    app.Data.FROM = data.FROM;
+    app.Data.USER = data.USER;
+    app.Data.PASS = (data.PASS ? crypto.CryptoJS.AES.decrypt(data.PASS, HASH).toString(crypto.CryptoJS.enc.Utf8) : '');
+    // app.Data.PASS = (data.PASS ? crypto.AES.decrypt(data.PASS, HASH).toString(crypto.enc.Utf8) : '');
+    app.Data.HOST = data.HOST;
+    app.Data.SUBJECT = data.SUBJECT;
+    app.Data.HTML = data.HTML;
+    app.Data.TEXT = data.TEXT;
+    app.Data.TO = data.TO;
+    app.Data.CSVA = data.CSVA;
+    app.Data.VARS = data.VARS;
   } catch (e) {
-    print(e);
+    log(e);
   }
 }
 
-const open = function(path) {
+var open = function(path) {
   let [ok, contents] = GLib.file_get_contents(path);
   if (ok) {
       let map = JSON.parse(contents);

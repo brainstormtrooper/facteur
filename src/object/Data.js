@@ -5,10 +5,11 @@ Data object.
 
 Handle CSV data for mailings.
 */
-
+const Lang = imports.lang;
+const Signals = imports.signals;
 const myFile = imports.lib.file;
 
-const Data = new Lang.Class ({
+var Data = new Lang.Class ({
         Name: 'objectData',
 
         //
@@ -49,7 +50,7 @@ const Data = new Lang.Class ({
         },
 
         emit_updated: function ( ) {
-                print('emitting signal...');
+                // print('emitting signal...');
                 this.emit('Updated_sig');
         },
 
@@ -61,8 +62,8 @@ const Data = new Lang.Class ({
           this.csva = this.CSVToArray(str);
           this.dataHeadings();
           this.trimData();
-          CSVA = this.csva;
-          TO = this.csva.map(x => x[0]);
+          app.Data.CSVA = this.csva;
+          app.Data.TO = this.csva.map(x => x[0]);
           this.emit_updated();
         },
 
@@ -72,11 +73,11 @@ const Data = new Lang.Class ({
         */
         dataHeadings: function(){
           this.headers = this.csva[0];
-          VARS = this.headers;
+          app.Data.VARS = this.headers;
           // VARS.shift();
-          print('headers are : ' + this.headers);
+          // print('headers are : ' + this.headers);
           this.colcount=Object.keys(this.headers).length;
-          print('got ' + this.colcount + ' keys.');
+          // print('got ' + this.colcount + ' keys.');
 
         },
 
@@ -91,16 +92,16 @@ const Data = new Lang.Class ({
             // print('Trimming... : ' + this.csva[k]);
             app.ui.results._LOG('Trimming... : ' + this.csva[k]);
             if(this.csva[k] == [] || this.csva[k] == null){
-              print('deleting row : ' + k);
+              // print('deleting row : ' + k);
               delete(this.csva[k]);
             }
           }
-          print('Trimmed data is now : ' + this.csva);
+          // print('Trimmed data is now : ' + this.csva);
         },
 
 
         CSVToArray: function(strData, strDelimiter) {
-                print('building array...');
+                log('building array...');
                 // Check to see if the delimiter is defined. If not,
                 // then default to comma.
                 strDelimiter = (strDelimiter || ",");

@@ -1,21 +1,25 @@
 /**
 UI for displaying html message interface
 */
+const Lang = imports.lang;
 // const GtkText = imports.gi.GtkText;
+const Gtk = imports.gi.Gtk;
 const GtkSource = imports.gi.GtkSource;
-const myContent = imports.object.Content; // import awesome.js from current directory
+const Webkit = imports.gi.WebKit2;
+const Gettext = imports.gettext;
+const myContent = imports.object.Content;
 const Content = new myContent.Content();
 // this.mailing = new Mailing.UImailing();
 
-const UIhtml = new Lang.Class ({
+var UIhtml = new Lang.Class ({
   Name: 'UIhtml',
 
   _updateUI: function () {
     app.ui.results._LOG("updating html content...");
-    let len = encodeURI(HTML).split(/%..|./).length - 1;
-    this.htmlBuffer.set_text(HTML, len);
-    len = encodeURI(TEXT).split(/%..|./).length - 1;
-    this.textBuffer.set_text(TEXT, len);
+    let len = encodeURI(app.Data.HTML).split(/%..|./).length - 1;
+    this.htmlBuffer.set_text(app.Data.HTML, len);
+    len = encodeURI(app.Data.TEXT).split(/%..|./).length - 1;
+    this.textBuffer.set_text(app.Data.TEXT, len);
   },
 
   _buildUI: function () {
@@ -82,8 +86,8 @@ const UIhtml = new Lang.Class ({
     vBox.pack_start(buttonBox, false, false, 0);
 
     button.connect('clicked', () => {
-      HTML = this.htmlBuffer.text;
-      TEXT = this.textBuffer.text;
+      app.Data.HTML = this.htmlBuffer.text;
+      app.Data.TEXT = this.textBuffer.text;
     });
 
     return vBox;

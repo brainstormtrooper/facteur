@@ -3,10 +3,11 @@ Message object.
 
 Create and send a compiled message.
 */
+const Lang = imports.lang;
+const Gio = imports.gi.Gio;
 
 
-
-const Message = new Lang.Class ({
+var Message = new Lang.Class ({
 
     // VARS
 
@@ -21,7 +22,7 @@ const Message = new Lang.Class ({
     },
 
     SendAll: function() {
-      MAILINGS.forEach((mailing) => {
+        app.Data.MAILINGS.forEach((mailing) => {
         const mobj = this.Build(mailing.text, mailing.html);
         this.Send(mobj, mailing.to);
       });
@@ -29,7 +30,7 @@ const Message = new Lang.Class ({
 
     Build: function(t, h) {
         // SUBJECT="$SUBJECT\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=$BOUNDRY\n\n"
-        const subBlock = `Subject: ${SUBJECT}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
+        const subBlock = `Subject: ${app.Data.SUBJECT}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
         // "--$BOUNDRY\nContent-Type: text/plain; charset=utf-8\n\n$t\n--$BOUNDRY\nContent-Type: text/html; charset=utf-8\n$h\n--$BOUNDRY--"
         const msgBlock = `--${this.boundary}\nContent-Type: text/plain; charset=utf-8\n${t}\n--${this.boundary}\nContent-Type: text/html; charset=utf-8\n${h}\n--${this.boundary}--`;
         // print(msgBlock);
@@ -57,11 +58,11 @@ const Message = new Lang.Class ({
                    '-svk4',
                    '--ssl-reqd',
                    // Option switches and values are separate args
-                   '--mail-from', FROM,
-                   '--url', HOST,
+                   '--mail-from', app.Data.FROM,
+                   '--url', app.Data.HOST,
                    '--mail-rcpt', to,
                    '-T', '-',
-                   '--user', `${USER}:${PASS}`
+                   '--user', `${app.Data.USER}:${app.Data.PASS}`
             ],
             flags: Gio.SubprocessFlags.STDIN_PIPE |
                    Gio.SubprocessFlags.STDOUT_PIPE |
@@ -110,7 +111,7 @@ const Message = new Lang.Class ({
                 }
             );
         });
-        print (`>>> RES >>> : ${stdout}`);
+        log (`>>> RES >>> : ${stdout}`);
         return stdout;
     } catch (e) {
         // This could be any number of errors, but probably it will be a GError

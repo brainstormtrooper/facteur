@@ -1,6 +1,10 @@
 
 const GLib = imports.gi.GLib;
+const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
+const Gettext = imports.gettext;
+const Signals = imports.signals;
+
 const File = imports.lib.file;
 const Settings = imports.UI.Settings;
 const Config = imports.lib.settings;
@@ -28,7 +32,7 @@ const PopWidget = function (properties) {
     this.pop.add(properties.widget);
 };
 
- const getHeader = function () {
+ var getHeader = function () {
 
     let headerBar, headerStart, imageNew, buttonNew, popMenu, imageMenu, buttonMenu;
 
@@ -50,11 +54,11 @@ const PopWidget = function (properties) {
                 opener.add_button('cancel', Gtk.ResponseType.CANCEL);
                 const res = opener.run();
                 if (res == Gtk.ResponseType.ACCEPT) {
-                  FILENAME = opener.get_filename();
-                  print(FILENAME);
+                  app.Data.FILENAME = opener.get_filename();
+                  log(app.Data.FILENAME);
                   this.emit('filename_changed', true);
-                  const fileData = File.open(FILENAME);
-                  print(JSON.stringify(fileData, null, 2));
+                  const fileData = File.open(app.Data.FILENAME);
+                  // print(JSON.stringify(fileData, null, 2));
                   File.unRoll(fileData);
 
                   try {
@@ -62,7 +66,7 @@ const PopWidget = function (properties) {
                     // this.parent();
                     this.emit('update_ui', true);
                   } catch(e) {
-                    print(e);
+                    log(e);
                   }
 
 
@@ -121,27 +125,45 @@ const getPopOpen = function () { /* Widget popover */
 const saveAs = function () {
   const saver = new Gtk.FileChooserDialog({title:'Select a destination'});
   saver.set_action(Gtk.FileChooserAction.SAVE);
-  const WP = FILENAME.split('/');
+  const WP = app.Data.FILENAME.split('/');
   const filename = WP.pop();
   saver.set_current_name(filename);
   try {
     const foldername = `/${WP.join('/')}`;
     saver.set_current_folder(foldername);
   } catch (e) {
-    print(e);
+    log(e);
   }
 
   saver.add_button('save', Gtk.ResponseType.ACCEPT);
   saver.add_button('cancel', Gtk.ResponseType.CANCEL);
   const res = saver.run();
   if (res == Gtk.ResponseType.ACCEPT) {
-    FILENAME = saver.get_filename();
-    print(FILENAME);
+    app.Data.FILENAME = saver.get_filename();
+    log(app.Data.FILENAME);
 
     const data = File.rollUp();
-    File.save(FILENAME, data);
+    File.save(app.Data.FILENAME, data);
   }
   saver.destroy();
+}
+
+const _OKHandler = function(dialog, response_id) {
+
+  // Destroy the dialog
+  this._dialog.destroy();
+}
+
+const _saveHandler = function(dialog, response_id) {
+  var ipv4 = false;
+  // print(this.settings.hashField.get_text());
+  Config.setHash(this.settings.hashField.get_text());
+  ipv4 = this.settings.ipv4Field.get_active();
+  //ipv4 = Config.getIpv4();
+  // print(ipv4);
+  Config.setIpv4(ipv4);
+  // Destroy the dialog
+  this._dialog.destroy();
 }
 
 const config = function () {
@@ -158,7 +180,7 @@ const config = function () {
   this.configFields = this.settings._buildModal(); 
   this.settings.hashField.set_text(Config.getHash());
   const ipv4 = Config.getIpv4();
-  print(ipv4);
+  // print(ipv4);
   if (ipv4) {
     this.settings.ipv4Field.set_active(true);
   }
@@ -173,33 +195,14 @@ const config = function () {
   this._actionArea.add (this.saveButton);
 
   // Connect the button to the function that handles what it does
-  this.cancelButton.connect ("clicked", this._OKHandler.bind(this));
-  this.saveButton.connect ("clicked", this._saveHandler.bind(this));
+  this.cancelButton.connect ("clicked", _OKHandler.bind(this));
+  this.saveButton.connect ("clicked", _saveHandler.bind(this));
 
   this._dialog.show_all();
 }
 
-_OKHandler = function(dialog, response_id) {
 
-  // Destroy the dialog
-  this._dialog.destroy();
-}
-
-_saveHandler = function(dialog, response_id) {
-  var ipv4 = false;
-  print(this.settings.hashField.get_text());
-  Config.setHash(this.settings.hashField.get_text());
-  ipv4 = this.settings.ipv4Field.get_active();
-  //ipv4 = Config.getIpv4();
-  print(ipv4);
-  Config.setIpv4(ipv4);
-  // Destroy the dialog
-  this._dialog.destroy();
-}
-
-
-
-const getSettingsMenu = function () {
+var getSettingsMenu = function () {
   let menu, section;
   menu = new Gio.Menu();
   section = new Gio.Menu();
@@ -213,12 +216,12 @@ const getSettingsMenu = function () {
           config();
           // this.emit('filename_changed', true);
         });
-  APP.add_action(actionConfig);
+  app.application.add_action(actionConfig);
 
   return menu;
 }
 
-const getFileMenu = function () { /* GMenu popover */
+var getFileMenu = function () { /* GMenu popover */
 
     let menu, section, submenu;
 
@@ -235,24 +238,24 @@ const getFileMenu = function () { /* GMenu popover */
                 saveAs();
                 this.emit('filename_changed', true);
               });
-        APP.add_action(actionSaveAs);
+        app.application.add_action(actionSaveAs);
 
 
     let actionSave = new Gio.SimpleAction ({ name: 'save' });
         actionSave.connect('activate', () => {
               if(FILENAME !== null){
                 const data = File.rollUp();
-                File.save(FILENAME, data);
+                File.save(app.Data.FILENAME, data);
               } else {
                 saveAs();
                 try{
                   this.emit('filename_changed', true);
                 } catch (e) {
-                  print(e);
+                  log(e);
                 }
               }
             });
-        APP.add_action(actionSave);
+        app.application.add_action(actionSave);
 
     return menu;
  };

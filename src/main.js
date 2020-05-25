@@ -1,15 +1,15 @@
 #!/usr/bin/gjs
 
 
-Gio = imports.gi.Gio;
-GLib = imports.gi.GLib;
-Gtk = imports.gi.Gtk;
-Lang = imports.lang;
-Webkit = imports.gi.WebKit2;
-Signals = imports.signals;
-GObject = imports.gi.GObject;
-Pango = imports.gi.Pango;
-Gettext = imports.gettext;
+const Gio = imports.gi.Gio;
+const GLib = imports.gi.GLib;
+const Gtk = imports.gi.Gtk;
+const Lang = imports.lang;
+// Webkit = imports.gi.WebKit2;
+const Signals = imports.signals;
+// GObject = imports.gi.GObject;
+// Pango = imports.gi.Pango;
+const Gettext = imports.gettext;
 imports.package.init({
   name: 'com.github.brainstormtrooper.gnome-emailer',
   version: '0.1.2',
@@ -17,28 +17,15 @@ imports.package.init({
   libdir: 'lib',
 });
 
-FROM = '';
-USER = '';
-PASS = '';
-HOST = '';
 
-SUBJECT = '';
-HTML = '';
-TEXT = '';
 
-TO = [];
-CSVA = [];
-VARS = [];
-MAILINGS = [];
+var APP = new Gtk.Application ();
 
-HASH = 'bobhash1';
-FILENAME = null;
-APP = new Gtk.Application ();
-
+/*
 stdout = new Gio.DataOutputStream({
     base_stream: new Gio.UnixOutputStream({ fd: 1 })
 });
-
+*/
 Gettext.bindtextdomain('gnome-emailer-0.1', '/usr/share/locale');
 Gettext.textdomain('gnome-emailer-0.1');
 
@@ -68,6 +55,24 @@ imports.searchPath.push(path);
 const GNOMEeMailer = new Lang.Class ({
     Name: 'GNOME Emailer Application',
     ID: 'com.github.brainstormtrooper.gnome-emailer',
+
+    Data: {
+      FROM: '',
+      USER: '',
+      PASS: '',
+      HOST: '',
+
+      SUBJECT: '',
+      HTML: '',
+      TEXT: '',
+
+      TO: [],
+      CSVA: [],
+      VARS: [],
+      MAILINGS: [],
+
+      FILENAME: 'undetitled',
+    },
 
     // Create the application itself
     _init: function () {
@@ -103,14 +108,6 @@ const GNOMEeMailer = new Lang.Class ({
             window_position: Gtk.WindowPosition.CENTER });
 
   //
-  // Settings
-  //
-  const mySettings = imports.lib.settings;
-  //const config = mySettings.getSettings(this.ID);
-  print('hash : ');
-  print(mySettings.getHash());
-
-  //
   // menu bar
   //
   const Menubar = imports.UI.menubar;
@@ -119,22 +116,22 @@ const GNOMEeMailer = new Lang.Class ({
     Signals.addSignalMethods(Menubar);
     Menubar.connect('update_ui',() => {
       try {
-        print('>>> updating UI');
+        log('>>> updating UI');
         this.ui.updateUI();
       } catch (e) {
-        print(e);
+        log(e);
       }
     });
     Menubar.connect('filename_changed',() => {
-      print('>>> filename_changed');
+      log('>>> filename_changed');
       try {
-        this._window.get_titlebar().set_subtitle(FILENAME);
+        this._window.get_titlebar().set_subtitle(this.Data.FILENAME);
       } catch (e) {
-        print(e);
+        log(e);
       }
     });
     Menubar.connect('Log', (msg) => {
-      print('>>> Log Entry');
+      log('>>> Log Entry');
       //  const iter = this.textBuffer.get_end_iter();
       // this.textBuffer.insert(iter, msg);
     });
@@ -165,7 +162,7 @@ const GNOMEeMailer = new Lang.Class ({
 
 
 // Run the application
-app = new GNOMEeMailer ();
+window.app = new GNOMEeMailer ();
 app.application.run (ARGV);
 
 // changes? in cola?... nope...

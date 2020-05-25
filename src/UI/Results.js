@@ -1,10 +1,14 @@
+const Lang = imports.lang;
+const Gtk = imports.gi.Gtk;
+const Gettext = imports.gettext;
+
 const myTemplate = imports.object.Template;
 const myMessage = imports.object.Message;
 const Template = new myTemplate.Template();
 const Message = new myMessage.Message();
 // this.mailing = new Mailing.UImailing();
 
-const UIresults = new Lang.Class ({
+var UIresults = new Lang.Class ({
   Name: 'UIresults',
 
   _buildUI: function () {
@@ -32,7 +36,7 @@ const UIresults = new Lang.Class ({
       if (res) {
         const sent = Message.SendAll();
       } else {
-        print('Failed...');
+        log('Failed...');
       }
       // Message.SendAll();
     });
