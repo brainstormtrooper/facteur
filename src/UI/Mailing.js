@@ -13,7 +13,7 @@ var UImailing = new Lang.Class({
   Name: 'UImailing',
 
   // Build the application's UI
-  _buildUI: function() {
+  _buildUI: function () {
 
     let pname, fname, result, data;
 
@@ -33,7 +33,7 @@ var UImailing = new Lang.Class({
     });
     this.choosebutton.set_action(Gtk.FileChooserAction.OPEN);
 
-    this.choosebutton.connect('file-set', Lang.bind(this, function() {
+    this.choosebutton.connect('file-set', Lang.bind(this, function () {
       let path = this.choosebutton.get_file().get_path();
       // do something with path
 
@@ -43,7 +43,7 @@ var UImailing = new Lang.Class({
 
     }));
 
-    this.data.connect('Updated_sig', Lang.bind(this, function() {
+    this.data.connect('Updated_sig', Lang.bind(this, function () {
 
       app.ui.results._LOG('imported.');
       // Data to go in the phonebook
@@ -128,18 +128,18 @@ var UImailing = new Lang.Class({
     if (this.choosebutton.selection_changed) {
       log('You selected : ' + this.choosebutton.selection_changed);
     }
-    
+
     //print('Filename is : ' + this.choosebutton.get_filename().get_path());
 
     return this.vBox;
   },
-  _updateUI: function() {
+  _updateUI: function () {
     this.data.csva = app.Data.CSVA;
     this.data.headers = app.Data.VARS;
     this.updateTable();
   },
-  
-  updateTable: function() {
+
+  updateTable: function () {
     // this._grid.remove(this._treeView);
     /*
     this._treeView = new Gtk.TreeView({
@@ -150,7 +150,7 @@ var UImailing = new Lang.Class({
     let phonebook = this.data.csva;
     let k;
     //this._treeView.remove(this._listStore);
-    delete(this._listStore);
+    delete (this._listStore);
     this._listStore = new Gtk.ListStore();
     // this._treeView.add(this._listStore);
 
@@ -223,7 +223,7 @@ var UImailing = new Lang.Class({
     // this.vBox.pack_start(this._treeView, true, true, 0);
   },
 
-  _onSelectionChanged: function() {
+  _onSelectionChanged: function () {
 
     // Grab a treeiter pointing to the current selection
     let [isSelected, model, iter] = this.selection.get_selected();

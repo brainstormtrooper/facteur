@@ -10,8 +10,8 @@ function getSettings(schemaId, path) {
     // Running from the source tree
     log('running from source tree');
     schemaSource = GioSSS.new_from_directory(pkg.pkgdatadir,
-                                               GioSSS.get_default(),
-                                               false);
+      GioSSS.get_default(),
+      false);
   } else {
     schemaSource = GioSSS.get_default();
   }
@@ -28,8 +28,10 @@ function getSettings(schemaId, path) {
     return new Gio.Settings({ settings_schema: schemaObj });
   else
 
-    return new Gio.Settings({ settings_schema: schemaObj,
-                              path: path });
+    return new Gio.Settings({
+      settings_schema: schemaObj,
+      path: path
+    });
 
 }
 

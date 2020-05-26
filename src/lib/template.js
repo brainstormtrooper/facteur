@@ -4,7 +4,7 @@ function iterRows() {
   // print(`> VARS = ${app.Data.VARS}`);
   for (let i = 0; i < app.Data.CSVA.length; i++) {
     const row = app.Data.CSVA[i];
-     // print(`> row is ${row}`);
+    // print(`> row is ${row}`);
     const vals = {};
     const to = app.Data.TO[i];
     let cHTML = app.Data.HTML;

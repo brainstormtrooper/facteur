@@ -5,17 +5,17 @@ const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
 const Gettext = imports.gettext;
 
-var UIsettings = new Lang.Class ({
+var UIsettings = new Lang.Class({
   Name: 'UIsettings',
   // Implements: [Signals.WithSignals],
 
-  _init: function() {
+  _init: function () {
 
     // Signals.addSignalMethods(this);
   },
 
   _updateUI() {
-  log('Updating UI (settings)');
+    log('Updating UI (settings)');
     try {
       this.userField.set_text(app.Data.USER);
       this.passField.set_text(app.Data.PASS);
@@ -23,28 +23,28 @@ var UIsettings = new Lang.Class ({
       this.subjectField.set_text(app.Data.SUBJECT);
       this.fromField.set_text(app.Data.FROM);
     } catch (err) {
-      log (err);
+      log(err);
     }
   },
 
   _buildUI: function () {
     // this.parent();
     // https://developer.gnome.org/gtk3/stable/GtkEntry.html
-    const vBox = new Gtk.VBox({spacing: 6});
+    const vBox = new Gtk.VBox({ spacing: 6 });
 
-    const fromBox = new Gtk.HBox({spacing: 6});
-    const smtpBox = new Gtk.HBox({spacing: 6});
-    const userBox = new Gtk.HBox({spacing: 6});
-    const passBox = new Gtk.HBox({spacing: 6});
-    const subjectBox = new Gtk.HBox({spacing: 6});
-    const buttonBox = new Gtk.HBox({spacing: 6});
+    const fromBox = new Gtk.HBox({ spacing: 6 });
+    const smtpBox = new Gtk.HBox({ spacing: 6 });
+    const userBox = new Gtk.HBox({ spacing: 6 });
+    const passBox = new Gtk.HBox({ spacing: 6 });
+    const subjectBox = new Gtk.HBox({ spacing: 6 });
+    const buttonBox = new Gtk.HBox({ spacing: 6 });
 
-    this.fromField = new Gtk.Entry({placeholder_text: Gettext.gettext('From e-mail')});
-    this.smtpField = new Gtk.Entry({placeholder_text: Gettext.gettext('Smtp host')});
-    this.userField = new Gtk.Entry({placeholder_text: Gettext.gettext('Smtp user')});
-    this.passField = new Gtk.Entry({placeholder_text: Gettext.gettext('Smtp password'), visibility: false, input_purpose: "password"});
-    this.subjectField = new Gtk.Entry({placeholder_text: Gettext.gettext('E-mail subject')});
-    const saveButton = new Gtk.Button({label: Gettext.gettext('Save')});
+    this.fromField = new Gtk.Entry({ placeholder_text: Gettext.gettext('From e-mail') });
+    this.smtpField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Smtp host') });
+    this.userField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Smtp user') });
+    this.passField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Smtp password'), visibility: false, input_purpose: "password" });
+    this.subjectField = new Gtk.Entry({ placeholder_text: Gettext.gettext('E-mail subject') });
+    const saveButton = new Gtk.Button({ label: Gettext.gettext('Save') });
 
     fromBox.pack_start(this.fromField, false, false, 0);
     smtpBox.pack_start(this.smtpField, false, false, 0);
@@ -78,14 +78,14 @@ var UIsettings = new Lang.Class ({
   },
 
   _buildModal: function () {
-    const vBox = new Gtk.VBox({spacing: 6});
+    const vBox = new Gtk.VBox({ spacing: 6 });
 
-    const hashBox = new Gtk.HBox({spacing: 6});
-    const ipv4Box = new Gtk.HBox({spacing: 6});
+    const hashBox = new Gtk.HBox({ spacing: 6 });
+    const ipv4Box = new Gtk.HBox({ spacing: 6 });
     // const buttonBox = new Gtk.HBox({spacing: 6});
 
-    this.hashField = new Gtk.Entry({placeholder_text: Gettext.gettext('Password Hash')});
-    this.ipv4Field = new Gtk.CheckButton ({label: Gettext.gettext('Force ipv4')});
+    this.hashField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Password Hash') });
+    this.ipv4Field = new Gtk.CheckButton({ label: Gettext.gettext('Force ipv4') });
     // const saveButton = new Gtk.Button({label: Gettext.gettext('Save')});
     // const cancelButton = new Gtk.Button({label: Gettext.gettext('Cancel')});
 

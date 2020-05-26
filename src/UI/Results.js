@@ -8,19 +8,19 @@ const Template = new myTemplate.Template();
 const Message = new myMessage.Message();
 // this.mailing = new Mailing.UImailing();
 
-var UIresults = new Lang.Class ({
+var UIresults = new Lang.Class({
   Name: 'UIresults',
 
   _buildUI: function () {
 
-    const vBox = new Gtk.VBox({spacing: 6});
+    const vBox = new Gtk.VBox({ spacing: 6 });
     const checkboxRow = new Gtk.HBox();
     const SendbuttonRow = new Gtk.HBox();
     const logWindow = new Gtk.ScrolledWindow({ vexpand: true });
     this.textBuffer = new Gtk.TextBuffer();
     const logText = new Gtk.TextView({ buffer: this.textBuffer, editable: false });
     // const checkbutton = new Gtk.CheckButton({label: "Use HTML"});
-    const sendButton = new Gtk.Button({label: Gettext.gettext('Send')});
+    const sendButton = new Gtk.Button({ label: Gettext.gettext('Send') });
 
     // checkboxRow.pack_start(checkbutton, false, false, 0);
     logWindow.add(logText);
@@ -44,7 +44,7 @@ var UIresults = new Lang.Class ({
     return vBox;
   },
 
-  _LOG: function(string, level = 'INFO') {
+  _LOG: function (string, level = 'INFO') {
     const entry = `[${level}] ${string} \r\n`
     const len = encodeURI(entry).split(/%..|./).length - 1;
     this.textBuffer.insert(this.textBuffer.get_end_iter(), entry, len);

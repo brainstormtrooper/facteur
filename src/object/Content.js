@@ -7,7 +7,7 @@ const Lang = imports.lang;
 
 const myFile = imports.lib.file;
 
-var Content = new Lang.Class ({
+var Content = new Lang.Class({
   Name: 'objectContent',
 
   Import: async function (path) {

@@ -4,7 +4,7 @@ const crypto = imports.lib.aes;
 // const crypto = imports.lib.crypto_js['crypto-js'];
 const settings = imports.lib.settings;
 
-var Import = function(path) {
+var Import = function (path) {
   return new Promise((resolve, reject) => {
     let file = Gio.File.new_for_path(path);
     log('reading file from ' + path);
@@ -27,7 +27,7 @@ var Import = function(path) {
   });
 }
 
-var save = function(path, data) {
+var save = function (path, data) {
   let dataStr = JSON.stringify(data, null, '\t');
   GLib.file_set_contents(path, dataStr);
 }
@@ -35,7 +35,7 @@ var save = function(path, data) {
 // https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
 // https://stackoverflow.com/questions/21291279/how-to-convert-to-string-and-back-again-with-cryptojs
 // replace with : https://github.com/brix/crypto-js ?
-var rollUp = function() {
+var rollUp = function () {
   const HASH = settings.getHash().toString();
   const roll = {
     FROM: app.Data.FROM,
@@ -52,7 +52,7 @@ var rollUp = function() {
   return roll;
 }
 
-var unRoll = function(data) {
+var unRoll = function (data) {
   const HASH = settings.getHash().toString();
   try {
     app.Data.FROM = data.FROM;
@@ -71,11 +71,11 @@ var unRoll = function(data) {
   }
 }
 
-var open = function(path) {
+var open = function (path) {
   let [ok, contents] = GLib.file_get_contents(path);
   if (ok) {
-      let map = JSON.parse(contents);
-      return map;
+    let map = JSON.parse(contents);
+    return map;
   } else {
     return {};
   }
