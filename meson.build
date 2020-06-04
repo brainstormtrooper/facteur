@@ -34,9 +34,9 @@ app_configuration.set('libdir', join_paths(get_option('prefix'), get_option('lib
 app_configuration.set('pkgdatadir', pkgdatadir)
 
 subdir('src')
-subdir('src/lib')
-subdir('src/ui')
-subdir('src/object')
+# subdir('src/lib')
+# subdir('src/ui')
+# subdir('src/object')
 subdir('data')
 subdir('po')
 meson.add_install_script('meson/meson_post_install.py')

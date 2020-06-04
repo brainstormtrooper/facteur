@@ -1,4 +1,4 @@
-app_resource = gnome.compile_resources(app_id + '.src',
+app_resource_src = gnome.compile_resources(app_id + '.src',
   app_id + '.src.gresource.xml',
   source_dir: '.',
   gresource_bundle: true,
@@ -13,7 +13,11 @@ app_launcher = configure_file(
 )
 
 install_data(app_launcher,
-  install_dir: get_option('pkgdatadir'),
+  install_dir: pkgdatadir,
   install_mode: 'rwxr-xr-x'
 )
 
+run_target('run',
+  command: app_launcher,
+  depends: app_resource_src
+)

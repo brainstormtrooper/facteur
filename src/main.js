@@ -1,15 +1,5 @@
-#!/usr/bin/gjs
 
 
-const Gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
-const Gtk = imports.gi.Gtk;
-const Lang = imports.lang;
-// Webkit = imports.gi.WebKit2;
-const Signals = imports.signals;
-// GObject = imports.gi.GObject;
-// Pango = imports.gi.Pango;
-const Gettext = imports.gettext;
 imports.package.init({
   name: 'com.github.brainstormtrooper.gnome-emailer',
   version: '0.1.2',
@@ -17,6 +7,20 @@ imports.package.init({
   libdir: 'lib',
 });
 
+
+const Gio = imports.gi.Gio;
+const GLib = imports.gi.GLib;
+const Gtk = imports.gi.Gtk;
+const Lang = imports.lang;
+// const GObject = imports.gi.GObject;
+// Webkit = imports.gi.WebKit2;
+const Signals = imports.signals;
+// GObject = imports.gi.GObject;
+// Pango = imports.gi.Pango;
+const Gettext = imports.gettext;
+
+const Menubar = imports.UI.menubar;
+const UI = imports.UI.UI; 
 
 
 var APP = new Gtk.Application();
@@ -33,7 +37,7 @@ Gettext.textdomain('gnome-emailer-0.1');
 //
 // add app folder to path
 //
-
+/*
 function getAppFileInfo() {
   let stack = (new Error()).stack,
     stackLine = stack.split('\n')[1],
@@ -50,7 +54,7 @@ function getAppFileInfo() {
 }
 const path = getAppFileInfo()[1];
 imports.searchPath.push(path);
-
+*/
 
 const GNOMEeMailer = new Lang.Class({
   Name: 'GNOME Emailer Application',
@@ -111,7 +115,7 @@ const GNOMEeMailer = new Lang.Class({
     //
     // menu bar
     //
-    const Menubar = imports.UI.menubar;
+    
     this._window.set_titlebar(Menubar.getHeader());
 
     Signals.addSignalMethods(Menubar);
@@ -142,7 +146,6 @@ const GNOMEeMailer = new Lang.Class({
     this._Vbox = new Gtk.VBox({ spacing: 6 });
     this._Hbox = new Gtk.HBox({ spacing: 6, homogeneous: true });
 
-    const UI = imports.UI.UI; // import awesome.js from current directory
     this.ui = new UI.UIstack();
     this.ui._buildStack();
 
@@ -164,7 +167,8 @@ const GNOMEeMailer = new Lang.Class({
 
 // Run the application
 window.app = new GNOMEeMailer();
-app.application.run(ARGV);
-
-// changes? in cola?... nope...
+// app.application.run(ARGV);
+app.application.run(ARGV)([imports.system.programInvocationName].concat(ARGV));
+// For technical reasons, this is the proper way you should start your application
+// (new GNOMEeMailer()).application.run([imports.system.programInvocationName].concat(ARGV));
 
