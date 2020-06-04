@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>com.github.brainstormtrooper.gnome-emailer.desktop</id>
+  <licence>CC0</licence>
+  <description>
+    <_p>
+      A template-based emailing app for small business offering:
+    </_p>
+    <ul>
+      <_li>Email personalization</_li>
+      <_li>HTML and text emails</_li>
+      <_li>CSV data import</_li>
+    </ul>
+  </description>
+  <screenshots>
+    <screenshot type="default" width="1024" height="768">https://www.example.com/gtk-js-app/screenshots/large.png</screenshot>
+  </screenshots>
+  <url type="homepage">https://www.github.com/brainstormtrooper/gnome-emailer</url>
+  <updatecontact>brainstormtrooper_at_free.fr</updatecontact>
+</component>

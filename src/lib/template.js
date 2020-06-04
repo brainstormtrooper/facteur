@@ -1,24 +1,24 @@
 function iterRows() {
-  print('START - starting treatment');
-  MAILINGS.length = 0;
-  print(`> VARS = ${VARS}`);
-  for (let i = 0; i < CSVA.length; i++) {
-    const row = CSVA[i];
-    print(`> row is ${row}`);
+  log('START - starting treatment');
+  app.Data.MAILINGS.length = 0;
+  // print(`> VARS = ${app.Data.VARS}`);
+  for (let i = 0; i < app.Data.CSVA.length; i++) {
+    const row = app.Data.CSVA[i];
+    // print(`> row is ${row}`);
     const vals = {};
-    const to = TO[i];
-    let cHTML = HTML;
-    let cTEXT = TEXT;
+    const to = app.Data.TO[i];
+    let cHTML = app.Data.HTML;
+    let cTEXT = app.Data.TEXT;
     row.forEach((val, k) => {
-      print(`VARS[k] = "${VARS[k]}", val = "${val}"`);
-      vals[VARS[k]] = val;
+      // print(`VARS[k] = "${app.Data.VARS[k]}", val = "${val}"`);
+      vals[app.Data.VARS[k]] = val;
     });
     Object.entries(vals).forEach(([i, v]) => {
       const iw = `{{${i}}}`;
       _positions(cHTML).forEach((pos) => {
-        print(`> Comparing "${pos}" to "${iw}"`);
+        // print(`> Comparing "${pos}" to "${iw}"`);
         if (pos == iw) {
-          print(`> MATCH; replacing pos="${pos}" with v="${v}"`);
+          // print(`> MATCH; replacing pos="${pos}" with v="${v}"`);
           cHTML = cHTML.replace(pos, v);
         }
       });
@@ -28,18 +28,20 @@ function iterRows() {
         }
       });
     });
+    /*
     print('-------------');
     print(cHTML);
     print(cTEXT);
     print('-------------');
-    MAILINGS.push({
+    */
+    app.Data.MAILINGS.push({
       html: cHTML,
       text: cTEXT,
       to,
     });
   };
-  print(`> MAILINGS.length ; "${MAILINGS.length}"`);
-  return MAILINGS.length;
+  // print(`> MAILINGS.length ; "${app.Data.MAILINGS.length}"`);
+  return app.Data.MAILINGS.length;
 }
 
 function _positions(template) {

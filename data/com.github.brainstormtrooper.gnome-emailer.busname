@@ -1,0 +1,11 @@
+[Unit]
+# Optional
+Description=com.github.brainstormtrooper.gnome-emailer
+# Optional (obviously)
+Documentation=http://www.github.com/brainstormtrooper/gnome-emailer
+
+[BusName]
+# Optional
+Name=com.github.brainstormtrooper.gnome-emailer
+# Optional
+# Service=com.github.brainstormtrooper.gnome-emailer.service

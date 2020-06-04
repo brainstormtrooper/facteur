@@ -3,12 +3,15 @@ Gnome GTK app for sending template based emails
 
 ## Getting the program
 git clone git@github.com:brainstormtrooper/GNOME-Emailer.git
+
 -or-
+
 download the ZIP archive
 
 ## Running the program
 cd GNOME-Emailer
-gjs ./main.js
+
+gjs src/main.js
 
 
 ### Creating a CSV mailing list
@@ -40,3 +43,16 @@ In the Results tab, hit the Send button. The rusults of the mailing will be disp
 You can save your mailing to a file for reuse or to send later by hitting the Save button on the header bar and selecting a file to save to.
 
 You can open a saved file by hitting the file chooser button on the header bar.
+
+## Installing the program
+This project uses the meson build system.
+
+To install the application, run the following commands:
+
+```meson <some build folder>```
+
+```cd <some build folder>```
+
+```ninja``` (here you can test the build with ```ninja run```)
+
+```meson install```
