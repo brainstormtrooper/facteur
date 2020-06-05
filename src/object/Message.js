@@ -5,7 +5,7 @@ Create and send a compiled message.
 */
 const Lang = imports.lang;
 const Gio = imports.gi.Gio;
-
+const Config = imports.lib.settings;
 
 var Message = new Lang.Class({
 
@@ -52,10 +52,15 @@ var Message = new Lang.Class({
 	//
 	Send: async function (msgObj, to, cancellable = null) {
 		// cat fifo | mail -s "$(echo -e $SUBJECT)" -r $FROM$SMTPs$SMTPu$SMTPp$i
+		const ipv4 = Config.getIpv4();
+		let flagStr = '-svk';
+		if (ipv4) {
+			flagStr = '-svk4';
+		}
 		try {
 			let proc = new Gio.Subprocess({
 				argv: ['curl',
-					'-svk4',
+					flagStr,
 					'--ssl-reqd',
 					// Option switches and values are separate args
 					'--mail-from', app.Data.FROM,
