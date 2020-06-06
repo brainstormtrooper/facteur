@@ -203,6 +203,27 @@ const config = function () {
   this._dialog.show_all();
 }
 
+const about = function() {
+  let aboutDialog = new Gtk.AboutDialog(
+      { authors: [ 'Rick Opper <brainstormtrooper@free.fr>' ],
+        // translator_credits: _("translator-credits"),
+        program_name: "Gnome-emailer",
+        comments: Gettext.gettext("Application for sending template based emails"),
+        copyright: 'Copyright 2015 Rick Opper',
+        license_type: Gtk.License.GPL_2_0,
+        logo_icon_name: 'com.github.brainstormtrooper.gnome-emailer',
+        version: pkg.version,
+        website: 'http://www.brainstormtrooper.free.fr',
+        wrap_license: true,
+        modal: true,
+        transient_for: app._window
+      });
+
+  aboutDialog.show();
+  aboutDialog.connect('response', function() {
+  aboutDialog.destroy();
+  });
+}
 
 var getSettingsMenu = function () {
   let menu, section;
@@ -218,7 +239,13 @@ var getSettingsMenu = function () {
     config();
     // this.emit('filename_changed', true);
   });
+  let actionAbout = new Gio.SimpleAction({ name: 'about' });
+  actionAbout.connect('activate', () => {
+    about();
+    // this.emit('filename_changed', true);
+  });
   app.application.add_action(actionConfig);
+  app.application.add_action(actionAbout);
 
   return menu;
 }
