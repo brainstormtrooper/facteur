@@ -10,9 +10,9 @@ const Settings = imports.UI.Settings;
 const Config = imports.lib.settings;
 
 const PopWidget = function (properties) {
-
+  // pan-down-symbolic
   let label = new Gtk.Label({ label: properties.label });
-  let image = new Gtk.Image({ icon_name: 'pan-down-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
+  let image = new Gtk.Image({ icon_name: 'document-save-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
   let widget = new Gtk.Grid();
   widget.attach(label, 0, 0, 1, 1);
   widget.attach(image, 1, 0, 1, 1);
@@ -176,7 +176,7 @@ const config = function () {
 
   // Create the dialog's content area, which contains a message
   this._contentArea = this._dialog.get_content_area();
-  this._message = new Gtk.Label({ label: "This demonstrates a dialog with a label" });
+  this._message = new Gtk.Label({ label: "Please configure your password hash and IPv4 preferences here." });
   this.settings = new Settings.UIsettings();
 
   this.configFields = this.settings._buildModal();

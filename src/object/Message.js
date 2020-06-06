@@ -106,13 +106,15 @@ var Message = new Lang.Class({
 							// zero causing the Promise to reject()
 							resolve(stdout);
 						} catch (e) {
+							app.ui.results._LOG(`>>> ERR >>> : ${e}`);
 							reject(e);
 						}
 					}
 				);
 			});
 			log(`>>> RES >>> : ${stdout}`);
-			return stdout;
+			app.ui.results._LOG(`>>> RES >>> : ${stdout}`);
+			// return stdout;
 		} catch (e) {
 			// This could be any number of errors, but probably it will be a GError
 			// in which case it will have `code` property carrying a GIOErrorEnum
