@@ -205,23 +205,23 @@ const config = function () {
 
 const about = function() {
   let aboutDialog = new Gtk.AboutDialog(
-      { authors: [ 'Rick Opper <brainstormtrooper@free.fr>' ],
-        // translator_credits: _("translator-credits"),
-        program_name: "Gnome-emailer",
-        comments: Gettext.gettext("Application for sending template based emails"),
-        copyright: 'Copyright 2015 Rick Opper',
-        license_type: Gtk.License.GPL_2_0,
-        logo_icon_name: 'com.github.brainstormtrooper.gnome-emailer',
-        version: pkg.version,
-        website: 'http://www.brainstormtrooper.free.fr',
-        wrap_license: true,
-        modal: true,
-        transient_for: app._window
-      });
+    { authors: [ 'Rick Opper <brainstormtrooper@free.fr>' ],
+      // translator_credits: _("translator-credits"),
+      program_name: "Gnome-emailer",
+      comments: Gettext.gettext("Application for sending template based emails"),
+      copyright: 'Copyright 2015 Rick Opper',
+      license_type: Gtk.License.GPL_2_0,
+      logo_icon_name: 'com.github.brainstormtrooper.gnome-emailer',
+      version: pkg.version,
+      website: 'http://www.brainstormtrooper.free.fr',
+      wrap_license: true,
+      modal: true,
+      transient_for: app._window
+    });
 
   aboutDialog.show();
   aboutDialog.connect('response', function() {
-  aboutDialog.destroy();
+    aboutDialog.destroy();
   });
 }
 
@@ -272,7 +272,7 @@ var getFileMenu = function () { /* GMenu popover */
 
   let actionSave = new Gio.SimpleAction({ name: 'save' });
   actionSave.connect('activate', () => {
-    if (FILENAME !== null) {
+    if (app.Data.FILENAME !== null) {
       const data = File.rollUp();
       File.save(app.Data.FILENAME, data);
     } else {
