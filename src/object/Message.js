@@ -34,7 +34,7 @@ var Message = new Lang.Class({
 		// "--$BOUNDRY\nContent-Type: text/plain; charset=utf-8\n\n$t\n--$BOUNDRY\nContent-Type: text/html; charset=utf-8\n$h\n--$BOUNDRY--"
 		const msgBlock = `--${this.boundary}\nContent-Type: text/plain; charset=utf-8\n${t}\n--${this.boundary}\nContent-Type: text/html; charset=utf-8\n${h}\n--${this.boundary}--`;
 		// print(msgBlock);
-		app.ui.results._LOG('Current message is : ' + msgBlock);
+		// app.ui.results._LOG('Current message is : ' + msgBlock);
 		const res = { subBlock, msgBlock };
 		return res;
 

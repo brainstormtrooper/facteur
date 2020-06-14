@@ -15,7 +15,7 @@ var UIsettings = new Lang.Class({
   },
 
   _updateUI() {
-    log('Updating UI (settings)');
+    // log('Updating UI (settings)');
     try {
       this.userField.set_text(app.Data.USER);
       this.passField.set_text(app.Data.PASS);
