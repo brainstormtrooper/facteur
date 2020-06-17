@@ -112,6 +112,9 @@ const GNOMEeMailer = new Lang.Class({
       window_position: Gtk.WindowPosition.CENTER
     });
 
+    this._window.set_events('GDK_ENTER_NOTIFY_MASK');
+    this._window.add_events('GDK_LEAVE_NOTIFY_MASK');
+
     //
     // menu bar
     //

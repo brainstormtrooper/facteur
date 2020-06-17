@@ -45,11 +45,14 @@ var UIsettings = new Lang.Class({
     this.passField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Smtp password'), visibility: false, input_purpose: "password" });
     this.subjectField = new Gtk.Entry({ placeholder_text: Gettext.gettext('E-mail subject') });
     const saveButton = new Gtk.Button({ label: Gettext.gettext('Save') });
+    const imagePass = new Gtk.Image({ icon_name: 'dialog-password-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
+    const passButton = new Gtk.Button({ image: imagePass });
 
     fromBox.pack_start(this.fromField, false, false, 0);
     smtpBox.pack_start(this.smtpField, false, false, 0);
     userBox.pack_start(this.userField, false, false, 0);
     passBox.pack_start(this.passField, false, false, 0);
+    passBox.pack_start(passButton, false, false, 0);
     subjectBox.pack_start(this.subjectField, false, false, 0);
     buttonBox.pack_end(saveButton, false, false, 0);
 
@@ -59,6 +62,13 @@ var UIsettings = new Lang.Class({
     vBox.pack_start(passBox, false, false, 0);
     vBox.pack_start(subjectBox, false, false, 0);
     vBox.pack_end(buttonBox, false, false, 0);
+
+    passButton.connect('enter-notify-event', () => {
+      this.passField.set_visibility(true);
+    });
+    passButton.connect('leave-notify-event', () => {
+      this.passField.set_visibility(false);
+    });
 
     saveButton.connect('clicked', () => {
       app.Data.USER = this.userField.get_text();
@@ -84,12 +94,15 @@ var UIsettings = new Lang.Class({
     const ipv4Box = new Gtk.HBox({ spacing: 6 });
     // const buttonBox = new Gtk.HBox({spacing: 6});
 
-    this.hashField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Password Hash') });
+    this.hashField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Password Hash'), visibility: false, input_purpose: "password" });
     this.ipv4Field = new Gtk.CheckButton({ label: Gettext.gettext('Force ipv4') });
+    const imagePass = new Gtk.Image({ icon_name: 'dialog-password-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
+    const passButton = new Gtk.Button({ image: imagePass });
     // const saveButton = new Gtk.Button({label: Gettext.gettext('Save')});
     // const cancelButton = new Gtk.Button({label: Gettext.gettext('Cancel')});
 
     hashBox.pack_start(this.hashField, false, false, 0);
+    hashBox.pack_start(passButton, false, false, 0);
     ipv4Box.pack_start(this.ipv4Field, false, false, 0);
     // buttonBox.pack_start(cancelButton, false, false, 0);
     // buttonBox.pack_end(saveButton, false, false, 0);
@@ -97,6 +110,13 @@ var UIsettings = new Lang.Class({
     vBox.pack_start(hashBox, false, false, 0);
     vBox.pack_start(ipv4Box, false, false, 0);
     // vBox.pack_end(buttonBox, false, false, 0);
+
+    passButton.connect('enter-notify-event', () => {
+      this.hashField.set_visibility(true);
+    });
+    passButton.connect('leave-notify-event', () => {
+      this.hashField.set_visibility(false);
+    });
 
     return vBox;
   }
