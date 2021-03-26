@@ -4,14 +4,17 @@ UI for displaying mailing settings
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
 const Gettext = imports.gettext;
+const Signals = imports.signals;
 
 var UIsettings = new Lang.Class({
   Name: 'UIsettings',
-  // Implements: [Signals.WithSignals],
+  Implements: [Signals.WithSignals],
 
   _init: function () {
 
-    // Signals.addSignalMethods(this);
+    // Signals.addSignalMethods(UIsettings.prototype);
+    // this.parent();
+    this.emit('bob', false);
   },
 
   _updateUI() {
@@ -30,6 +33,7 @@ var UIsettings = new Lang.Class({
   _buildUI: function () {
     // this.parent();
     // https://developer.gnome.org/gtk3/stable/GtkEntry.html
+    this.emit('Log', '>>> building UI...');
     const vBox = new Gtk.VBox({ spacing: 6 });
 
     const fromBox = new Gtk.HBox({ spacing: 6 });

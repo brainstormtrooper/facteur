@@ -6,10 +6,25 @@ const myTemplate = imports.object.Template;
 const myMessage = imports.object.Message;
 const Template = new myTemplate.Template();
 const Message = new myMessage.Message();
+const Signals = imports.signals;
 // this.mailing = new Mailing.UImailing();
 
 var UIresults = new Lang.Class({
   Name: 'UIresults',
+  Implements: [Signals.WithSignals],
+
+  _init: function () {
+
+    // Signals.addSignalMethods(UIresults.prototype);
+    // this.parent();
+    this.emit('bob', false);
+    
+    this.connect('Log', (msg) => {
+      log('>>> Log Entry from Results signal');
+      this._LOG(msg);
+    });
+    
+  },
 
   _buildUI: function () {
 
