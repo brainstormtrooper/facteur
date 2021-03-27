@@ -36,34 +36,55 @@ var UIsettings = new Lang.Class({
     this.emit('Log', '>>> building UI...');
     const vBox = new Gtk.VBox({ spacing: 6 });
 
+    const fromlabelBox = new Gtk.HBox({ spacing: 6 });
     const fromBox = new Gtk.HBox({ spacing: 6 });
+    const smtplabelBox = new Gtk.HBox({ spacing: 6 });
     const smtpBox = new Gtk.HBox({ spacing: 6 });
+    const userlabelBox = new Gtk.HBox({ spacing: 6 });
     const userBox = new Gtk.HBox({ spacing: 6 });
+    const passlabelBox = new Gtk.HBox({ spacing: 6 });
     const passBox = new Gtk.HBox({ spacing: 6 });
+    const subjectlabelBox = new Gtk.HBox({ spacing: 6 });
     const subjectBox = new Gtk.HBox({ spacing: 6 });
     const buttonBox = new Gtk.HBox({ spacing: 6 });
 
-    this.fromField = new Gtk.Entry({ placeholder_text: Gettext.gettext('From e-mail') });
-    this.smtpField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Smtp host') });
-    this.userField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Smtp user') });
-    this.passField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Smtp password'), visibility: false, input_purpose: "password" });
-    this.subjectField = new Gtk.Entry({ placeholder_text: Gettext.gettext('E-mail subject') });
+    const fromlabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('From e-mail') });
+    const smtplabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('Smtp host') });
+    const userlabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('Smtp user') });
+    const passlabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('Smtp password') });
+    const subjectlabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('E-mail subject') });
+
+    this.fromField = new Gtk.Entry({ placeholder_text: Gettext.gettext('me@domain.ext') });
+    this.smtpField = new Gtk.Entry({ placeholder_text: Gettext.gettext('smtp(s)://sub.domain.ext:123') });
+    this.userField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Username') });
+    this.passField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Password'), visibility: false, input_purpose: "password" });
+    this.subjectField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Subject') });
     const saveButton = new Gtk.Button({ label: Gettext.gettext('Save') });
     const imagePass = new Gtk.Image({ icon_name: 'dialog-password-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
     const passButton = new Gtk.Button({ image: imagePass });
 
+    fromlabelBox.pack_start(fromlabel, false, false, 0);
     fromBox.pack_start(this.fromField, false, false, 0);
+    smtplabelBox.pack_start(smtplabel, false, false, 0);
     smtpBox.pack_start(this.smtpField, false, false, 0);
+    userlabelBox.pack_start(userlabel, false, false, 0);
     userBox.pack_start(this.userField, false, false, 0);
+    passlabelBox.pack_start(passlabel, false, false, 0);
     passBox.pack_start(this.passField, false, false, 0);
     passBox.pack_start(passButton, false, false, 0);
+    subjectlabelBox.pack_start(subjectlabel, false, false, 0);
     subjectBox.pack_start(this.subjectField, false, false, 0);
     buttonBox.pack_end(saveButton, false, false, 0);
 
+    vBox.pack_start(fromlabelBox, false, false, 0);
     vBox.pack_start(fromBox, false, false, 0);
+    vBox.pack_start(smtplabelBox, false, false, 0);
     vBox.pack_start(smtpBox, false, false, 0);
+    vBox.pack_start(userlabelBox, false, false, 0);
     vBox.pack_start(userBox, false, false, 0);
+    vBox.pack_start(passlabelBox, false, false, 0);
     vBox.pack_start(passBox, false, false, 0);
+    vBox.pack_start(subjectlabelBox, false, false, 0);
     vBox.pack_start(subjectBox, false, false, 0);
     vBox.pack_end(buttonBox, false, false, 0);
 
