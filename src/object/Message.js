@@ -29,13 +29,10 @@ var Message = new Lang.Class({
 	},
 
 	Build: function (t, h) {
-		// SUBJECT="$SUBJECT\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=$BOUNDRY\n\n"
 		const subBlock = `Subject: ${app.Data.SUBJECT}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
-		// "--$BOUNDRY\nContent-Type: text/plain; charset=utf-8\n\n$t\n--$BOUNDRY\nContent-Type: text/html; charset=utf-8\n$h\n--$BOUNDRY--"
-		const msgBlock = `--${this.boundary}\nContent-Type: text/plain; charset=utf-8\n${t}\n--${this.boundary}\nContent-Type: text/html; charset=utf-8\n${h}\n--${this.boundary}--`;
-		// print(msgBlock);
-		// app.ui.results._LOG('Current message is : ' + msgBlock);
+		const msgBlock = `--${this.boundary}\nContent-Type: text/plain; charset=utf-8\n${t}\n--${this.boundary}\nContent-Type: text/html; charset=utf-8\n${h}\n--${this.boundary}--`;	
 		const res = { subBlock, msgBlock };
+
 		return res;
 
 	},
@@ -51,7 +48,6 @@ var Message = new Lang.Class({
 	// https://stackoverflow.com/questions/44728855/curl-send-html-email-with-embedded-image-and-attachment
 	//
 	Send: async function (msgObj, to, cancellable = null) {
-		// cat fifo | mail -s "$(echo -e $SUBJECT)" -r $FROM$SMTPs$SMTPu$SMTPp$i
 		const ipv4 = Config.getIpv4();
 		let flagStr = '-svk';
 		if (ipv4) {

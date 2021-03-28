@@ -12,13 +12,10 @@ var UIsettings = new Lang.Class({
 
   _init: function () {
 
-    // Signals.addSignalMethods(UIsettings.prototype);
-    // this.parent();
     this.emit('bob', false);
   },
 
   _updateUI() {
-    // log('Updating UI (settings)');
     try {
       this.userField.set_text(app.Data.USER);
       this.passField.set_text(app.Data.PASS);
@@ -31,7 +28,6 @@ var UIsettings = new Lang.Class({
   },
 
   _buildUI: function () {
-    // this.parent();
     // https://developer.gnome.org/gtk3/stable/GtkEntry.html
     this.emit('Log', '>>> building UI...');
     const vBox = new Gtk.VBox({ spacing: 6 });
@@ -104,9 +100,6 @@ var UIsettings = new Lang.Class({
       const str = ` >>> SETTINGS: "${app.Data.USER}", "${app.Data.HOST}", "${app.Data.SUBJECT}", "${app.Data.FROM}"...`;
 
       app.ui.results._LOG(str);
-      // Signals.addSignalMethods(this);
-      // this.emit('Log', str);
-      // print(str);
     })
 
     return vBox;
@@ -117,24 +110,18 @@ var UIsettings = new Lang.Class({
 
     const hashBox = new Gtk.HBox({ spacing: 6 });
     const ipv4Box = new Gtk.HBox({ spacing: 6 });
-    // const buttonBox = new Gtk.HBox({spacing: 6});
 
     this.hashField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Password Hash'), visibility: false, input_purpose: "password" });
     this.ipv4Field = new Gtk.CheckButton({ label: Gettext.gettext('Force ipv4') });
     const imagePass = new Gtk.Image({ icon_name: 'dialog-password-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
     const passButton = new Gtk.Button({ image: imagePass });
-    // const saveButton = new Gtk.Button({label: Gettext.gettext('Save')});
-    // const cancelButton = new Gtk.Button({label: Gettext.gettext('Cancel')});
 
     hashBox.pack_start(this.hashField, false, false, 0);
     hashBox.pack_start(passButton, false, false, 0);
     ipv4Box.pack_start(this.ipv4Field, false, false, 0);
-    // buttonBox.pack_start(cancelButton, false, false, 0);
-    // buttonBox.pack_end(saveButton, false, false, 0);
 
     vBox.pack_start(hashBox, false, false, 0);
     vBox.pack_start(ipv4Box, false, false, 0);
-    // vBox.pack_end(buttonBox, false, false, 0);
 
     passButton.connect('enter-notify-event', () => {
       this.hashField.set_visibility(true);

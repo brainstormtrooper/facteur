@@ -44,20 +44,16 @@ var Data = new Lang.Class({
     this.parent();
 
 
-    //print('Methods in Data class : ' + this.getMethods(this).join("\n"));
-
     this.emit('bob', false);
   },
 
   emit_updated: function () {
-    // print('emitting signal...');
     this.emit('Updated_sig');
   },
 
 
   Import: async function (path) {
     const str = await myFile.Import(path);
-    // print(`>>> str = ${str}`);
     this.csva = this.CSVToArray(str);
     this.dataHeadings();
     this.trimData();
@@ -73,10 +69,7 @@ var Data = new Lang.Class({
   dataHeadings: function () {
     this.headers = this.csva[0];
     app.Data.VARS = this.headers;
-    // VARS.shift();
-    // print('headers are : ' + this.headers);
     this.colcount = Object.keys(this.headers).length;
-    // print('got ' + this.colcount + ' keys.');
 
   },
 
@@ -88,14 +81,11 @@ var Data = new Lang.Class({
   trimData: function () {
     this.csva.shift();
     for (var k = 0; k < this.csva.length; k++) {
-      // print('Trimming... : ' + this.csva[k]);
       app.ui.results._LOG('Trimming... : ' + this.csva[k]);
       if (this.csva[k] == [] || this.csva[k] == null) {
-        // print('deleting row : ' + k);
         delete (this.csva[k]);
       }
     }
-    // print('Trimmed data is now : ' + this.csva);
   },
 
 

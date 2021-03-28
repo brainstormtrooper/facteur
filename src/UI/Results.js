@@ -7,7 +7,6 @@ const myMessage = imports.object.Message;
 const Template = new myTemplate.Template();
 const Message = new myMessage.Message();
 const Signals = imports.signals;
-// this.mailing = new Mailing.UImailing();
 
 var UIresults = new Lang.Class({
   Name: 'UIresults',
@@ -15,8 +14,6 @@ var UIresults = new Lang.Class({
 
   _init: function () {
 
-    // Signals.addSignalMethods(UIresults.prototype);
-    // this.parent();
     this.emit('bob', false);
     
     this.connect('Log', (msg) => {
@@ -34,10 +31,8 @@ var UIresults = new Lang.Class({
     const logWindow = new Gtk.ScrolledWindow({ vexpand: true });
     this.textBuffer = new Gtk.TextBuffer();
     const logText = new Gtk.TextView({ buffer: this.textBuffer, editable: false });
-    // const checkbutton = new Gtk.CheckButton({label: "Use HTML"});
     const sendButton = new Gtk.Button({ label: Gettext.gettext('Send') });
 
-    // checkboxRow.pack_start(checkbutton, false, false, 0);
     logWindow.add(logText);
     SendbuttonRow.pack_end(sendButton, false, false, 0);
     vBox.pack_start(checkboxRow, false, false, 0);
@@ -53,7 +48,7 @@ var UIresults = new Lang.Class({
       } else {
         log('Failed...');
       }
-      // Message.SendAll();
+     
     });
 
     return vBox;

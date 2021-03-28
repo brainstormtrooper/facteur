@@ -1,6 +1,5 @@
 const Gio = imports.gi.Gio;
 const System = imports.system;
-// const pkg = imports.package;
 
 function getSettings(schemaId, path) {
   const GioSSS = Gio.SettingsSchemaSource;
@@ -36,7 +35,6 @@ function getSettings(schemaId, path) {
 }
 
 function getHash() {
-  // log('getHash');
   const config = getSettings(app.ID);
 
   return config.get_string('password-hash');
@@ -44,7 +42,6 @@ function getHash() {
 
 function setHash(hash) {
   const config = getSettings(app.ID);
-  // print('setting hash...');
   config.set_string('password-hash', hash);
 }
 

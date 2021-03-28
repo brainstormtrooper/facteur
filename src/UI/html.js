@@ -2,14 +2,12 @@
 UI for displaying html message interface
 */
 const Lang = imports.lang;
-// const GtkText = imports.gi.GtkText;
 const Gtk = imports.gi.Gtk;
 const GtkSource = imports.gi.GtkSource;
 const Webkit = imports.gi.WebKit2;
 const Gettext = imports.gettext;
 const myContent = imports.object.Content;
 const Content = new myContent.Content();
-// this.mailing = new Mailing.UImailing();
 
 var UIhtml = new Lang.Class({
   Name: 'UIhtml',
@@ -29,7 +27,6 @@ var UIhtml = new Lang.Class({
     const scrollHtml = new Gtk.ScrolledWindow({ vexpand: true });
     const scrollPrev = new Gtk.ScrolledWindow({ vexpand: true });
     const buttonBox = new Gtk.HBox();
-    // const checkbutton = new Gtk.CheckButton({label: "Use HTML"});
     const button = new Gtk.Button({ label: Gettext.gettext('Save') });
     const notebook = new Gtk.Notebook();
     const pageText = new Gtk.VBox({ spacing: 6 });
@@ -54,10 +51,8 @@ var UIhtml = new Lang.Class({
       // do something with path
       app.ui.results._LOG(`Importing template from : ${path}`);
       const content = await Content.Import(path);
-      // print('Changed is : ' + content);
       const len = encodeURI(content).split(/%..|./).length - 1;
       this.htmlBuffer.set_text(content, len);
-      //print('================= \n imported : \n' + data.csvstr );
 
     });
 

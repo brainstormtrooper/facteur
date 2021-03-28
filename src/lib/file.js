@@ -1,7 +1,6 @@
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const crypto = imports.lib.aes;
-// const crypto = imports.lib.crypto_js['crypto-js'];
 const settings = imports.lib.settings;
 
 var Import = function (path) {
@@ -58,7 +57,6 @@ var unRoll = function (data) {
     app.Data.FROM = data.FROM;
     app.Data.USER = data.USER;
     app.Data.PASS = (data.PASS ? crypto.CryptoJS.AES.decrypt(data.PASS, HASH).toString(crypto.CryptoJS.enc.Utf8) : '');
-    // app.Data.PASS = (data.PASS ? crypto.AES.decrypt(data.PASS, HASH).toString(crypto.enc.Utf8) : '');
     app.Data.HOST = data.HOST;
     app.Data.SUBJECT = data.SUBJECT;
     app.Data.HTML = data.HTML;

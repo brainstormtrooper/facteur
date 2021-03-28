@@ -10,7 +10,6 @@ const Settings = imports.UI.Settings;
 const Config = imports.lib.settings;
 
 const PopWidget = function (properties) {
-  // pan-down-symbolic
   let label = new Gtk.Label({ label: properties.label });
   let image = new Gtk.Image({ icon_name: 'document-save-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
   let widget = new Gtk.Grid();
@@ -43,7 +42,6 @@ var getHeader = function () {
 
   headerStart = new Gtk.Grid({ column_spacing: headerBar.spacing });
 
-  // this.widgetOpen = new PopWidget({ label: "Open", widget: this.getPopOpen() });
 
   imageNew = new Gtk.Image({ icon_name: 'document-open-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
   buttonNew = new Gtk.Button({ image: imageNew });
@@ -58,24 +56,20 @@ var getHeader = function () {
       log(app.Data.FILENAME);
       this.emit('filename_changed', true);
       const fileData = File.open(app.Data.FILENAME);
-      // print(JSON.stringify(fileData, null, 2));
       File.unRoll(fileData);
 
       try {
         Signals.addSignalMethods(this);
-        // this.parent();
         this.emit('update_ui', true);
       } catch (e) {
         log(e);
       }
 
 
-      // this._window.ui.updateUI();
     }
     opener.destroy();
   });
 
-  // headerStart.attach(this.widgetOpen.button, 0, 0, 1, 1);
   headerStart.attach(buttonNew, 1, 0, 1, 1);
   headerBar.pack_start(headerStart);
 
@@ -156,11 +150,8 @@ const _OKHandler = function (dialog, response_id) {
 
 const _saveHandler = function (dialog, response_id) {
   var ipv4 = false;
-  // print(this.settings.hashField.get_text());
   Config.setHash(this.settings.hashField.get_text());
   ipv4 = this.settings.ipv4Field.get_active();
-  //ipv4 = Config.getIpv4();
-  // print(ipv4);
   Config.setIpv4(ipv4);
   // Destroy the dialog
   this._dialog.destroy();
@@ -182,7 +173,6 @@ const config = function () {
   this.configFields = this.settings._buildModal();
   this.settings.hashField.set_text(Config.getHash());
   const ipv4 = Config.getIpv4();
-  // print(ipv4);
   if (ipv4) {
     this.settings.ipv4Field.set_active(true);
   }
@@ -237,12 +227,10 @@ var getSettingsMenu = function () {
   let actionConfig = new Gio.SimpleAction({ name: 'preferences' });
   actionConfig.connect('activate', () => {
     config();
-    // this.emit('filename_changed', true);
   });
   let actionAbout = new Gio.SimpleAction({ name: 'about' });
   actionAbout.connect('activate', () => {
     about();
-    // this.emit('filename_changed', true);
   });
   app.application.add_action(actionConfig);
   app.application.add_action(actionAbout);
