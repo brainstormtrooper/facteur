@@ -2,6 +2,7 @@
 UI for displaying mailing settings
 */
 const Gtk = imports.gi.Gtk;
+const Gdk = imports.gi.Gdk;
 const Lang = imports.lang;
 const Gettext = imports.gettext;
 const Signals = imports.signals;
@@ -11,7 +12,6 @@ var UIsettings = new Lang.Class({
   Implements: [Signals.WithSignals],
 
   _init: function () {
-
     this.emit('bob', false);
   },
 
@@ -29,20 +29,30 @@ var UIsettings = new Lang.Class({
 
   _buildUI: function () {
     // https://developer.gnome.org/gtk3/stable/GtkEntry.html
-    this.emit('Log', '>>> building UI...');
-    const vBox = new Gtk.VBox({ spacing: 6 });
-
-    const fromlabelBox = new Gtk.HBox({ spacing: 6 });
-    const fromBox = new Gtk.HBox({ spacing: 6 });
-    const smtplabelBox = new Gtk.HBox({ spacing: 6 });
-    const smtpBox = new Gtk.HBox({ spacing: 6 });
-    const userlabelBox = new Gtk.HBox({ spacing: 6 });
-    const userBox = new Gtk.HBox({ spacing: 6 });
-    const passlabelBox = new Gtk.HBox({ spacing: 6 });
-    const passBox = new Gtk.HBox({ spacing: 6 });
-    const subjectlabelBox = new Gtk.HBox({ spacing: 6 });
-    const subjectBox = new Gtk.HBox({ spacing: 6 });
-    const buttonBox = new Gtk.HBox({ spacing: 6 });
+    this.emit('Log', '>>> building UI...'); 
+    /*
+    const css = '#formbox { background-color: #f00; }';
+    const css_provider = new Gtk.CssProvider();
+    css_provider.load_from_data(css);
+    // context = new Gtk.StyleContext();
+    const screen = Gdk.Screen.get_default();
+    Gtk.StyleContext.add_provider_for_screen(screen, css_provider,
+                                    Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+    */
+    const vBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6});
+    const hBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6, name: 'hbox', hexpand: true }); 
+    const formBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6, name: 'formbox', hexpand: false });
+    const fromlabelBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const fromBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const smtplabelBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const smtpBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const userlabelBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const userBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const passlabelBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const passBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const subjectlabelBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const subjectBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const buttonBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
 
     const fromlabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('From e-mail') });
     const smtplabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('Smtp host') });
@@ -50,11 +60,11 @@ var UIsettings = new Lang.Class({
     const passlabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('Smtp password') });
     const subjectlabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('E-mail subject') });
 
-    this.fromField = new Gtk.Entry({ placeholder_text: Gettext.gettext('me@domain.ext') });
-    this.smtpField = new Gtk.Entry({ placeholder_text: Gettext.gettext('smtp(s)://sub.domain.ext:123') });
-    this.userField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Username') });
-    this.passField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Password'), visibility: false, input_purpose: "password" });
-    this.subjectField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Subject') });
+    this.fromField = new Gtk.Entry({ placeholder_text: Gettext.gettext('me@domain.ext'), width_chars: 32 });
+    this.smtpField = new Gtk.Entry({ placeholder_text: Gettext.gettext('smtp(s)://sub.domain.ext:123'), width_chars: 32 });
+    this.userField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Username'), width_chars: 32 });
+    this.passField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Password'), visibility: false, input_purpose: "password", width_chars: 32 });
+    this.subjectField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Subject'), width_chars: 32 });
     const saveButton = new Gtk.Button({ label: Gettext.gettext('Save') });
     const imagePass = new Gtk.Image({ icon_name: 'dialog-password-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
     const passButton = new Gtk.Button({ image: imagePass });
@@ -72,16 +82,18 @@ var UIsettings = new Lang.Class({
     subjectBox.pack_start(this.subjectField, false, false, 0);
     buttonBox.pack_end(saveButton, false, false, 0);
 
-    vBox.pack_start(fromlabelBox, false, false, 0);
-    vBox.pack_start(fromBox, false, false, 0);
-    vBox.pack_start(smtplabelBox, false, false, 0);
-    vBox.pack_start(smtpBox, false, false, 0);
-    vBox.pack_start(userlabelBox, false, false, 0);
-    vBox.pack_start(userBox, false, false, 0);
-    vBox.pack_start(passlabelBox, false, false, 0);
-    vBox.pack_start(passBox, false, false, 0);
-    vBox.pack_start(subjectlabelBox, false, false, 0);
-    vBox.pack_start(subjectBox, false, false, 0);
+    formBox.pack_start(fromlabelBox, false, false, 0);
+    formBox.pack_start(fromBox, false, false, 0);
+    formBox.pack_start(smtplabelBox, false, false, 0);
+    formBox.pack_start(smtpBox, false, false, 0);
+    formBox.pack_start(userlabelBox, false, false, 0);
+    formBox.pack_start(userBox, false, false, 0);
+    formBox.pack_start(passlabelBox, false, false, 0);
+    formBox.pack_start(passBox, false, false, 0);
+    formBox.pack_start(subjectlabelBox, false, false, 0);
+    formBox.pack_start(subjectBox, false, false, 0);
+    hBox.set_center_widget(formBox);
+    vBox.pack_start(hBox, true, true, 0);
     vBox.pack_end(buttonBox, false, false, 0);
 
     passButton.connect('enter-notify-event', () => {
@@ -106,10 +118,10 @@ var UIsettings = new Lang.Class({
   },
 
   _buildModal: function () {
-    const vBox = new Gtk.VBox({ spacing: 6 });
+    const vBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
 
-    const hashBox = new Gtk.HBox({ spacing: 6 });
-    const ipv4Box = new Gtk.HBox({ spacing: 6 });
+    const hashBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const ipv4Box = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
 
     this.hashField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Password Hash'), visibility: false, input_purpose: "password" });
     this.ipv4Field = new Gtk.CheckButton({ label: Gettext.gettext('Force ipv4') });
