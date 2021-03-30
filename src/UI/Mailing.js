@@ -16,10 +16,11 @@ var UImailing = new Lang.Class({
 
     let pname, fname, result, data;
 
-    this.vBox = new Gtk.VBox({
+    this.vBox = new Gtk.Box({
+      orientation: Gtk.Orientation.VERTICAL, 
       spacing: 6
     });
-    this.hBox = new Gtk.HBox();
+    this.hBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
 
     //
     // choose the csv file for recipients and variables

@@ -25,9 +25,9 @@ var UIresults = new Lang.Class({
 
   _buildUI: function () {
 
-    const vBox = new Gtk.VBox({ spacing: 6 });
-    const checkboxRow = new Gtk.HBox();
-    const SendbuttonRow = new Gtk.HBox();
+    const vBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
+    const checkboxRow = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
+    const SendbuttonRow = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
     const logWindow = new Gtk.ScrolledWindow({ vexpand: true });
     this.textBuffer = new Gtk.TextBuffer();
     const logText = new Gtk.TextView({ buffer: this.textBuffer, editable: false });

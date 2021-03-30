@@ -21,21 +21,21 @@ var UIhtml = new Lang.Class({
   },
 
   _buildUI: function () {
-    const vBox = new Gtk.VBox({ spacing: 6 });
-    const hBox = new Gtk.HBox();
+    const vBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
+    const hBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
     const scrollText = new Gtk.ScrolledWindow({ vexpand: true });
     const scrollHtml = new Gtk.ScrolledWindow({ vexpand: true });
     const scrollPrev = new Gtk.ScrolledWindow({ vexpand: true });
-    const buttonBox = new Gtk.HBox();
+    const buttonBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
     const button = new Gtk.Button({ label: Gettext.gettext('Save') });
     const notebook = new Gtk.Notebook();
-    const pageText = new Gtk.VBox({ spacing: 6 });
-    const pageHtml = new Gtk.VBox({ spacing: 6 });
+    const pageText = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
+    const pageHtml = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
     this.textBuffer = new Gtk.TextBuffer();
     const messageText = new Gtk.TextView({ buffer: this.textBuffer, editable: true });
     const htmlNotebook = new Gtk.Notebook();
-    const pageCode = new Gtk.VBox({ spacing: 6 });
-    const pagePreview = new Gtk.VBox({ spacing: 6 });
+    const pageCode = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
+    const pagePreview = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
     const langManager = new GtkSource.LanguageManager();
     this.htmlBuffer = new GtkSource.Buffer({ language: langManager.get_language('html') });
     const messagehtml = new GtkSource.View({ buffer: this.htmlBuffer });
