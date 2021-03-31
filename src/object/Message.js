@@ -23,7 +23,7 @@ var Message = new Lang.Class({
 
 	SendAll: function () {
 		app.Data.MAILINGS.forEach((mailing) => {
-			const mobj = this.Build(mailing.text, mailing.html);
+			const mobj = this.Build(mailing.text, mailing.html.replace(/(\r\n|\n|\r)/gm, ''));
 			this.Send(mobj, mailing.to);
 		});
 	},
