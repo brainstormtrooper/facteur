@@ -145,8 +145,8 @@ const GNOMEeMailer = new Lang.Class({
     });
 
     // Vbox to hold the switcher and stack.
-    this._Vbox = new Gtk.VBox({ spacing: 6 });
-    this._Hbox = new Gtk.HBox({ spacing: 6, homogeneous: true });
+    this._Vbox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
+    this._Hbox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6, homogeneous: true });
 
     this.ui = new UI.UIstack();
     this.ui._buildStack();
@@ -168,9 +168,9 @@ const GNOMEeMailer = new Lang.Class({
 
 
 // Run the application
-window.app = new GNOMEeMailer();
+app = new GNOMEeMailer();
 // app.application.run(ARGV);
-window.app.application.run(ARGV)([imports.system.programInvocationName].concat(ARGV));
+app.application.run(ARGV)([imports.system.programInvocationName].concat(ARGV));
 // For technical reasons, this is the proper way you should start your application
 // (new GNOMEeMailer()).application.run([imports.system.programInvocationName].concat(ARGV));
 

@@ -21,6 +21,7 @@ var UImailing = new Lang.Class({
       spacing: 6
     });
     this.hBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
+    this.scrollView = new Gtk.ScrolledWindow({ vexpand: true });
 
     //
     // choose the csv file for recipients and variables
@@ -107,11 +108,11 @@ var UImailing = new Lang.Class({
     // Attach the treeview and label to the grid
     this._grid.attach(this._treeView, 0, 0, 1, 1);
     this._grid.attach(this._label, 0, 1, 1, 1);
-
+    this.scrollView.add(this._grid);
     this.hBox.pack_start(this.chooselabel, false, false, 0);
     this.hBox.pack_start(this.choosebutton, false, false, 0);
     this.vBox.pack_start(this.hBox, false, false, 0);
-    this.vBox.pack_start(this._grid, true, true, 0);
+    this.vBox.pack_start(this.scrollView, true, true, 0);
 
     
     if (this.choosebutton.selection_changed) {
