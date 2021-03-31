@@ -2,7 +2,7 @@
 
 imports.package.init({
   name: 'com.github.brainstormtrooper.gnome-emailer',
-  version: '0.2.2',
+  version: '0.2.3',
   prefix: '/usr/local',
   libdir: 'lib',
 });
