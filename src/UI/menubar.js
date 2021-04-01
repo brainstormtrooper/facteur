@@ -7,6 +7,7 @@ const Signals = imports.signals;
 
 const File = imports.lib.file;
 const Settings = imports.UI.Settings;
+const Modal = imports.UI.Modal;
 const Config = imports.lib.settings;
 
 const PopWidget = function (properties) {
@@ -35,6 +36,8 @@ var getHeader = function () {
 
   let headerBar, headerStart, imageNew, buttonNew, popMenu, imageMenu, buttonMenu;
 
+  Signals.addSignalMethods(this);
+
   headerBar = new Gtk.HeaderBar();
   headerBar.set_title("Gnome Emailer");
   headerBar.set_subtitle("Untitled Mailing");
@@ -52,18 +55,21 @@ var getHeader = function () {
     opener.add_button('cancel', Gtk.ResponseType.CANCEL);
     const res = opener.run();
     if (res == Gtk.ResponseType.ACCEPT) {
-      app.Data.FILENAME = opener.get_filename();
-      log(app.Data.FILENAME);
-      this.emit('filename_changed', true);
-      const fileData = File.open(app.Data.FILENAME);
-      File.unRoll(fileData);
-
+      
       try {
-        Signals.addSignalMethods(this);
+        app.Data.FILENAME = opener.get_filename();
+        const fileData = File.open(app.Data.FILENAME);
+        File.unRoll(fileData);
+        
         this.emit('update_ui', true);
-      } catch (e) {
-        log(e);
+        
+        log(app.Data.FILENAME);
+        this.emit('filename_changed', true);
+      } catch (error) {
+        const myModal = new Modal.UImodal();
+        myModal.showOpenModal(Gettext.gettext('Error opening file. Not a valid emailer file'));
       }
+      
 
 
     }

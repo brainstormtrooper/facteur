@@ -71,11 +71,18 @@ var unRoll = function (data) {
 
 var open = function (path) {
   let [ok, contents] = GLib.file_get_contents(path);
+  let res = {};
   if (ok) {
-    let map = JSON.parse(contents);
-    return map;
-  } else {
-    return {};
-  }
+    try {
+      res = JSON.parse(contents);
+
+    } catch (e) {
+      log(e);
+      throw e;
+    }
+    
+  } 
+  
+  return res;
 }
 
