@@ -7,6 +7,7 @@ const Signals = imports.signals;
 
 const File = imports.lib.file;
 const Settings = imports.UI.Settings;
+const Modal = imports.UI.Modal;
 const Config = imports.lib.settings;
 
 const PopWidget = function (properties) {
@@ -56,15 +57,17 @@ var getHeader = function () {
     if (res == Gtk.ResponseType.ACCEPT) {
       
       try {
+        app.Data.FILENAME = opener.get_filename();
         const fileData = File.open(app.Data.FILENAME);
         File.unRoll(fileData);
         
         this.emit('update_ui', true);
-        app.Data.FILENAME = opener.get_filename();
+        
         log(app.Data.FILENAME);
         this.emit('filename_changed', true);
       } catch (error) {
-        showOpenErrorModal(Gettext.gettext('Error opening file. Not a valid emailer file'));
+        const myModal = new Modal.UImodal();
+        myModal.showOpenModal(Gettext.gettext('Error opening file. Not a valid emailer file'));
       }
       
 
@@ -278,40 +281,4 @@ var getFileMenu = function () { /* GMenu popover */
   app.application.add_action(actionSave);
 
   return menu;
-};
-
-var showOpenErrorModal = function(message) {
-
-  let label, modal, contentArea, button, actionArea;
-
-  label = new Gtk.Label({
-      label: message,
-      vexpand: true
-  });
-
-  modal = new Gtk.Dialog({ 
-      default_height: 200,
-      default_width: 200,
-      modal: true,
-      transient_for: app._window,
-      title: 'Modal',
-      use_header_bar: false
-  });
-
-  modal.connect('response', function() {
-      modal.destroy();
-  });
-
-  contentArea = modal.get_content_area();
-  contentArea.add(label);
-
-  button = Gtk.Button.new_with_label ('OK');
-  button.connect ("clicked", () => {
-      modal.destroy();
-  });
-
-  actionArea = modal.get_action_area();
-  actionArea.add(button);
-
-  modal.show_all();
 };
