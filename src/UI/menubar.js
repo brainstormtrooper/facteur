@@ -35,6 +35,8 @@ var getHeader = function () {
 
   let headerBar, headerStart, imageNew, buttonNew, popMenu, imageMenu, buttonMenu;
 
+  Signals.addSignalMethods(this);
+
   headerBar = new Gtk.HeaderBar();
   headerBar.set_title("Gnome Emailer");
   headerBar.set_subtitle("Untitled Mailing");
@@ -52,18 +54,19 @@ var getHeader = function () {
     opener.add_button('cancel', Gtk.ResponseType.CANCEL);
     const res = opener.run();
     if (res == Gtk.ResponseType.ACCEPT) {
-      app.Data.FILENAME = opener.get_filename();
-      log(app.Data.FILENAME);
-      this.emit('filename_changed', true);
-      const fileData = File.open(app.Data.FILENAME);
-      File.unRoll(fileData);
-
+      
       try {
-        Signals.addSignalMethods(this);
+        const fileData = File.open(app.Data.FILENAME);
+        File.unRoll(fileData);
+        
         this.emit('update_ui', true);
-      } catch (e) {
-        log(e);
+        app.Data.FILENAME = opener.get_filename();
+        log(app.Data.FILENAME);
+        this.emit('filename_changed', true);
+      } catch (error) {
+        showOpenErrorModal(Gettext.gettext('Error opening file. Not a valid emailer file'));
       }
+      
 
 
     }
@@ -275,4 +278,40 @@ var getFileMenu = function () { /* GMenu popover */
   app.application.add_action(actionSave);
 
   return menu;
+};
+
+var showOpenErrorModal = function(message) {
+
+  let label, modal, contentArea, button, actionArea;
+
+  label = new Gtk.Label({
+      label: message,
+      vexpand: true
+  });
+
+  modal = new Gtk.Dialog({ 
+      default_height: 200,
+      default_width: 200,
+      modal: true,
+      transient_for: app._window,
+      title: 'Modal',
+      use_header_bar: false
+  });
+
+  modal.connect('response', function() {
+      modal.destroy();
+  });
+
+  contentArea = modal.get_content_area();
+  contentArea.add(label);
+
+  button = Gtk.Button.new_with_label ('OK');
+  button.connect ("clicked", () => {
+      modal.destroy();
+  });
+
+  actionArea = modal.get_action_area();
+  actionArea.add(button);
+
+  modal.show_all();
 };
