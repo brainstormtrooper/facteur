@@ -56,21 +56,26 @@ var getHeader = function () {
     const res = opener.run();
     if (res == Gtk.ResponseType.ACCEPT) {
       
-      try {
-        app.Data.FILENAME = opener.get_filename();
-        const fileData = File.open(app.Data.FILENAME);
-        File.unRoll(fileData);
+      app.Data.FILENAME = opener.get_filename();
+      const promise = File.open(app.Data.FILENAME);
+      promise.then(fileData => {
+        try {
+          File.unRoll(fileData);
+          this.emit('update_ui', true);
+          log(app.Data.FILENAME);
+          this.emit('filename_changed', true);
+        } catch (error) {
+          log(error);
+          const myModal = new Modal.UImodal();
+          myModal.showOpenModal(Gettext.gettext('Error opening file. Not a valid emailer file'));
+        }
         
-        this.emit('update_ui', true);
-        
-        log(app.Data.FILENAME);
-        this.emit('filename_changed', true);
-      } catch (error) {
+      })
+      .catch(error => {
+        log(error);
         const myModal = new Modal.UImodal();
         myModal.showOpenModal(Gettext.gettext('Error opening file. Not a valid emailer file'));
-      }
-      
-
+      });
 
     }
     opener.destroy();

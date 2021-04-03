@@ -7,6 +7,7 @@ const Lang = imports.lang;
 const GObject = imports.gi.GObject;
 const Pango = imports.gi.Pango;
 const myData = imports.object.Data; 
+const Modal = imports.UI.Modal;
 
 var UImailing = new Lang.Class({
   Name: 'UImailing',
@@ -37,9 +38,14 @@ var UImailing = new Lang.Class({
     this.choosebutton.connect('file-set', Lang.bind(this, function () {
       let path = this.choosebutton.get_file().get_path();
       // do something with path
-
       this.data.Import(path);
       app.ui.results._LOG('CSV File path is : ' + path);
+    
+    }));
+
+    this.data.connect('Import_error_sig', Lang.bind(this, function () {
+      const myModal = new Modal.UImodal();
+      myModal.showOpenModal(Gettext.gettext('Error importing file. Not a valid mailing list'));
 
     }));
 

@@ -51,15 +51,31 @@ var Data = new Lang.Class({
     this.emit('Updated_sig');
   },
 
+  verify: function(csva) {
+    let res = true;
+    if (csva[0][0] != 'address') {
+      res = false;
+    }
 
+    return res;
+  },
+
+  /**
+   * Imports a new CSV file
+   * @param {string} path 
+   */
   Import: async function (path) {
     const str = await myFile.Import(path);
     this.csva = this.CSVToArray(str);
+    if (!this.verify(this.csva)) {
+      this.emit('Import_error_sig');
+    } else {
     this.dataHeadings();
     this.trimData();
     app.Data.CSVA = this.csva;
     app.Data.TO = this.csva.map(x => x[0]);
     this.emit_updated();
+    }
   },
 
   /**

@@ -19,7 +19,7 @@ var UImodal = new Lang.Class({
             default_width: 200,
             modal: true,
             transient_for: app._window,
-            title: 'Modal',
+            title: 'Error',
             use_header_bar: false
         });
       
