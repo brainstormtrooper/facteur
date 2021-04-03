@@ -5,7 +5,7 @@ const Lang = imports.lang;
 var UImodal = new Lang.Class({
     Name: 'UImodal',
 
-    showOpenModal: function(message) {
+    showOpenModal: function(title, message) {
 
         let label, modal, contentArea, button, actionArea;
       
@@ -19,7 +19,7 @@ var UImodal = new Lang.Class({
             default_width: 200,
             modal: true,
             transient_for: app._window,
-            title: 'Error',
+            title,
             use_header_bar: false
         });
       

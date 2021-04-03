@@ -67,14 +67,14 @@ var getHeader = function () {
         } catch (error) {
           log(error);
           const myModal = new Modal.UImodal();
-          myModal.showOpenModal(Gettext.gettext('Error opening file. Not a valid emailer file'));
+          myModal.showOpenModal('Error', Gettext.gettext('Error opening file. Not a valid emailer file'));
         }
         
       })
       .catch(error => {
         log(error);
         const myModal = new Modal.UImodal();
-        myModal.showOpenModal(Gettext.gettext('Error opening file. Not a valid emailer file'));
+        myModal.showOpenModal('Error', Gettext.gettext('Error opening file. Not a valid emailer file'));
       });
 
     }

@@ -45,7 +45,7 @@ var UImailing = new Lang.Class({
 
     this.data.connect('Import_error_sig', Lang.bind(this, function () {
       const myModal = new Modal.UImodal();
-      myModal.showOpenModal(Gettext.gettext('Error importing file. Not a valid mailing list'));
+      myModal.showOpenModal('Error', Gettext.gettext('Error importing file. Not a valid mailing list'));
 
     }));
 
