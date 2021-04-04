@@ -49,15 +49,19 @@ var Message = new Lang.Class({
 	//
 	Send: async function (msgObj, to, cancellable = null) {
 		const ipv4 = Config.getIpv4();
+		let sslStr = '';
 		let flagStr = '-svk';
 		if (ipv4) {
 			flagStr = '-svk4';
+		}
+		if (app.Data.HOST.toLowerCase().includes('https')) {
+			sslStr = '--ssl-reqd'
 		}
 		try {
 			let proc = new Gio.Subprocess({
 				argv: ['curl',
 					flagStr,
-					'--ssl-reqd',
+					sslStr,
 					// Option switches and values are separate args
 					'--mail-from', app.Data.FROM,
 					'--url', app.Data.HOST,
