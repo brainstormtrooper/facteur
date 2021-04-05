@@ -56,3 +56,14 @@ function setIpv4(val) {
 
   config.set_boolean('force-ipv4', val);
 }
+
+function setDelay(delay){
+  const config = getSettings(app.ID);
+  config.set_int('delay', delay);
+}
+
+function getDelay() {
+  const config = getSettings(app.ID);
+
+  return config.get_int('delay');
+}

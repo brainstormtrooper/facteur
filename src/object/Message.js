@@ -22,9 +22,12 @@ var Message = new Lang.Class({
 	},
 
 	SendAll: function () {
+		const delay = Config.getDelay();
 		app.Data.MAILINGS.forEach((mailing) => {
-			const mobj = this.Build(mailing.text, mailing.html.replace(/(\r\n|\n|\r)/gm, ''));
-			this.Send(mobj, mailing.to);
+			setTimeout(function () {
+        const mobj = this.Build(mailing.text, mailing.html.replace(/(\r\n|\n|\r)/gm, ''));
+        this.Send(mobj, mailing.to);
+			}, delay);
 		});
 	},
 
@@ -124,7 +127,7 @@ var Message = new Lang.Class({
 			// This could be any number of errors, but probably it will be a GError
 			// in which case it will have `code` property carrying a GIOErrorEnum
 			// you could use to programmatically respond to, if desired.
-			logError(e);
+			log(e);
 		}
 	}
 });
