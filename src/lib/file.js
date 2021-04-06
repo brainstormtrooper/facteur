@@ -46,18 +46,24 @@ var rollUp = function () {
     TO: app.Data.TO,
     CSVA: app.Data.CSVA,
     VARS: app.Data.VARS,
+    DELAY: app.Data.DELAY
   };
 
   return roll;
 }
 
 var verify = function(data){
-  const required = ['FROM', 'USER', 'PASS', 'HOST', 'SUBJECT', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS'];
+  const required = ['FROM', 'USER', 'PASS', 'HOST', 'SUBJECT', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS', 'DELAY'];
   let valid = true;
   required.forEach(key => {
     if (!data.hasOwnProperty(key)) {
       valid = false;
-    }
+    };
+  });
+  Object.keys(data).forEach(key => {
+    if (!required.includes(key)) {
+      valid = false;
+    };
   });
   return valid;
 }
@@ -77,6 +83,7 @@ var unRoll = function(data) {
   app.Data.TO = data.TO;
   app.Data.CSVA = data.CSVA;
   app.Data.VARS = data.VARS;
+  app.Data.DELAY = data.DELAY;
 }
 
 var open = async function(path) {

@@ -69,6 +69,7 @@ const GNOMEeMailer = new Lang.Class({
     SUBJECT: '',
     HTML: '',
     TEXT: '',
+    DELAY: '',
 
     TO: [],
     CSVA: [],

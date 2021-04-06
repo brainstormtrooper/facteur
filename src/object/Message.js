@@ -21,10 +21,26 @@ var Message = new Lang.Class({
 		return true;
 	},
 
+  sleep: function(milliseconds) {
+    let timeStart = new Date().getTime();
+    while (true) {
+      let elapsedTime = new Date().getTime() - timeStart;
+      if (elapsedTime > milliseconds) {
+          break;
+      }
+    }
+  },
+
 	SendAll: function () {
+    let delay = Config.getDelay();
+    if (app.Data.DELAY != delay) {
+      delay = app.Data.DELAY;
+    }
+    log('start');
 		app.Data.MAILINGS.forEach((mailing) => {
-			const mobj = this.Build(mailing.text, mailing.html.replace(/(\r\n|\n|\r)/gm, ''));
-			this.Send(mobj, mailing.to);
+      const mobj = this.Build(mailing.text, mailing.html.replace(/(\r\n|\n|\r)/gm, ''));
+      this.Send(mobj, mailing.to);
+			this.sleep(delay);
 		});
 	},
 
@@ -49,26 +65,26 @@ var Message = new Lang.Class({
 	//
 	Send: async function (msgObj, to, cancellable = null) {
 		const ipv4 = Config.getIpv4();
-		let sslStr = '';
 		let flagStr = '-svk';
 		if (ipv4) {
 			flagStr = '-svk4';
 		}
-		if (app.Data.HOST.toLowerCase().includes('https')) {
-			sslStr = '--ssl-reqd'
+		
+    const argv = ['curl',
+      flagStr,
+      // Option switches and values are separate args
+      '--mail-from', app.Data.FROM,
+      '--url', app.Data.HOST,
+      '--mail-rcpt', to,
+      '-T', '-',
+      '--user', `${app.Data.USER}:${app.Data.PASS}`
+    ];
+    if (app.Data.HOST.toLowerCase().includes('https')) {
+			argv.push('--ssl-reqd');
 		}
 		try {
 			let proc = new Gio.Subprocess({
-				argv: ['curl',
-					flagStr,
-					sslStr,
-					// Option switches and values are separate args
-					'--mail-from', app.Data.FROM,
-					'--url', app.Data.HOST,
-					'--mail-rcpt', to,
-					'-T', '-',
-					'--user', `${app.Data.USER}:${app.Data.PASS}`
-				],
+				argv,
 				flags: Gio.SubprocessFlags.STDIN_PIPE |
 					Gio.SubprocessFlags.STDOUT_PIPE |
 					Gio.SubprocessFlags.STDERR_MERGE
@@ -124,7 +140,7 @@ var Message = new Lang.Class({
 			// This could be any number of errors, but probably it will be a GError
 			// in which case it will have `code` property carrying a GIOErrorEnum
 			// you could use to programmatically respond to, if desired.
-			logError(e);
+			log(e);
 		}
 	}
 });
