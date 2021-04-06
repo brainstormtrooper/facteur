@@ -6,6 +6,7 @@ const Gdk = imports.gi.Gdk;
 const Lang = imports.lang;
 const Gettext = imports.gettext;
 const Signals = imports.signals;
+const Config = imports.lib.settings;
 
 var UIsettings = new Lang.Class({
   Name: 'UIsettings',
@@ -22,6 +23,7 @@ var UIsettings = new Lang.Class({
       this.smtpField.set_text(app.Data.HOST);
       this.subjectField.set_text(app.Data.SUBJECT);
       this.fromField.set_text(app.Data.FROM);
+      this.delayField.set_text(app.Data.DELAY);
     } catch (err) {
       log(err);
     }
@@ -52,6 +54,8 @@ var UIsettings = new Lang.Class({
     const passBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
     const subjectlabelBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
     const subjectBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const delaylabelBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const delayBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
     const buttonBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
 
     const fromlabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('From e-mail') });
@@ -59,12 +63,14 @@ var UIsettings = new Lang.Class({
     const userlabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('Smtp user') });
     const passlabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('Smtp password') });
     const subjectlabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('E-mail subject') });
+    const delaylabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('Delay between sending emails (in millisaconds)') });
 
     this.fromField = new Gtk.Entry({ placeholder_text: Gettext.gettext('me@domain.ext'), width_chars: 32 });
     this.smtpField = new Gtk.Entry({ placeholder_text: Gettext.gettext('smtp(s)://sub.domain.ext:123'), width_chars: 32 });
     this.userField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Username'), width_chars: 32 });
     this.passField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Password'), visibility: false, input_purpose: "password", width_chars: 32 });
     this.subjectField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Subject'), width_chars: 32 });
+    this.delayField = new Gtk.Entry({ placeholder_text: '1000', width_chars: 32, text: Config.getDelay().toString() });
     const saveButton = new Gtk.Button({ label: Gettext.gettext('Save') });
     const imagePass = new Gtk.Image({ icon_name: 'dialog-password-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
     const passButton = new Gtk.Button({ image: imagePass });
@@ -80,6 +86,9 @@ var UIsettings = new Lang.Class({
     passBox.pack_start(passButton, false, false, 0);
     subjectlabelBox.pack_start(subjectlabel, false, false, 0);
     subjectBox.pack_start(this.subjectField, false, false, 0);
+    delaylabelBox.pack_start(delaylabel, false, false, 0);
+    delayBox.pack_start(this.delayField, false, false, 0);
+
     buttonBox.pack_end(saveButton, false, false, 0);
 
     formBox.pack_start(fromlabelBox, false, false, 0);
@@ -92,6 +101,8 @@ var UIsettings = new Lang.Class({
     formBox.pack_start(passBox, false, false, 0);
     formBox.pack_start(subjectlabelBox, false, false, 0);
     formBox.pack_start(subjectBox, false, false, 0);
+    formBox.pack_start(delaylabelBox, false, false, 0);
+    formBox.pack_start(delayBox, false, false, 0);
     hBox.set_center_widget(formBox);
     vBox.pack_start(hBox, true, true, 0);
     vBox.pack_end(buttonBox, false, false, 0);
@@ -109,6 +120,7 @@ var UIsettings = new Lang.Class({
       app.Data.HOST = this.smtpField.get_text();
       app.Data.SUBJECT = this.subjectField.get_text();
       app.Data.FROM = this.fromField.get_text();
+      app.Data.DELAY = this.delayField.get_text();
       const str = ` >>> SETTINGS: "${app.Data.USER}", "${app.Data.HOST}", "${app.Data.SUBJECT}", "${app.Data.FROM}"...`;
 
       app.ui.results._LOG(str);
@@ -122,18 +134,26 @@ var UIsettings = new Lang.Class({
 
     const hashBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
     const ipv4Box = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const delayLabelBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+    const delayBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
 
     this.hashField = new Gtk.Entry({ placeholder_text: Gettext.gettext('Password Hash'), visibility: false, input_purpose: "password" });
     this.ipv4Field = new Gtk.CheckButton({ label: Gettext.gettext('Force ipv4') });
+    this.delayLabel = new Gtk.Label({ halign: Gtk.Align.START, label: Gettext.gettext('sending delay in milliseconds') });
+    this.delayField = new Gtk.Entry({ placeholder_text: '1000' });
     const imagePass = new Gtk.Image({ icon_name: 'dialog-password-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
     const passButton = new Gtk.Button({ image: imagePass });
 
     hashBox.pack_start(this.hashField, false, false, 0);
     hashBox.pack_start(passButton, false, false, 0);
     ipv4Box.pack_start(this.ipv4Field, false, false, 0);
+    delayLabelBox.pack_start(this.delayLabel, false, false, 0);
+    delayBox.pack_start(this.delayField, false, false, 0);
 
     vBox.pack_start(hashBox, false, false, 0);
     vBox.pack_start(ipv4Box, false, false, 0);
+    vBox.pack_start(delayLabelBox, false, false, 0);
+    vBox.pack_start(delayBox, false, false, 0);
 
     passButton.connect('enter-notify-event', () => {
       this.hashField.set_visibility(true);

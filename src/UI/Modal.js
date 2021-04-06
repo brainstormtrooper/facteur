@@ -63,6 +63,7 @@ var UImodal = new Lang.Class({
         if (ipv4) {
           this.settings.ipv4Field.set_active(true);
         }
+        this.settings.delayField.set_text(Config.getDelay().toString());
         this._contentArea.add(this._message);
         this._contentArea.add(this.configFields);
         // Handlers for button actions
@@ -77,6 +78,7 @@ var UImodal = new Lang.Class({
           Config.setHash(this.settings.hashField.get_text());
           ipv4 = this.settings.ipv4Field.get_active();
           Config.setIpv4(ipv4);
+          Config.setDelay(this.settings.delayField.get_text());
           // Destroy the dialog
           this._dialog.destroy();
         }
