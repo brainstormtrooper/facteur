@@ -1,7 +1,9 @@
 const Gio = imports.gi.Gio;
 const System = imports.system;
+const Data = imports.object.Data;
+const appData = new Data.Data().data;
 
-function getSettings(schemaId, path) {
+getSettings = (schemaId, path) => {
   const GioSSS = Gio.SettingsSchemaSource;
   let schemaSource;
 
@@ -34,36 +36,36 @@ function getSettings(schemaId, path) {
 
 }
 
-function getHash() {
-  const config = getSettings(app.ID);
+getHash = () => {
+  const config = getSettings(appData.ID);
 
   return config.get_string('password-hash');
 }
 
-function setHash(hash) {
-  const config = getSettings(app.ID);
+setHash = (hash) => {
+  const config = getSettings(appData.ID);
   config.set_string('password-hash', hash);
 }
 
-function getIpv4() {
-  const config = getSettings(app.ID);
+getIpv4 = () => {
+  const config = getSettings(appData.ID);
 
   return config.get_boolean('force-ipv4');
 }
 
-function setIpv4(val) {
-  const config = getSettings(app.ID);
+setIpv4 = (val) => {
+  const config = getSettings(appData.ID);
 
   config.set_boolean('force-ipv4', val);
 }
 
-function setDelay(delay){
-  const config = getSettings(app.ID);
+setDelay = (delay) => {
+  const config = getSettings(appData.ID);
   config.set_int('delay', delay);
 }
 
-function getDelay() {
-  const config = getSettings(app.ID);
+getDelay = () => {
+  const config = getSettings(appData.ID);
 
   return config.get_int('delay');
 }

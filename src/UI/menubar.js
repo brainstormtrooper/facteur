@@ -5,13 +5,14 @@ const Gtk = imports.gi.Gtk;
 const Gettext = imports.gettext;
 const Signals = imports.signals;
 
+const Data = imports.object.Data;
+const appData = new Data.Data().data;
+
 const File = imports.lib.file;
-// const Settings = imports.UI.Settings;
 const Modal = imports.UI.Modal;
-// const Config = imports.lib.settings;
 const myModal = new Modal.UImodal();
 
-const PopWidget = function (properties) {
+const PopWidget = (properties) => {
   let label = new Gtk.Label({ label: properties.label });
   let image = new Gtk.Image({ icon_name: 'document-save-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR });
   let widget = new Gtk.Grid();
@@ -33,7 +34,7 @@ const PopWidget = function (properties) {
   this.pop.add(properties.widget);
 };
 
-var getHeader = function () {
+const getHeader = (app) => {
 
   let headerBar, headerStart, imageNew, buttonNew, popMenu, imageMenu, buttonMenu;
 
@@ -57,13 +58,13 @@ var getHeader = function () {
     const res = opener.run();
     if (res == Gtk.ResponseType.ACCEPT) {
       
-      app.Data.FILENAME = opener.get_filename();
-      const promise = File.open(app.Data.FILENAME);
+      appData.FILENAME = opener.get_filename();
+      const promise = File.open(appData.FILENAME);
       promise.then(fileData => {
         try {
           File.unRoll(fileData);
           this.emit('update_ui', true);
-          log(app.Data.FILENAME);
+          log(appData.FILENAME);
           this.emit('filename_changed', true);
         } catch (error) {
           log(error);
@@ -90,7 +91,7 @@ var getHeader = function () {
   buttonMenu = new Gtk.MenuButton({ image: imageMenu });
   buttonMenu.set_popover(popMenu);
   popMenu.set_size_request(-1, -1);
-  buttonMenu.set_menu_model(this.getFileMenu());
+  buttonMenu.set_menu_model(this.getFileMenu(app));
 
 
   var configMenu = new Gtk.Popover();
@@ -98,7 +99,7 @@ var getHeader = function () {
   var buttonConfig = new Gtk.MenuButton({ image: imageConfig });
   buttonConfig.set_popover(configMenu);
   configMenu.set_size_request(-1, -1);
-  buttonConfig.set_menu_model(this.getSettingsMenu());
+  buttonConfig.set_menu_model(this.getSettingsMenu(app));
 
   headerBar.pack_end(buttonConfig);
   headerBar.pack_end(buttonMenu);
@@ -108,7 +109,7 @@ var getHeader = function () {
 
 
 
-const getPopOpen = function () { /* Widget popover */
+const getPopOpen = () => { /* Widget popover */
 
   let widget = new Gtk.Grid(),
     label = new Gtk.Label({ label: "Label 1" }),
@@ -128,10 +129,10 @@ const getPopOpen = function () { /* Widget popover */
 };
 
 
-const saveAs = function () {
+const saveAs = () => {
   const saver = new Gtk.FileChooserDialog({ title: 'Select a destination' });
   saver.set_action(Gtk.FileChooserAction.SAVE);
-  const WP = app.Data.FILENAME.split('/');
+  const WP = appData.FILENAME.split('/');
   const filename = WP.pop();
   saver.set_current_name(filename);
   try {
@@ -145,22 +146,17 @@ const saveAs = function () {
   saver.add_button('cancel', Gtk.ResponseType.CANCEL);
   const res = saver.run();
   if (res == Gtk.ResponseType.ACCEPT) {
-    app.Data.FILENAME = saver.get_filename();
-    log(app.Data.FILENAME);
+    appData.FILENAME = saver.get_filename();
+    log(appData.FILENAME);
 
     const data = File.rollUp();
-    File.save(app.Data.FILENAME, data);
+    File.save(appData.FILENAME, data);
   }
   saver.destroy();
 }
 
 
-
-
-
-
-
-var getSettingsMenu = function () {
+var getSettingsMenu = (app) => {
   let menu, section;
   menu = new Gio.Menu();
   section = new Gio.Menu();
@@ -178,13 +174,13 @@ var getSettingsMenu = function () {
   actionAbout.connect('activate', () => {
     myModal.about();
   });
-  app.application.add_action(actionConfig);
-  app.application.add_action(actionAbout);
+  app.add_action(actionConfig);
+  app.add_action(actionAbout);
 
   return menu;
 }
 
-var getFileMenu = function () { /* GMenu popover */
+var getFileMenu = (app) => { /* GMenu popover */
 
   let menu, section, submenu;
 
@@ -201,14 +197,14 @@ var getFileMenu = function () { /* GMenu popover */
     saveAs();
     this.emit('filename_changed', true);
   });
-  app.application.add_action(actionSaveAs);
+  app.add_action(actionSaveAs);
 
 
   let actionSave = new Gio.SimpleAction({ name: 'save' });
   actionSave.connect('activate', () => {
-    if (app.Data.FILENAME !== null) {
+    if (appData.FILENAME !== null) {
       const data = File.rollUp();
-      File.save(app.Data.FILENAME, data);
+      File.save(appData.FILENAME, data);
     } else {
       saveAs();
       try {
@@ -218,7 +214,7 @@ var getFileMenu = function () { /* GMenu popover */
       }
     }
   });
-  app.application.add_action(actionSave);
+  app.add_action(actionSave);
 
   return menu;
 };

@@ -1,26 +1,25 @@
 
 // const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
-const Lang = imports.lang;
 const Gettext = imports.gettext;
 // const Webkit = imports.gi.WebKit2;
 
 
-var UIstack = new Lang.Class({
-  Name: 'UIstack',
+var UIstack = class UIstack{
+  Name = 'UIstack';
 
   // Update
 
-  updateUI: function () {
+  updateUI() {
     log('here in updateUI (UI)');
     this.settings._updateUI();
     this.mailing._updateUI();
     this.html._updateUI();
 
-  },
+  };
 
   // Build the application's UI
-  _buildStack: function () {
+  _buildStack() {
 
 
     this._Stack = new Gtk.Stack();
@@ -75,7 +74,7 @@ var UIstack = new Lang.Class({
     this._stack_switcher.set_stack(this._Stack);
 
 
-  },
+  };
 
 
-});
+};

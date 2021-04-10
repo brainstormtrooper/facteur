@@ -3,17 +3,18 @@ UI for displaying mailing list data
 */
 const Gtk = imports.gi.Gtk;
 const Gettext = imports.gettext;
-const Lang = imports.lang;
 const GObject = imports.gi.GObject;
 const Pango = imports.gi.Pango;
-const myData = imports.object.Data; 
+const myList = imports.object.List; 
 const Modal = imports.UI.Modal;
+const Data = imports.object.Data;
+const appData = new Data.Data().data;
 
-var UImailing = new Lang.Class({
-  Name: 'UImailing',
+const UImailing = class UImailing{
+  Name = 'UImailing';
 
   // Build the application's UI
-  _buildUI: function () {
+  _buildUI() {
 
     let pname, fname, result, data;
 
@@ -28,7 +29,7 @@ var UImailing = new Lang.Class({
     // choose the csv file for recipients and variables
     //
 
-    this.data = new myData.Data();
+    this.list = new myList.List();
 
     this.choosebutton = new Gtk.FileChooserButton({
       title: Gettext.gettext('Select a file')
@@ -38,18 +39,18 @@ var UImailing = new Lang.Class({
     this.choosebutton.connect('file-set', Lang.bind(this, function () {
       let path = this.choosebutton.get_file().get_path();
       // do something with path
-      this.data.Import(path);
+      this.list.Import(path);
       app.ui.results._LOG('CSV File path is : ' + path);
     
     }));
 
-    this.data.connect('Import_error_sig', Lang.bind(this, function () {
+    this.list.connect('Import_error_sig', Lang.bind(this, function () {
       const myModal = new Modal.UImodal();
       myModal.showOpenModal('Error', Gettext.gettext('Error importing file. Not a valid mailing list'));
 
     }));
 
-    this.data.connect('Updated_sig', Lang.bind(this, function () {
+    this.list.connect('Updated_sig', Lang.bind(this, function () {
 
       app.ui.results._LOG('imported.');
       // Data to go in the phonebook
@@ -127,22 +128,22 @@ var UImailing = new Lang.Class({
 
 
     return this.vBox;
-  },
-  _updateUI: function () {
-    this.data.csva = app.Data.CSVA;
-    this.data.headers = app.Data.VARS;
+  };
+  _updateUI() {
+    this.list.csva = appData.CSVA;
+    this.list.headers = appData.VARS;
     this.updateTable();
-  },
+  };
 
-  updateTable: function () {
+  updateTable() {
     
-    let phonebook = this.data.csva;
+    let phonebook = this.list.csva;
     let k;
     delete (this._listStore);
     this._listStore = new Gtk.ListStore();
 
     let coltypes = [];
-    this.data.headers.forEach((h) => {
+    this.list.headers.forEach((h) => {
 
       coltypes.push(GObject.TYPE_STRING);
 
@@ -167,7 +168,7 @@ var UImailing = new Lang.Class({
     for (k = 0; k < this.data.headers.length; k++) {
       
       this[`col_${k}`] = new Gtk.TreeViewColumn({
-        title: this.data.headers[k]
+        title: this.list.headers[k]
       });
       this[`col_${k}`].pack_start(normal, true);
       if (k == 0) {
@@ -185,18 +186,18 @@ var UImailing = new Lang.Class({
 
     // Put the data in the table
     let i;
-    for (i = 0; i < this.data.csva.length; i++) {
+    for (i = 0; i < this.list.csva.length; i++) {
 
-      let row = this.data.csva[i];
+      let row = this.list.csva[i];
       let iter = this._listStore.append();
 
 
-      this._listStore.set(iter, Object.keys(this.data.headers), row);
+      this._listStore.set(iter, Object.keys(this.list.headers), row);
 
     }
-  },
+  };
 
-  _onSelectionChanged: function () {
+  _onSelectionChanged() {
 
     // Grab a treeiter pointing to the current selection
     let [isSelected, model, iter] = this.selection.get_selected();
@@ -209,8 +210,8 @@ var UImailing = new Lang.Class({
             this._listStore.get_value (iter, 2) + "\n" +
             this._listStore.get_value (iter, 3));
 */
-  },
+  };
 
-});
+};
 
 

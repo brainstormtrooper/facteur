@@ -3,37 +3,35 @@ Template object.
 
 Handle templates for mailings.
 */
-const Lang = imports.lang;
 const Signals = imports.signals;
 const myTemplate = imports.lib.template;
+const Data = imports.object.Data;
+const appData = new Data.Data().data;
 
-var Template = new Lang.Class({
-  Name: 'Template Class',
+var Template = class Template {
+  Name = 'Template Class';
 
 
   // METHODS
 
-  Template: function () {
+  Template() {
 
     Signals.addSignalMethods(Template.prototype);
     this.parent();
 
     this.emit('bob', false);
 
-  },
+  };
 
-  Compile: function () {
+  Compile() {
     return new Promise((resolve, reject) => {
-      const res = myTemplate.iterRows();
+      const res = myTemplate.iterRows(appData);
       if (res) {
         resolve(res);
       } else {
         reject('Failed to iterate over rows.');
       }
     });
-  },
+  };
 
-  Run: function () {
-    // myTemplate.Run();
-  }
-});
+};

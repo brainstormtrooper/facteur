@@ -1,0 +1,11 @@
+{
+  "undef": true,
+  "unused": true,
+  "esversion": 9,
+  "globals": {
+    "log": true,
+    "ARGV": true,
+    "imports": true,
+    "pkg": true
+  }
+}

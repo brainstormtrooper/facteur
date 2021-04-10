@@ -3,25 +3,26 @@ Message object.
 
 Create and send a compiled message.
 */
-const Lang = imports.lang;
 const Gio = imports.gi.Gio;
 const Config = imports.lib.settings;
+const Data = imports.object.Data;
+const appData = new Data.Data().data;
 
-var Message = new Lang.Class({
+var Message = class Message{
 
 	// VARS
 
-	Name: 'Message',
-	boundary: [...Array(16)].map(() => Math.random().toString(36)[2]).join(''),
+	Name = 'Message';
+	boundary = [...Array(16)].map(() => Math.random().toString(36)[2]).join('');
 
 
 	// METHODS
 
-	Message: function () {
+	Message() {
 		return true;
-	},
+	};
 
-  sleep: function(milliseconds) {
+  sleep(milliseconds) {
     let timeStart = new Date().getTime();
     while (true) {
       let elapsedTime = new Date().getTime() - timeStart;
@@ -29,41 +30,40 @@ var Message = new Lang.Class({
           break;
       }
     }
-  },
+  };
 
-	SendAll: function () {
+	SendAll() {
     let delay = Config.getDelay();
-    if (app.Data.DELAY != delay) {
-      delay = app.Data.DELAY;
+    if (appData.DELAY != delay) {
+      delay = appData.DELAY;
     }
-    log('start');
-		app.Data.MAILINGS.forEach((mailing) => {
+    appData.MAILINGS.forEach((mailing) => {
       const mobj = this.Build(mailing.text, mailing.html.replace(/(\r\n|\n|\r)/gm, ''));
       this.Send(mobj, mailing.to);
 			this.sleep(delay);
 		});
-	},
+	};
 
-	Build: function (t, h) {
-		const subBlock = `Subject: ${app.Data.SUBJECT}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
+	Build(t, h) {
+		const subBlock = `Subject: ${appData.SUBJECT}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
 		const msgBlock = `--${this.boundary}\nContent-Type: text/plain; charset=utf-8\n${t}\n--${this.boundary}\nContent-Type: text/html; charset=utf-8\n${h}\n--${this.boundary}--`;	
 		const res = { subBlock, msgBlock };
 
 		return res;
 
-	},
+	};
 
-	Preview: function () {
+	Preview() {
 
 		return true;
 
-	},
+	};
 	//
 	// https://stackoverflow.com/questions/47533683/writing-a-native-messaging-host-in-gjs
 	// https://www.mailjet.com/feature/smtp-relay/
 	// https://stackoverflow.com/questions/44728855/curl-send-html-email-with-embedded-image-and-attachment
 	//
-	Send: async function (msgObj, to, cancellable = null) {
+	async Send (msgObj, to, cancellable = null) {
 		const ipv4 = Config.getIpv4();
 		let flagStr = '-svk';
 		if (ipv4) {
@@ -73,13 +73,13 @@ var Message = new Lang.Class({
     const argv = ['curl',
       flagStr,
       // Option switches and values are separate args
-      '--mail-from', app.Data.FROM,
-      '--url', app.Data.HOST,
+      '--mail-from', appData.FROM,
+      '--url', appData.HOST,
       '--mail-rcpt', to,
       '-T', '-',
-      '--user', `${app.Data.USER}:${app.Data.PASS}`
+      '--user', `${appData.USER}:${appData.PASS}`
     ];
-    if (app.Data.HOST.toLowerCase().includes('https')) {
+    if (appData.HOST.toLowerCase().includes('https')) {
 			argv.push('--ssl-reqd');
 		}
 		try {
@@ -143,4 +143,4 @@ var Message = new Lang.Class({
 			log(e);
 		}
 	}
-});
+};

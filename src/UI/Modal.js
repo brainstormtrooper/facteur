@@ -1,14 +1,12 @@
-
 const Gtk = imports.gi.Gtk;
-const Lang = imports.lang;
 const Settings = imports.UI.Settings;
 const Config = imports.lib.settings;
 const Gettext = imports.gettext;
 
-var UImodal = new Lang.Class({
-    Name: 'UImodal',
+var UImodal = class UImodal{
+    Name = 'UImodal';
 
-    showOpenModal: function(title, message) {
+    showOpenModal(title, message) {
 
         let label, modal, contentArea, button, actionArea;
       
@@ -42,9 +40,9 @@ var UImodal = new Lang.Class({
         actionArea.add(button);
       
         modal.show_all();
-      },
+      };
 
-      config: function () {
+      config() {
         // Create the dialog
         this._dialog = new Gtk.Dialog({
           transient_for: app._window,
@@ -67,13 +65,13 @@ var UImodal = new Lang.Class({
         this._contentArea.add(this._message);
         this._contentArea.add(this.configFields);
         // Handlers for button actions
-        const _OKHandler = function (dialog, response_id) {
+        const _OKHandler = () => {
 
           // Destroy the dialog
           this._dialog.destroy();
         }
         
-        const _saveHandler = function (dialog, response_id) {
+        const _saveHandler = () => {
           var ipv4 = false;
           Config.setHash(this.settings.hashField.get_text());
           ipv4 = this.settings.ipv4Field.get_active();
@@ -94,9 +92,9 @@ var UImodal = new Lang.Class({
         this.saveButton.connect("clicked", _saveHandler.bind(this));
       
         this._dialog.show_all();
-      },
+      };
 
-      about: function() {
+      about() {
         let aboutDialog = new Gtk.AboutDialog(
           { authors: [ 'Rick Opper <brainstormtrooper@free.fr>', 'Special thanks to Andy Holmes' ],
             // translator_credits: _("translator-credits"),
@@ -117,4 +115,4 @@ var UImodal = new Lang.Class({
           aboutDialog.destroy();
         });
       }
-})
+    };

@@ -3,33 +3,35 @@ UI for displaying mailing settings
 */
 const Gtk = imports.gi.Gtk;
 const Gdk = imports.gi.Gdk;
-const Lang = imports.lang;
 const Gettext = imports.gettext;
 const Signals = imports.signals;
 const Config = imports.lib.settings;
 
-var UIsettings = new Lang.Class({
-  Name: 'UIsettings',
-  Implements: [Signals.WithSignals],
+const Data = imports.object.Data;
+const appData = new Data.Data();
 
-  _init: function () {
+var UIsettings = class UIsettings{
+  Name = 'UIsettings';
+  Implements = [Signals.WithSignals];
+
+  constructor() {
     this.emit('bob', false);
-  },
+  };
 
   _updateUI() {
     try {
-      this.userField.set_text(app.Data.USER);
-      this.passField.set_text(app.Data.PASS);
-      this.smtpField.set_text(app.Data.HOST);
-      this.subjectField.set_text(app.Data.SUBJECT);
-      this.fromField.set_text(app.Data.FROM);
-      this.delayField.set_text(app.Data.DELAY);
+      this.userField.set_text(appData.data.USER);
+      this.passField.set_text(appData.data.PASS);
+      this.smtpField.set_text(appData.data.HOST);
+      this.subjectField.set_text(appData.data.SUBJECT);
+      this.fromField.set_text(appData.data.FROM);
+      this.delayField.set_text(appData.data.DELAY);
     } catch (err) {
       log(err);
     }
-  },
+  };
 
-  _buildUI: function () {
+  _buildUI() {
     // https://developer.gnome.org/gtk3/stable/GtkEntry.html
     this.emit('Log', '>>> building UI...'); 
     /*
@@ -115,21 +117,21 @@ var UIsettings = new Lang.Class({
     });
 
     saveButton.connect('clicked', () => {
-      app.Data.USER = this.userField.get_text();
-      app.Data.PASS = this.passField.get_text();
-      app.Data.HOST = this.smtpField.get_text();
-      app.Data.SUBJECT = this.subjectField.get_text();
-      app.Data.FROM = this.fromField.get_text();
-      app.Data.DELAY = this.delayField.get_text();
-      const str = ` >>> SETTINGS: "${app.Data.USER}", "${app.Data.HOST}", "${app.Data.SUBJECT}", "${app.Data.FROM}"...`;
+      appData.data.USER = this.userField.get_text();
+      appData.data.PASS = this.passField.get_text();
+      appData.data.HOST = this.smtpField.get_text();
+      appData.data.SUBJECT = this.subjectField.get_text();
+      appData.data.FROM = this.fromField.get_text();
+      appData.data.DELAY = this.delayField.get_text();
+      const str = ` >>> SETTINGS: "${appData.data.USER}", "${appData.data.HOST}", "${appData.data.SUBJECT}", "${appData.data.FROM}"...`;
 
       app.ui.results._LOG(str);
     })
 
     return vBox;
-  },
+  };
 
-  _buildModal: function () {
+  _buildModal() {
     const vBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
 
     const hashBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
@@ -164,4 +166,4 @@ var UIsettings = new Lang.Class({
 
     return vBox;
   }
-});
+};

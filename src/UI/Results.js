@@ -1,4 +1,3 @@
-const Lang = imports.lang;
 const Gtk = imports.gi.Gtk;
 const Gettext = imports.gettext;
 
@@ -8,11 +7,11 @@ const Template = new myTemplate.Template();
 const Message = new myMessage.Message();
 const Signals = imports.signals;
 
-var UIresults = new Lang.Class({
-  Name: 'UIresults',
-  Implements: [Signals.WithSignals],
+var UIresults = class UIresults{
+  Name = 'UIresults';
+  Implements = [Signals.WithSignals];
 
-  _init: function () {
+  constructor() {
 
     this.emit('bob', false);
     
@@ -21,9 +20,9 @@ var UIresults = new Lang.Class({
       this._LOG(msg);
     });
     
-  },
+  };
 
-  _buildUI: function () {
+  _buildUI() {
 
     const vBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
     const checkboxRow = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
@@ -52,11 +51,11 @@ var UIresults = new Lang.Class({
     });
 
     return vBox;
-  },
+  };
 
-  _LOG: function (string, level = 'INFO') {
+  _LOG(string, level = 'INFO') {
     const entry = `[${level}] ${string} \r\n`
     const len = encodeURI(entry).split(/%..|./).length - 1;
     this.textBuffer.insert(this.textBuffer.get_end_iter(), entry, len);
   }
-});
+};

@@ -1,26 +1,27 @@
 /**
 UI for displaying html message interface
 */
-const Lang = imports.lang;
 const Gtk = imports.gi.Gtk;
 const GtkSource = imports.gi.GtkSource;
 const Webkit = imports.gi.WebKit2;
 const Gettext = imports.gettext;
 const myContent = imports.object.Content;
 const Content = new myContent.Content();
+const Data = imports.object.Data;
+const appData = new Data.Data().data;
 
-var UIhtml = new Lang.Class({
-  Name: 'UIhtml',
+var UIhtml = class UIhtml{
+  Name = 'UIhtml';
 
-  _updateUI: function () {
+  _updateUI() {
     app.ui.results._LOG("updating html content...");
-    let len = encodeURI(app.Data.HTML).split(/%..|./).length - 1;
-    this.htmlBuffer.set_text(app.Data.HTML, len);
-    len = encodeURI(app.Data.TEXT).split(/%..|./).length - 1;
-    this.textBuffer.set_text(app.Data.TEXT, len);
-  },
+    let len = encodeURI(appData.HTML).split(/%..|./).length - 1;
+    this.htmlBuffer.set_text(appData.HTML, len);
+    len = encodeURI(appData.TEXT).split(/%..|./).length - 1;
+    this.textBuffer.set_text(appData.TEXT, len);
+  };
 
-  _buildUI: function () {
+  _buildUI() {
     const vBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
     const hBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
     const scrollText = new Gtk.ScrolledWindow({ vexpand: true });
@@ -81,11 +82,11 @@ var UIhtml = new Lang.Class({
     vBox.pack_start(buttonBox, false, false, 0);
 
     button.connect('clicked', () => {
-      app.Data.HTML = this.htmlBuffer.text;
-      app.Data.TEXT = this.textBuffer.text;
+      appData.HTML = this.htmlBuffer.text;
+      appData.TEXT = this.textBuffer.text;
     });
 
     return vBox;
-  },
+  };
 
-});
+};
