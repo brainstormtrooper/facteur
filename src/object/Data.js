@@ -1,33 +1,31 @@
 
-var Data = class Data {
-  Name = 'objectData';
+var Data = class Data { // jshint ignore:line
   
-  data = {
-    FROM: '',
-    USER: '',
-    PASS: '',
-    HOST: '',
-
-    SUBJECT: '',
-    HTML: '',
-    TEXT: '',
-    DELAY: '',
-
-    TO: [],
-    CSVA: [],
-    VARS: [],
-    MAILINGS: [],
-
-    FILENAME: 'untitled',
-    ID: ''
-  };
-
   constructor() {
     if (Data._instance) {
-      return Data._instance
+      return Data._instance;
     }
     Data._instance = this;
 
-  };
+    this.data = {
+      FROM: '',
+      USER: '',
+      PASS: '',
+      HOST: '',
+  
+      SUBJECT: '',
+      HTML: '',
+      TEXT: '',
+      DELAY: '',
+  
+      TO: [],
+      CSVA: [],
+      VARS: [],
+      MAILINGS: [],
+  
+      FILENAME: 'untitled',
+      ID: ''
+    };
+  }
 
 };

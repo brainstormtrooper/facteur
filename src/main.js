@@ -21,5 +21,5 @@ Gettext.textdomain('gnome-emailer-0.1');
 // app.application.run(ARGV);
 // app.application.run(ARGV)([imports.system.programInvocationName].concat(ARGV));
 // For technical reasons, this is the proper way you should start your application
-(new Emailer.GNOMEeMailer()).application.run([imports.system.programInvocationName].concat(ARGV));
+(new Emailer.GNOMEeMailer()).run([imports.system.programInvocationName].concat(ARGV));
 

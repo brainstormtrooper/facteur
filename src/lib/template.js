@@ -1,4 +1,6 @@
-iterRows = (data) => {
+
+// jshint unused:false
+function iterRows(data) {
   log('START - starting treatment');
   data.MAILINGS.length = 0;
   for (let i = 0; i < data.CSVA.length; i++) {
@@ -7,9 +9,13 @@ iterRows = (data) => {
     const to = data.TO[i];
     let cHTML = data.HTML;
     let cTEXT = data.TEXT;
+
+    // jshint -W083
+
     row.forEach((val, k) => {
       vals[data.VARS[k]] = val;
     });
+
     Object.entries(vals).forEach(([i, v]) => {
       const iw = `{{${i}}}`;
       _positions(cHTML).forEach((pos) => {
@@ -29,12 +35,12 @@ iterRows = (data) => {
       text: cTEXT,
       to,
     });
-  };
+  }
   
   return data.MAILINGS.length;
 }
 
-_positions = (template) => {
+function _positions(template) {
   const re = /{{([a-zA-Z0-9_]+)}}/g;
   const res = template.match(re);
   return res;

@@ -6,7 +6,9 @@ const Data = imports.object.Data;
 
 const appData = new Data.Data();
 
-const Import = (path) => {
+// jshint unused:false
+
+function Import(path) {
   return new Promise((resolve, reject) => {
     let file = Gio.File.new_for_path(path);
     log('reading file from ' + path);
@@ -28,7 +30,7 @@ const Import = (path) => {
   });
 }
 
-const save = (path, data) => {
+function save(path, data) {
   let dataStr = JSON.stringify(data, null, '\t');
   GLib.file_set_contents(path, dataStr);
 }
@@ -36,7 +38,7 @@ const save = (path, data) => {
 // https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
 // https://stackoverflow.com/questions/21291279/how-to-convert-to-string-and-back-again-with-cryptojs
 // replace with : https://github.com/brix/crypto-js ?
-const rollUp = () => {
+function rollUp() {
   const HASH = settings.getHash().toString();
   const roll = {
     FROM: appData.data.FROM,
@@ -55,23 +57,23 @@ const rollUp = () => {
   return roll;
 }
 
-const verify = (data) => {
+function verify(data) {
   const required = ['FROM', 'USER', 'PASS', 'HOST', 'SUBJECT', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS', 'DELAY'];
   let valid = true;
   required.forEach(key => {
     if (!data.hasOwnProperty(key)) {
       valid = false;
-    };
+    }
   });
   Object.keys(data).forEach(key => {
     if (!required.includes(key)) {
       valid = false;
-    };
+    }
   });
   return valid;
 }
 
-const unRoll = (data) => {
+function unRoll(data) {
   if (!verify(data)) {
     throw 'bad file';
   }
@@ -89,7 +91,7 @@ const unRoll = (data) => {
   appData.data.DELAY = data.DELAY;
 }
 
-const open = async (path) => {
+async function open(path) {
   // let [ok, contents] = GLib.file_get_contents(path);
   let res = {};
   try {
