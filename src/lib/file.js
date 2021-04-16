@@ -6,7 +6,7 @@ const Data = imports.object.Data;
 
 const appData = new Data.Data();
 
-// jshint unused:false
+/* eslint-disable no-unused-vars */
 
 function Import(path) {
   return new Promise((resolve, reject) => {
@@ -61,6 +61,7 @@ function verify(data) {
   const required = ['FROM', 'USER', 'PASS', 'HOST', 'SUBJECT', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS', 'DELAY'];
   let valid = true;
   required.forEach(key => {
+    // eslint-disable-next-line no-prototype-builtins
     if (!data.hasOwnProperty(key)) {
       valid = false;
     }
@@ -93,15 +94,8 @@ function unRoll(data) {
 
 async function open(path) {
   // let [ok, contents] = GLib.file_get_contents(path);
-  let res = {};
-  try {
-    const contents = await Import(path);
-    res = JSON.parse(contents);
-  } catch (error) {
+  const contents = await Import(path);
 
-    throw error;
-  } 
-  
-  return res;
+  return JSON.parse(contents);
 }
 

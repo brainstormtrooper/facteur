@@ -7,7 +7,7 @@ const GObject = imports.gi.GObject;
 const Template = new myTemplate.Template();
 const Message = new myMessage.Message();
 
-var UIresults = GObject.registerClass( //jshint ignore:line
+var UIresults = GObject.registerClass( // eslint-disable-line
   {
     GTypeName: 'UIresults',
     Signals: {

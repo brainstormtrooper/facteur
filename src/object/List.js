@@ -10,7 +10,7 @@ const Data = imports.object.Data;
 const GObject = imports.gi.GObject;
 const appData = new Data.Data().data;
 
-var List = GObject.registerClass( // jshint ignore:line
+var List = GObject.registerClass( // eslint-disable-line
   {
     GTypeName: 'List',
     Signals: {

@@ -1,0 +1,17 @@
+{
+  "extends": ["eslint:recommended", "google"],
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
+
+  "env": {
+    "es6": true
+  },
+
+  "globals": {
+    // "readonly" or "writable",
+    "imports" : "readonly",
+    "log": "readonly",
+    "pkg": "readonly"
+  }
+}

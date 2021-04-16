@@ -1,5 +1,5 @@
 
-// jshint unused:false
+/* eslint-disable no-unused-vars */
 function iterRows(data) {
   log('START - starting treatment');
   data.MAILINGS.length = 0;
@@ -9,8 +9,6 @@ function iterRows(data) {
     const to = data.TO[i];
     let cHTML = data.HTML;
     let cTEXT = data.TEXT;
-
-    // jshint -W083
 
     row.forEach((val, k) => {
       vals[data.VARS[k]] = val;
@@ -43,5 +41,6 @@ function iterRows(data) {
 function _positions(template) {
   const re = /{{([a-zA-Z0-9_]+)}}/g;
   const res = template.match(re);
+  
   return res;
 }

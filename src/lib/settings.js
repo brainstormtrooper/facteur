@@ -3,7 +3,7 @@ const System = imports.system;
 const Data = imports.object.Data;
 const appData = new Data.Data().data;
 
-// jshint unused:false
+/* eslint-disable no-unused-vars */
 
 function getSettings(schemaId, path) {
   const GioSSS = Gio.SettingsSchemaSource;

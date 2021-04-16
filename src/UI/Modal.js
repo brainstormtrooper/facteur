@@ -4,9 +4,9 @@ const Config = imports.lib.settings;
 const Gettext = imports.gettext;
 const GObject = imports.gi.GObject;
 
-var UImodal = GObject.registerClass( // jshint ignore:line
+var UImodal = GObject.registerClass( // eslint-disable-line
   {
-      GTypeName: 'UImodal',
+    GTypeName: 'UImodal',
   }, 
   class UImodal extends GObject.Object {
     _init(){

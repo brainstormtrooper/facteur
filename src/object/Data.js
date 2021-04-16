@@ -1,5 +1,5 @@
 
-var Data = class Data { // jshint ignore:line
+var Data = class Data { // eslint-disable-line
   
   constructor() {
     if (Data._instance) {

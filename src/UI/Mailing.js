@@ -11,17 +11,17 @@ const Modal = imports.UI.Modal;
 const Data = imports.object.Data;
 const appData = new Data.Data().data;
 
-var UImailing = GObject.registerClass( // jshint ignore:line
+var UImailing = GObject.registerClass( // eslint-disable-line
   {
-      GTypeName: 'UImailing',
-      Signals: {
-        'Logger': {
-          param_types: [GObject.TYPE_STRING]
-        },      
-        'Updated_sig': {
-          param_types: [GObject.TYPE_BOOLEAN]
-        }
+    GTypeName: 'UImailing',
+    Signals: {
+      'Logger': {
+        param_types: [GObject.TYPE_STRING]
+      },      
+      'Updated_sig': {
+        param_types: [GObject.TYPE_BOOLEAN]
       }
+    }
   }, 
   class UImailing extends GObject.Object {
     _init() {

@@ -11,14 +11,14 @@ const Content = new myContent.Content();
 const Data = imports.object.Data;
 const appData = new Data.Data().data;
 
-var UIcontents = GObject.registerClass( // jshint ignore:line
+var UIcontents = GObject.registerClass( // eslint-disable-line
   {
-      GTypeName: 'UIcontents',
-      Signals: {
-        'Logger': {
-            param_types: [GObject.TYPE_STRING]
-        },
-      }
+    GTypeName: 'UIcontents',
+    Signals: {
+      'Logger': {
+        param_types: [GObject.TYPE_STRING]
+      },
+    }
   }, 
   class UIcontents extends GObject.Object {
     _init() {
@@ -26,12 +26,7 @@ var UIcontents = GObject.registerClass( // jshint ignore:line
     }
 
     _updateUI() {
-      // app.ui.results._LOG("updating html content...");
-      try {
-        this.emit('Logger', 'updating html content...');
-      } catch (error) {
-        log(error);
-      }
+      this.emit('Logger', 'updating html content...');
       
       let len = encodeURI(appData.HTML).split(/%..|./).length - 1;
       this.htmlBuffer.set_text(appData.HTML, len);

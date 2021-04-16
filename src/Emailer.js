@@ -1,3 +1,4 @@
+
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
@@ -14,7 +15,7 @@ const Contents = new imports.UI.Contents.UIcontents();
 // import the app data singleton to hold persitant data
 const appData = new imports.object.Data.Data().data;
 
-var GNOMEeMailer = GObject.registerClass( // jshint ignore:line
+var GNOMEeMailer = GObject.registerClass( // eslint-disable-line
   {
       GTypeName: 'GNOMEeMailer',
   }, 
@@ -158,7 +159,5 @@ var GNOMEeMailer = GObject.registerClass( // jshint ignore:line
       this._window.show_all();
   
     }
-
-  }
-);
+  });
   

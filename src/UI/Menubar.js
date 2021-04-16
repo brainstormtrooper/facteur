@@ -11,20 +11,20 @@ const File = imports.lib.file;
 const Modal = imports.UI.Modal;
 const myModal = new Modal.UImodal();
 
-var Menubar = GObject.registerClass( // jshint ignore:line
+var Menubar = GObject.registerClass( // eslint-disable-line
   {
-      GTypeName: 'Menubar',
-      Signals: {
-        'Logger': {
-          param_types: [GObject.TYPE_STRING]
-        },
-        'update_ui': {
-          param_types: [GObject.TYPE_BOOLEAN]
-        },
-        'filename_changed': {
-          param_types: [GObject.TYPE_BOOLEAN]
-        },
-      }
+    GTypeName: 'Menubar',
+    Signals: {
+      'Logger': {
+        param_types: [GObject.TYPE_STRING]
+      },
+      'update_ui': {
+        param_types: [GObject.TYPE_BOOLEAN]
+      },
+      'filename_changed': {
+        param_types: [GObject.TYPE_BOOLEAN]
+      },
+    }
   }, 
   class Menubar extends GObject.Object {
     _init() {

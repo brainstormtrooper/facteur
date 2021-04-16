@@ -9,7 +9,7 @@ const Data = imports.object.Data;
 const GObject = imports.gi.GObject;
 const appData = new Data.Data().data;
 
-var Message = GObject.registerClass( // jshint ignore:line
+var Message = GObject.registerClass( // eslint-disable-line
   {
       GTypeName: 'Message',
       Signals: {
@@ -32,6 +32,7 @@ var Message = GObject.registerClass( // jshint ignore:line
 
     sleep(milliseconds) {
       let timeStart = new Date().getTime();
+      // eslint-disable-next-line
       while (true) {
         let elapsedTime = new Date().getTime() - timeStart;
         if (elapsedTime > milliseconds) {
@@ -125,7 +126,8 @@ var Message = GObject.registerClass( // jshint ignore:line
             // properly
             (proc, res) => {
               try {
-                let [ok, stdout, stderr] = proc.communicate_utf8_finish(res); // jshint ignore:line
+                // eslint-disable-next-line
+                let [ok, stdout, stderr] = proc.communicate_utf8_finish(res); 
                 // Because we used the STDERR_MERGE flag stderr will be
                 // included in stdout. Obviously you could also call
                 // `resolve([stdout, stderr])` if you wanted to keep both

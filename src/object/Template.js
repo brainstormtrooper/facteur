@@ -8,7 +8,7 @@ const Data = imports.object.Data;
 const GObject = imports.gi.GObject;
 const appData = new Data.Data().data;
 
-var Template = GObject.registerClass( // jshint ignore:line
+var Template = GObject.registerClass( // eslint-disable-line
   {
       GTypeName: 'Template',
   }, 
