@@ -1,7 +1,18 @@
 {
-  "extends": ["eslint:recommended", "google"],
+  "extends": ["eslint:recommended", "/usr/local/lib/eslintrc.json"],
   "parserOptions": {
     "ecmaVersion": 2017
+  },
+
+  "rules": {
+    "require-jsdoc": "off",
+    "array-bracket-spacing": "error",
+    "func-call-spacing": "error",
+    "space-before-function-paren": "error",
+    "space-before-blocks": "error",
+    "key-spacing": "error",
+    "object-curly-spacing": ["error", "always"],
+    "newline-before-return": "error"
   },
 
   "env": {
@@ -12,6 +23,7 @@
     // "readonly" or "writable",
     "imports" : "readonly",
     "log": "readonly",
+    "ARGV": "readonly",
     "pkg": "readonly"
   }
 }

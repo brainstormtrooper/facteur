@@ -9,25 +9,25 @@ const GObject = imports.gi.GObject;
 const appData = new Data.Data().data;
 
 var Template = GObject.registerClass( // eslint-disable-line
-  {
+    {
       GTypeName: 'Template',
-  }, 
-  class Template extends GObject.Object {
-    _init() {
-      super._init();           
-    }
-    // METHODS
+    },
+    class Template extends GObject.Object {
+      _init() {
+        super._init();
+      }
+      // METHODS
 
-    Compile() {
-      return new Promise((resolve, reject) => {
-        const res = myTemplate.iterRows(appData);
-        if (res) {
-          resolve(res);
-        } else {
-          reject('Failed to iterate over rows.');
-        }
-      });
-    }
-
-  }
+      compile() {
+        return new Promise((resolve, reject) => {
+          const res = myTemplate.iterRows(appData);
+          if (res) {
+            resolve(res);
+          } else {
+            const e = new Error('Failed to iterate over rows.');
+            reject(e);
+          }
+        });
+      }
+    },
 );

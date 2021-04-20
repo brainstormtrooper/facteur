@@ -34,13 +34,13 @@ function iterRows(data) {
       to,
     });
   }
-  
+
   return data.MAILINGS.length;
 }
 
 function _positions(template) {
   const re = /{{([a-zA-Z0-9_]+)}}/g;
   const res = template.match(re);
-  
+
   return res;
 }

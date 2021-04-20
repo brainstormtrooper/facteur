@@ -1,6 +1,6 @@
 
 var Data = class Data { // eslint-disable-line
-  
+
   constructor() {
     if (Data._instance) {
       return Data._instance;
@@ -12,20 +12,19 @@ var Data = class Data { // eslint-disable-line
       USER: '',
       PASS: '',
       HOST: '',
-  
+
       SUBJECT: '',
       HTML: '',
       TEXT: '',
       DELAY: '',
-  
+
       TO: [],
       CSVA: [],
       VARS: [],
       MAILINGS: [],
-  
+
       FILENAME: 'untitled',
-      ID: ''
+      ID: '',
     };
   }
-
 };

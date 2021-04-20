@@ -8,9 +8,9 @@ const appData = new Data.Data();
 
 /* eslint-disable no-unused-vars */
 
-function Import(path) {
+function fopen(path) {
   return new Promise((resolve, reject) => {
-    let file = Gio.File.new_for_path(path);
+    const file = Gio.File.new_for_path(path);
     log('reading file from ' + path);
     // asynchronous file loading...
     file.load_contents_async(null, (file, res) => {
@@ -20,7 +20,6 @@ function Import(path) {
         const dataString = contents.toString();
 
         resolve(dataString);
-
       } catch (e) {
         log('Error loading data file : ' + e);
 
@@ -31,7 +30,7 @@ function Import(path) {
 }
 
 function save(path, data) {
-  let dataStr = JSON.stringify(data, null, '\t');
+  const dataStr = JSON.stringify(data, null, '\t');
   GLib.file_set_contents(path, dataStr);
 }
 
@@ -51,36 +50,42 @@ function rollUp() {
     TO: appData.data.TO,
     CSVA: appData.data.CSVA,
     VARS: appData.data.VARS,
-    DELAY: appData.data.DELAY
+    DELAY: appData.data.DELAY,
   };
 
   return roll;
 }
 
 function verify(data) {
-  const required = ['FROM', 'USER', 'PASS', 'HOST', 'SUBJECT', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS', 'DELAY'];
+  const required = [
+    'FROM', 'USER', 'PASS', 'HOST', 'SUBJECT',
+    'HTML', 'TEXT', 'TO', 'CSVA', 'VARS', 'DELAY',
+  ];
   let valid = true;
-  required.forEach(key => {
+  required.forEach((key) => {
     // eslint-disable-next-line no-prototype-builtins
     if (!data.hasOwnProperty(key)) {
       valid = false;
     }
   });
-  Object.keys(data).forEach(key => {
+  Object.keys(data).forEach((key) => {
     if (!required.includes(key)) {
       valid = false;
     }
   });
+
   return valid;
 }
 
 function unRoll(data) {
   if (!verify(data)) {
-    throw 'bad file';
+    const bfe = new Error('Bad file');
+    throw bfe;
   }
   const HASH = settings.getHash().toString();
   appData.data.FROM = data.FROM;
   appData.data.USER = data.USER;
+  // eslint-disable-next-line
   appData.data.PASS = (data.PASS ? crypto.CryptoJS.AES.decrypt(data.PASS, HASH).toString(crypto.CryptoJS.enc.Utf8) : '');
   appData.data.HOST = data.HOST;
   appData.data.SUBJECT = data.SUBJECT;
@@ -94,7 +99,7 @@ function unRoll(data) {
 
 async function open(path) {
   // let [ok, contents] = GLib.file_get_contents(path);
-  const contents = await Import(path);
+  const contents = await fopen(path);
 
   return JSON.parse(contents);
 }

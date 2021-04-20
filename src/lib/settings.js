@@ -13,29 +13,24 @@ function getSettings(schemaId, path) {
     // Running from the source tree
     log('running from source tree');
     schemaSource = GioSSS.new_from_directory(pkg.pkgdatadir,
-      GioSSS.get_default(),
-      false);
+        GioSSS.get_default(),
+        false);
   } else {
     schemaSource = GioSSS.get_default();
   }
 
-  let schemaObj = schemaSource.lookup(schemaId, true);
+  const schemaObj = schemaSource.lookup(schemaId, true);
   if (!schemaObj) {
     log('Missing GSettings schema ' + schemaId);
     System.exit(1);
   }
 
+  const cnfblk = {settings_schema: schemaObj};
+  if (path !== undefined) {
+    cnfblk.path = path;
+  }
 
-  if (path === undefined)
-
-    return new Gio.Settings({ settings_schema: schemaObj });
-  else
-
-    return new Gio.Settings({
-      settings_schema: schemaObj,
-      path: path
-    });
-
+  return new Gio.Settings(cnfblk);
 }
 
 function getHash() {
