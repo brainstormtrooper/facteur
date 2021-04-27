@@ -17,4 +17,3 @@ Gettext.textdomain('gnome-emailer-0.1');
 
 // eslint-disable-next-line max-len
 (new Emailer.GNOMEeMailer()).run([imports.system.programInvocationName].concat(ARGV));
-

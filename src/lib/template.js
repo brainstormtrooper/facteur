@@ -6,7 +6,7 @@ function iterRows(data) {
   for (let i = 0; i < data.CSVA.length; i++) {
     const row = data.CSVA[i];
     const vals = {};
-    const to = data.TO[i];
+    const to = data.TO[i].replace(/"/g, '').trim();
     let cHTML = data.HTML;
     let cTEXT = data.TEXT;
 

@@ -104,7 +104,7 @@ var List = GObject.registerClass( // eslint-disable-line
         this.csva.shift();
         for (let k = 0; k < this.csva.length; k++) {
           // app.ui.results._LOG('Trimming... : ' + this.csva[k]);
-          this.emit('Log', 'Trimming... : ' + this.csva[k]);
+          // this.emit('Log', 'Trimming... : ' + this.csva[k]);
           if (this.csva[k] == [] || this.csva[k] == null) {
             delete (this.csva[k]);
           }

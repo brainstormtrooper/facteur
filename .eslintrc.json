@@ -1,7 +1,8 @@
 {
   "extends": ["eslint:recommended", "/usr/local/lib/eslintrc.json"],
   "parserOptions": {
-    "ecmaVersion": 2017
+    "ecmaVersion": 2017,
+    "sourceType": "module"
   },
 
   "rules": {
@@ -24,6 +25,8 @@
     "imports" : "readonly",
     "log": "readonly",
     "ARGV": "readonly",
-    "pkg": "readonly"
+    "pkg": "readonly",
+    "require": "readonly",
+    "module": "readonly"
   }
 }

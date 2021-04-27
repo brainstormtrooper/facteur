@@ -25,7 +25,7 @@ function getSettings(schemaId, path) {
     System.exit(1);
   }
 
-  const cnfblk = {settings_schema: schemaObj};
+  const cnfblk = { settings_schema: schemaObj };
   if (path !== undefined) {
     cnfblk.path = path;
   }
