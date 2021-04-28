@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars, no-var */
+/* eslint-disable no-unused-vars, no-var, no-tabs */
 
 var testCsv = `address,name,likes
   recipient1@email.com,Bob,red cars
@@ -29,39 +29,39 @@ var password = 'password';
 var hash = 'gnome-emailer';
 
 var fileStr = `{
-  "FROM": "sender@email.com",
-  "USER": "username",
-  "PASS": "U2FsdGVkX19Lhn94BJI7n21YOM71UaJfKPGyUFAifL0=",
-  "HOST": "smtps://smtp.mail.domain.com:465",
-  "SUBJECT": "test",
-  "HTML": "<p>{{name}}, {{likes}}.</p>",
-  "TEXT": "{{name}}, {{likes}}.",
-  "TO": [
-    "recipient1@email.com",
-    "recipient2@otheremail.com",
-    "recipient3@email.com"
-  ],
-  "CSVA": [
-    [
-      "recipient1@email.com",
-      "rick",
-      "red cars"
-    ],
-    [
-      "recipient2@otheremail.com",
-      "Ricky",
-      "fast"
-    ],
-    [
-      "recipient3@email.com",
-      "Bob",
-      "luxury"
-    ]
-  ],
-  "VARS": [
-    "address",
-    "name",
-    "likes"
-  ],
-  "DELAY": "500"
-  }`;
+	"FROM": "sender@email.com",
+	"USER": "username",
+	"PASS": "U2FsdGVkX19Lhn94BJI7n21YOM71UaJfKPGyUFAifL0=",
+	"HOST": "smtps://smtp.mail.domain.com:465",
+	"SUBJECT": "test",
+	"HTML": "<p>{{name}}, {{likes}}.</p>",
+	"TEXT": "{{name}}, {{likes}}.",
+	"TO": [
+		"recipient1@email.com",
+		"recipient2@otheremail.com",
+		"recipient3@email.com"
+	],
+	"CSVA": [
+		[
+			"recipient1@email.com",
+			"rick",
+			"red cars"
+		],
+		[
+			"recipient2@otheremail.com",
+			"Ricky",
+			"fast"
+		],
+		[
+			"recipient3@email.com",
+			"Bob",
+			"luxury"
+		]
+	],
+	"VARS": [
+		"address",
+		"name",
+		"likes"
+	],
+	"DELAY": "500"
+}`;
