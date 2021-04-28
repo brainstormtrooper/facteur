@@ -3,16 +3,17 @@ Html message object.
 
 Handle message contents for mailings.
 */
-const Lang = imports.lang;
-
 const myFile = imports.lib.file;
 
-var Content = new Lang.Class({
-  Name: 'objectContent',
+var Content = class Content{ // eslint-disable-line
+  /**
+   * opens or imports a file
+   * @param {string} path
+   * @return {string} file contents
+   */
+  async import(path) {
+    const str = await myFile.fopen(path);
 
-  Import: async function (path) {
-    const str = await myFile.Import(path);
     return str;
-  },
-
-});
+  }
+};

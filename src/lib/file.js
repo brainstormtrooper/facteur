@@ -2,10 +2,15 @@ const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const crypto = imports.lib.aes;
 const settings = imports.lib.settings;
+const Data = imports.object.Data;
 
-var Import = function (path) {
+const appData = new Data.Data();
+
+/* eslint-disable no-unused-vars */
+
+function fopen(path) {
   return new Promise((resolve, reject) => {
-    let file = Gio.File.new_for_path(path);
+    const file = Gio.File.new_for_path(path);
     log('reading file from ' + path);
     // asynchronous file loading...
     file.load_contents_async(null, (file, res) => {
@@ -15,7 +20,6 @@ var Import = function (path) {
         const dataString = contents.toString();
 
         resolve(dataString);
-
       } catch (e) {
         log('Error loading data file : ' + e);
 
@@ -25,78 +29,78 @@ var Import = function (path) {
   });
 }
 
-var save = function (path, data) {
-  let dataStr = JSON.stringify(data, null, '\t');
+function save(path, data) {
+  const dataStr = JSON.stringify(data, null, '\t');
   GLib.file_set_contents(path, dataStr);
 }
 
 // https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
 // https://stackoverflow.com/questions/21291279/how-to-convert-to-string-and-back-again-with-cryptojs
 // replace with : https://github.com/brix/crypto-js ?
-var rollUp = function () {
+function rollUp() {
   const HASH = settings.getHash().toString();
   const roll = {
-    FROM: app.Data.FROM,
-    USER: app.Data.USER,
-    PASS: crypto.CryptoJS.AES.encrypt(app.Data.PASS, HASH).toString(),
-    HOST: app.Data.HOST,
-    SUBJECT: app.Data.SUBJECT,
-    HTML: app.Data.HTML,
-    TEXT: app.Data.TEXT,
-    TO: app.Data.TO,
-    CSVA: app.Data.CSVA,
-    VARS: app.Data.VARS,
-    DELAY: app.Data.DELAY
+    FROM: appData.data.FROM,
+    USER: appData.data.USER,
+    PASS: crypto.CryptoJS.AES.encrypt(appData.data.PASS, HASH).toString(),
+    HOST: appData.data.HOST,
+    SUBJECT: appData.data.SUBJECT,
+    HTML: appData.data.HTML,
+    TEXT: appData.data.TEXT,
+    TO: appData.data.TO,
+    CSVA: appData.data.CSVA,
+    VARS: appData.data.VARS,
+    DELAY: appData.data.DELAY,
   };
 
   return roll;
 }
 
-var verify = function(data){
-  const required = ['FROM', 'USER', 'PASS', 'HOST', 'SUBJECT', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS', 'DELAY'];
+function verify(data) {
+  const required = [
+    'FROM', 'USER', 'PASS', 'HOST', 'SUBJECT',
+    'HTML', 'TEXT', 'TO', 'CSVA', 'VARS', 'DELAY',
+  ];
   let valid = true;
-  required.forEach(key => {
+  required.forEach((key) => {
+    // eslint-disable-next-line no-prototype-builtins
     if (!data.hasOwnProperty(key)) {
       valid = false;
-    };
+    }
   });
-  Object.keys(data).forEach(key => {
+  Object.keys(data).forEach((key) => {
     if (!required.includes(key)) {
       valid = false;
-    };
+    }
   });
+
   return valid;
 }
 
-var unRoll = function(data) {
+function unRoll(data) {
   if (!verify(data)) {
-    throw 'bad file';
+    const bfe = new Error('Bad file');
+    throw bfe;
   }
   const HASH = settings.getHash().toString();
-  app.Data.FROM = data.FROM;
-  app.Data.USER = data.USER;
-  app.Data.PASS = (data.PASS ? crypto.CryptoJS.AES.decrypt(data.PASS, HASH).toString(crypto.CryptoJS.enc.Utf8) : '');
-  app.Data.HOST = data.HOST;
-  app.Data.SUBJECT = data.SUBJECT;
-  app.Data.HTML = data.HTML;
-  app.Data.TEXT = data.TEXT;
-  app.Data.TO = data.TO;
-  app.Data.CSVA = data.CSVA;
-  app.Data.VARS = data.VARS;
-  app.Data.DELAY = data.DELAY;
+  appData.data.FROM = data.FROM;
+  appData.data.USER = data.USER;
+  // eslint-disable-next-line
+  appData.data.PASS = (data.PASS ? crypto.CryptoJS.AES.decrypt(data.PASS, HASH).toString(crypto.CryptoJS.enc.Utf8) : '');
+  appData.data.HOST = data.HOST;
+  appData.data.SUBJECT = data.SUBJECT;
+  appData.data.HTML = data.HTML;
+  appData.data.TEXT = data.TEXT;
+  appData.data.TO = data.TO;
+  appData.data.CSVA = data.CSVA;
+  appData.data.VARS = data.VARS;
+  appData.data.DELAY = data.DELAY;
 }
 
-var open = async function(path) {
+async function open(path) {
   // let [ok, contents] = GLib.file_get_contents(path);
-  let res = {};
-  try {
-    const contents = await Import(path);
-    res = JSON.parse(contents);
-  } catch (error) {
+  const contents = await fopen(path);
 
-    throw error;
-  } 
-  
-  return res;
+  return JSON.parse(contents);
 }
 

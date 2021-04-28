@@ -3,37 +3,31 @@ Template object.
 
 Handle templates for mailings.
 */
-const Lang = imports.lang;
-const Signals = imports.signals;
 const myTemplate = imports.lib.template;
+const Data = imports.object.Data;
+const GObject = imports.gi.GObject;
+const appData = new Data.Data().data;
 
-var Template = new Lang.Class({
-  Name: 'Template Class',
-
-
-  // METHODS
-
-  Template: function () {
-
-    Signals.addSignalMethods(Template.prototype);
-    this.parent();
-
-    this.emit('bob', false);
-
-  },
-
-  Compile: function () {
-    return new Promise((resolve, reject) => {
-      const res = myTemplate.iterRows();
-      if (res) {
-        resolve(res);
-      } else {
-        reject('Failed to iterate over rows.');
+var Template = GObject.registerClass( // eslint-disable-line
+    {
+      GTypeName: 'Template',
+    },
+    class Template extends GObject.Object {
+      _init() {
+        super._init();
       }
-    });
-  },
+      // METHODS
 
-  Run: function () {
-    // myTemplate.Run();
-  }
-});
+      compile() {
+        return new Promise((resolve, reject) => {
+          const res = myTemplate.iterRows(appData);
+          if (res) {
+            resolve(res);
+          } else {
+            const e = new Error('Failed to iterate over rows.');
+            reject(e);
+          }
+        });
+      }
+    },
+);
