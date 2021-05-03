@@ -11,7 +11,6 @@ const appData = new Data.Data();
 function fopen(path) {
   return new Promise((resolve, reject) => {
     const file = Gio.File.new_for_path(path);
-    log('reading file from ' + path);
     // asynchronous file loading...
     file.load_contents_async(null, (file, res) => {
       try {

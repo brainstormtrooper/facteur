@@ -146,14 +146,14 @@ var Message = GObject.registerClass( // eslint-disable-line
                 },
             );
           });
-          log(`>>> RES >>> : ${stdout}`);
+          // log(`>>> RES >>> : ${stdout}`);
           this.emit('Logger', `>>> RES >>> : ${stdout}`);
           // return stdout;
         } catch (e) {
           // This could be any number of errors, but probably it will be a
           // GError in which case it will have `code` property carrying a
           // GIOErrorEnum you could use to programmatically respond to.
-          log(e);
+          error(e);
         }
       }
     },

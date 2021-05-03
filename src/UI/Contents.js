@@ -82,11 +82,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           const path = choosebutton.get_file().get_path();
           // do something with path
           // app.ui.results._LOG(`Importing template from : ${path}`);
-          try {
-            this.emit('Logger', `Importing template from : ${path}`);
-          } catch (error) {
-            log(error);
-          }
+          this.emit('Logger', `Importing template from : ${path}`);
 
           const content = await Content.import(path);
           const len = encodeURI(content).split(/%..|./).length - 1;

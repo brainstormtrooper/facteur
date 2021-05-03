@@ -1,7 +1,6 @@
 
 /* eslint-disable no-unused-vars */
 function iterRows(data) {
-  log('START - starting treatment');
   data.MAILINGS.length = 0;
   for (let i = 0; i < data.CSVA.length; i++) {
     const row = data.CSVA[i];
