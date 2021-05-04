@@ -52,7 +52,11 @@ var UImailing = GObject.registerClass( // eslint-disable-line
         this.choosebutton.connect('file-set', Lang.bind(this, function() {
           const path = this.choosebutton.get_file().get_path();
           // do something with path
-          this.list.import(path);
+          try {
+            this.list.import(path);
+          } catch (error) {
+            logError(error);
+          }
           this.emit('Logger', 'CSV File path is : ' + path);
         }));
 

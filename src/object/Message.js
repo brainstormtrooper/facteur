@@ -153,7 +153,7 @@ var Message = GObject.registerClass( // eslint-disable-line
           // This could be any number of errors, but probably it will be a
           // GError in which case it will have `code` property carrying a
           // GIOErrorEnum you could use to programmatically respond to.
-          error(e);
+          logError(e);
         }
       }
     },

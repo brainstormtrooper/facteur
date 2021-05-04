@@ -77,14 +77,14 @@ var GNOMEeMailer = GObject.registerClass( // eslint-disable-line
           try {
             this.updateUI();
           } catch (e) {
-            error(e);
+            logError(e);
           }
         });
         Menubar.connect('filename_changed', () => {
           try {
             this._window.get_titlebar().set_subtitle(appData.FILENAME);
           } catch (e) {
-            error(e);
+            logError(e);
           }
         });
 

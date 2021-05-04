@@ -53,7 +53,8 @@ var UIresults = GObject.registerClass( // eslint-disable-line
           if (res) {
             Message.sendAll();
           } else {
-            error('Failed...');
+            const e = new Error('Failed to compile template');
+            logError(e);
           }
         });
 

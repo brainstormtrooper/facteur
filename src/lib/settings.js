@@ -21,7 +21,8 @@ function getSettings(schemaId, path) {
 
   const schemaObj = schemaSource.lookup(schemaId, true);
   if (!schemaObj) {
-    error('Missing GSettings schema ' + schemaId);
+    const e = new Error('Missing GSettings schema ' + schemaId);
+    logError(e);
     System.exit(1);
   }
 

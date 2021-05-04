@@ -20,7 +20,7 @@ function fopen(path) {
 
         resolve(dataString);
       } catch (e) {
-        log('Error loading data file : ' + e);
+        logError(e, 'File error');
 
         reject(e);
       }
@@ -97,7 +97,6 @@ function unRoll(data) {
 }
 
 async function open(path) {
-  // let [ok, contents] = GLib.file_get_contents(path);
   const contents = await fopen(path);
 
   return JSON.parse(contents);

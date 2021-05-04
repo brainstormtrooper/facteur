@@ -33,7 +33,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           this.fromField.set_text(appData.data.FROM);
           this.delayField.set_text(appData.data.DELAY);
         } catch (err) {
-          error(err);
+          logError(err);
         }
       }
 
