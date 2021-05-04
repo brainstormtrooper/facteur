@@ -121,7 +121,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
               license_type: Gtk.License.GPL_2_0,
               logo_icon_name: 'com.github.brainstormtrooper.gnome-emailer',
               version: pkg.version,
-              website: 'http://www.brainstormtrooper.free.fr',
+              website: 'https://github.com/brainstormtrooper/GNOME-Emailer/wiki',
               wrap_license: true,
               modal: true,
               transient_for: window,
