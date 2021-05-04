@@ -24,6 +24,7 @@
     // "readonly" or "writable",
     "imports" : "readonly",
     "log": "readonly",
+    "error": "readonly",
     "ARGV": "readonly",
     "pkg": "readonly",
     "require": "readonly",

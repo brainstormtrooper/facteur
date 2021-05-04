@@ -75,18 +75,16 @@ var GNOMEeMailer = GObject.registerClass( // eslint-disable-line
 
         Menubar.connect('update_ui', () => {
           try {
-            log('>>> updating UI');
             this.updateUI();
           } catch (e) {
-            log(e);
+            error(e);
           }
         });
         Menubar.connect('filename_changed', () => {
-          log('>>> filename_changed');
           try {
             this._window.get_titlebar().set_subtitle(appData.FILENAME);
           } catch (e) {
-            log(e);
+            error(e);
           }
         });
 

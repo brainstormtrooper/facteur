@@ -53,11 +53,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
           const path = this.choosebutton.get_file().get_path();
           // do something with path
           this.list.import(path);
-          try {
-            this.emit('Logger', 'CSV File path is : ' + path);
-          } catch (error) {
-            log(error);
-          }
+          this.emit('Logger', 'CSV File path is : ' + path);
         }));
 
         this.list.connect('Import_error_sig', Lang.bind(this, function() {
@@ -72,11 +68,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
 
         this.list.connect('Updated_sig', Lang.bind(this, function() {
           // app.ui.results._LOG('imported.');
-          try {
-            this.emit('Logger', 'imported...');
-          } catch (error) {
-            log(error);
-          }
+          this.emit('Logger', 'imported...');
 
           // Data to go in the phonebook
           this.updateTable();

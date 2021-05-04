@@ -33,17 +33,13 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           this.fromField.set_text(appData.data.FROM);
           this.delayField.set_text(appData.data.DELAY);
         } catch (err) {
-          log(err);
+          error(err);
         }
       }
 
       _buildUI() {
         // https://developer.gnome.org/gtk3/stable/GtkEntry.html
-        try {
-          this.emit('Logger', '>>> building UI...');
-        } catch (error) {
-          log(error);
-        }
+        this.emit('Logger', '>>> building UI...');
 
         /*
         const css = '#formbox { background-color: #f00; }';
@@ -223,11 +219,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           appData.data.DELAY = this.delayField.get_text();
           // eslint-disable-next-line max-len
           const str = ` >>> SETTINGS: "${appData.data.USER}", "${appData.data.HOST}", "${appData.data.SUBJECT}", "${appData.data.FROM}"...`;
-          try {
-            this.emit('Logger', str);
-          } catch (error) {
-            log(error);
-          }
+          this.emit('Logger', str);
         });
 
         return vBox;

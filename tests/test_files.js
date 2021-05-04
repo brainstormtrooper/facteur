@@ -38,6 +38,5 @@ function testUnrollFile(path) {
   // eslint-disable-next-line max-len
   const roll = JSON.stringify(myFile.rollUp(), null, '\t').replace(/"PASS": "(.+)"/gm, '');
   const litmus = strings.fileStr.replace(/"PASS": "(.+)"/gm, '');
-  // eslint-disable-next-line max-len
   JsUnit.assertEquals('file rolled up', litmus, roll);
 }

@@ -1,6 +1,5 @@
 const Gtk = imports.gi.Gtk;
 const Gettext = imports.gettext;
-
 const myTemplate = imports.object.Template;
 const myMessage = imports.object.Message;
 const GObject = imports.gi.GObject;
@@ -44,12 +43,17 @@ var UIresults = GObject.registerClass( // eslint-disable-line
         vBox.pack_start(logWindow, true, true, 0);
         vBox.pack_end(SendbuttonRow, false, false, 0);
 
+
+        Message.connect('Logger', (obj, msg) => {
+          this._LOG(msg);
+        });
+
         sendButton.connect('clicked', async () => {
           const res = await Template.compile();
           if (res) {
             Message.sendAll();
           } else {
-            log('Failed...');
+            error('Failed...');
           }
         });
 
@@ -57,7 +61,6 @@ var UIresults = GObject.registerClass( // eslint-disable-line
       }
 
       _LOG(string, level = 'INFO') {
-        log('adding to results log...');
         const entry = `[${level}] ${string} \r\n`;
         const len = encodeURI(entry).split(/%..|./).length - 1;
         this.textBuffer.insert(this.textBuffer.get_end_iter(), entry, len);

@@ -92,11 +92,10 @@ var Menubar = GObject.registerClass( // eslint-disable-line
               try {
                 File.unRoll(fileData);
                 this.emit('update_ui', true);
-                log(appData.FILENAME);
                 this.emit('Logger', `Opened file : ${appData.FILENAME}.`);
                 this.emit('filename_changed', true);
               } catch (error) {
-                log(error);
+                error(error);
                 // const myModal = new Modal.UImodal();
                 myModal.showOpenModal(
                     'Error',
@@ -108,7 +107,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
               }
             })
                 .catch((error) => {
-                  log(error);
+                  error(error);
                   // const myModal = new Modal.UImodal();
                   myModal.showOpenModal(
                       'Error',
@@ -186,7 +185,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
           const foldername = `/${WP.join('/')}`;
           saver.set_current_folder(foldername);
         } catch (e) {
-          log(e);
+          error(e);
         }
 
         saver.add_button('save', Gtk.ResponseType.ACCEPT);
@@ -194,7 +193,6 @@ var Menubar = GObject.registerClass( // eslint-disable-line
         const res = saver.run();
         if (res == Gtk.ResponseType.ACCEPT) {
           appData.FILENAME = saver.get_filename();
-          log(appData.FILENAME);
 
           const data = File.rollUp();
           File.save(appData.FILENAME, data);
@@ -251,7 +249,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
             try {
               this.emit('filename_changed', true);
             } catch (e) {
-              log(e);
+              error(e);
             }
           }
         });

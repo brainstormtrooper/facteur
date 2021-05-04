@@ -54,10 +54,6 @@ var List = GObject.registerClass( // eslint-disable-line
       // METHODS
       //
 
-      emitUpdated() {
-        this.emit('Updated_sig');
-      }
-
       verify(csva) {
         let res = true;
         if (csva[0][0] != 'address') {
@@ -72,16 +68,25 @@ var List = GObject.registerClass( // eslint-disable-line
        * @param {string} path
        */
       async import(path) {
-        const str = await myFile.fOpen(path);
-        this.csva = this.csvToArray(str);
+        try {
+          const str = await myFile.fopen(path);
+          this.csva = this.csvToArray(str);
+        } catch (error) {
+          log(error);
+          this.emit('Import_error_sig', true);
+        }
         if (!this.verify(this.csva)) {
-          this.emit('Import_error_sig');
+          this.emit('Import_error_sig', true);
         } else {
-          this.dataHeadings();
-          this.trimData();
-          appData.CSVA = this.csva;
-          appData.TO = this.csva.map((x) => x[0]);
-          this.emitUpdated();
+          try {
+            this.dataHeadings();
+            this.trimData();
+            appData.CSVA = this.csva;
+            appData.TO = this.csva.map((x) => x[0]);
+            this.emit('Updated_sig', true);
+          } catch (error) {
+            log(error);
+          }
         }
       }
 
