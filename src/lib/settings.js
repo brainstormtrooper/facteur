@@ -34,17 +34,6 @@ function getSettings(schemaId, path) {
   return new Gio.Settings(cnfblk);
 }
 
-function getHash() {
-  const config = getSettings(appData.ID);
-
-  return config.get_string('password-hash');
-}
-
-function setHash(hash) {
-  const config = getSettings(appData.ID);
-  config.set_string('password-hash', hash);
-}
-
 function getIpv4() {
   const config = getSettings(appData.ID);
 

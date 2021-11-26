@@ -4,6 +4,7 @@ UI for displaying mailing settings
 const Gtk = imports.gi.Gtk;
 const Gettext = imports.gettext;
 const Config = imports.lib.settings;
+const secret = imports.lib.secret;
 const GObject = imports.gi.GObject;
 
 const Data = imports.object.Data;
@@ -217,6 +218,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           appData.data.SUBJECT = this.subjectField.get_text();
           appData.data.FROM = this.fromField.get_text();
           appData.data.DELAY = this.delayField.get_text();
+          secret.passwordSet(appData.data.PASS);
           // eslint-disable-next-line max-len
           const str = ` >>> SETTINGS: "${appData.data.USER}", "${appData.data.HOST}", "${appData.data.SUBJECT}", "${appData.data.FROM}"...`;
           this.emit('Logger', str);
@@ -230,9 +232,6 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             { orientation: Gtk.Orientation.VERTICAL, spacing: 6 },
         );
 
-        const hashBox = new Gtk.Box(
-            { orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 },
-        );
         const ipv4Box = new Gtk.Box(
             { orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 },
         );
@@ -243,11 +242,6 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             { orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 },
         );
 
-        this.hashField = new Gtk.Entry({
-          placeholder_text: Gettext.gettext('Password Hash'),
-          visibility: false,
-          input_purpose: 'password',
-        });
         this.ipv4Field = new Gtk.CheckButton(
             { label: Gettext.gettext('Force ipv4') },
         );
@@ -256,29 +250,14 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             { halign: Gtk.Align.START, label: Gettext.gettext('sending delay in milliseconds') },
         );
         this.delayField = new Gtk.Entry({ placeholder_text: '1000' });
-        const imagePass = new Gtk.Image(
-            // eslint-disable-next-line max-len
-            { icon_name: 'dialog-password-symbolic', icon_size: Gtk.IconSize.SMALL_TOOLBAR },
-        );
-        const passButton = new Gtk.Button({ image: imagePass });
 
-        hashBox.pack_start(this.hashField, false, false, 0);
-        hashBox.pack_start(passButton, false, false, 0);
         ipv4Box.pack_start(this.ipv4Field, false, false, 0);
         delayLabelBox.pack_start(this.delayLabel, false, false, 0);
         delayBox.pack_start(this.delayField, false, false, 0);
 
-        vBox.pack_start(hashBox, false, false, 0);
         vBox.pack_start(ipv4Box, false, false, 0);
         vBox.pack_start(delayLabelBox, false, false, 0);
         vBox.pack_start(delayBox, false, false, 0);
-
-        passButton.connect('enter-notify-event', () => {
-          this.hashField.set_visibility(true);
-        });
-        passButton.connect('leave-notify-event', () => {
-          this.hashField.set_visibility(false);
-        });
 
         return vBox;
       }
