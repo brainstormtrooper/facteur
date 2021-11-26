@@ -1,7 +1,6 @@
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
-const crypto = imports.lib.aes;
-const settings = imports.lib.settings;
+const secret = imports.lib.secret;
 const Data = imports.object.Data;
 
 const appData = new Data.Data();
@@ -33,15 +32,11 @@ function save(path, data) {
   GLib.file_set_contents(path, dataStr);
 }
 
-// https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
-// https://stackoverflow.com/questions/21291279/how-to-convert-to-string-and-back-again-with-cryptojs
-// replace with : https://github.com/brix/crypto-js ?
 function rollUp() {
-  const HASH = settings.getHash().toString();
+  secret.passwordSet(appData.data.PASS);
   const roll = {
     FROM: appData.data.FROM,
     USER: appData.data.USER,
-    PASS: crypto.CryptoJS.AES.encrypt(appData.data.PASS, HASH).toString(),
     HOST: appData.data.HOST,
     SUBJECT: appData.data.SUBJECT,
     HTML: appData.data.HTML,
@@ -50,6 +45,7 @@ function rollUp() {
     CSVA: appData.data.CSVA,
     VARS: appData.data.VARS,
     DELAY: appData.data.DELAY,
+    FILEID: appData.data.FILEID,
   };
 
   return roll;
@@ -57,8 +53,8 @@ function rollUp() {
 
 function verify(data) {
   const required = [
-    'FROM', 'USER', 'PASS', 'HOST', 'SUBJECT',
-    'HTML', 'TEXT', 'TO', 'CSVA', 'VARS', 'DELAY',
+    'FROM', 'USER', 'HOST', 'SUBJECT',
+    'FILEID', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS', 'DELAY',
   ];
   let valid = true;
   required.forEach((key) => {
@@ -81,11 +77,8 @@ function unRoll(data) {
     const bfe = new Error('Bad file');
     throw bfe;
   }
-  const HASH = settings.getHash().toString();
   appData.data.FROM = data.FROM;
   appData.data.USER = data.USER;
-  // eslint-disable-next-line
-  appData.data.PASS = (data.PASS ? crypto.CryptoJS.AES.decrypt(data.PASS, HASH).toString(crypto.CryptoJS.enc.Utf8) : '');
   appData.data.HOST = data.HOST;
   appData.data.SUBJECT = data.SUBJECT;
   appData.data.HTML = data.HTML;
@@ -94,6 +87,8 @@ function unRoll(data) {
   appData.data.CSVA = data.CSVA;
   appData.data.VARS = data.VARS;
   appData.data.DELAY = data.DELAY;
+  appData.data.FILEID = data.FILEID;
+  secret.passwordGet();
 }
 
 async function open(path) {

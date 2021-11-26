@@ -61,12 +61,11 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         this._contentArea = this._dialog.get_content_area();
         this._message = new Gtk.Label(
             // eslint-disable-next-line max-len
-            { label: 'Please configure your password hash and IPv4 preferences here.' },
+            { label: 'Please configure your preferences here.' },
         );
         this.settings = new Settings.UIsettings();
 
         this.configFields = this.settings._buildModal();
-        this.settings.hashField.set_text(Config.getHash());
         const ipv4 = Config.getIpv4();
         if (ipv4) {
           this.settings.ipv4Field.set_active(true);
@@ -82,7 +81,6 @@ var UImodal = GObject.registerClass( // eslint-disable-line
 
         const _saveHandler = () => {
           let ipv4 = false;
-          Config.setHash(this.settings.hashField.get_text());
           ipv4 = this.settings.ipv4Field.get_active();
           Config.setIpv4(ipv4);
           Config.setDelay(this.settings.delayField.get_text());

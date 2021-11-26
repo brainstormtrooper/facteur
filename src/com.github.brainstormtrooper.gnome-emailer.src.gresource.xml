@@ -12,7 +12,8 @@
     <file>object/Data.js</file>
     <file>object/Message.js</file>
     <file>object/Template.js</file>
-    <file>lib/aes.js</file>
+    <file>lib/secret.js</file>
+    <file>lib/uuid.js</file>
     <file>lib/file.js</file>
     <file>lib/settings.js</file>
     <file>lib/table.js</file>

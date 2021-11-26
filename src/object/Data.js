@@ -1,3 +1,4 @@
+const uuid = imports.lib.uuid;
 
 var Data = class Data { // eslint-disable-line
 
@@ -23,6 +24,7 @@ var Data = class Data { // eslint-disable-line
       VARS: [],
       MAILINGS: [],
 
+      FILEID: uuid.uuid(),
       FILENAME: 'untitled',
       ID: '',
     };
