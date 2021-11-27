@@ -7,13 +7,6 @@
         Force using only ipv4 address resolution.
       </description>
     </key>
-    <key name="password-hash" type="s">
-      <default>"gnome-emailer"</default>
-      <summary>Master password hash</summary>
-      <description>
-        Used to hash service/account passwords.
-      </description>
-    </key>
     <key name="delay" type="i">
       <range min="0" max="5000"/>
       <default>1000</default>
