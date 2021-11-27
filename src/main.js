@@ -12,8 +12,8 @@ const Gettext = imports.gettext;
 
 const Emailer = imports.Emailer;
 
-Gettext.bindtextdomain('gnome-emailer-0.1', '/usr/share/locale');
-Gettext.textdomain('gnome-emailer-0.1');
+Gettext.bindtextdomain('gnome-emailer-0.5', '/usr/share/locale');
+Gettext.textdomain('gnome-emailer-0.5');
 
 // eslint-disable-next-line max-len
 (new Emailer.GNOMEeMailer()).run([imports.system.programInvocationName].concat(ARGV));
