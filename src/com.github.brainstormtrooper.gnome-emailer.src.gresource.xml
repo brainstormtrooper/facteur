@@ -2,6 +2,7 @@
 <gresources>
   <gresource prefix="/com/github/brainstormtrooper/gnome-emailer/js">
     <file>main.js</file>
+    <file>Emailerjs</file>
     <file>UI/Contents.js</file>
     <file>UI/Mailing.js</file>
     <file>UI/Menubar.js</file>

@@ -1,7 +1,7 @@
 app_resource_src = gnome.compile_resources(app_id + '.src',
   app_id + '.src.gresource.xml',
   source_dir: '.',
-  gresource_bundle: true,
+  gresource_bundle: false,
   install: true,
   install_dir : pkgdatadir
 )
