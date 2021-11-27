@@ -1,5 +1,5 @@
 project('gnome-emailer', 'c',
-  version: '0.1.0',
+  version: '0.5.0',
   meson_version: '>= 0.50.0',
 )
 
@@ -40,3 +40,5 @@ subdir('src')
 subdir('data')
 subdir('po')
 meson.add_install_script('meson/meson_post_install.py')
+# rpm = import('rpm')
+# rpm.generate_spec_template()
