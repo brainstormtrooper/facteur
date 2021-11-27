@@ -2,21 +2,21 @@
 <gresources>
   <gresource prefix="/com/github/brainstormtrooper/gnome-emailer/js">
     <file>main.js</file>
-    <file>UI/html.js</file>
+    <file>UI/Contents.js</file>
     <file>UI/Mailing.js</file>
-    <file>UI/menubar.js</file>
+    <file>UI/Menubar.js</file>
+    <file>UI/Modal.js</file>
     <file>UI/Results.js</file>
     <file>UI/Settings.js</file>
-    <file>UI/UI.js</file>
     <file>object/Content.js</file>
     <file>object/Data.js</file>
+    <file>object/List.js</file>
     <file>object/Message.js</file>
     <file>object/Template.js</file>
     <file>lib/secret.js</file>
     <file>lib/uuid.js</file>
     <file>lib/file.js</file>
     <file>lib/settings.js</file>
-    <file>lib/table.js</file>
     <file>lib/template.js</file>
   </gresource>
 </gresources>
