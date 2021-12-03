@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-  <id>com.github.brainstormtrooper.gnome-emailer.desktop</id>
+  <id>com.github.brainstormtrooper.facteur.desktop</id>
   <licence>CC0</licence>
   <description>
     <_p>
@@ -15,6 +15,6 @@
   <screenshots>
     <screenshot type="default" width="1024" height="768">https://www.example.com/gtk-js-app/screenshots/large.png</screenshot>
   </screenshots>
-  <url type="homepage">https://www.github.com/brainstormtrooper/gnome-emailer</url>
+  <url type="homepage">https://www.github.com/brainstormtrooper/facteur</url>
   <updatecontact>brainstormtrooper_at_free.fr</updatecontact>
 </component>

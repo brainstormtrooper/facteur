@@ -1,4 +1,4 @@
-data/com.github.brainstormtrooper.gnome-emailer.desktop.in
-data/com.github.brainstormtrooper.gnome-emailer.appdata.xml.in
-data/com.github.brainstormtrooper.gnome-emailer.gschema.xml
+data/com.github.brainstormtrooper.facteur.desktop.in
+data/com.github.brainstormtrooper.facteur.appdata.xml.in
+data/com.github.brainstormtrooper.facteur.gschema.xml
 src/main.js

@@ -17,14 +17,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../data/gnome-emailer.desktop.in.h:1
+#: ../data/facteur.desktop.in.h:1
 msgid "Gnome emailer"
 msgstr "Gnome emailer"
 
-#: ../data/gnome-emailer.desktop.in.h:2
+#: ../data/facteur.desktop.in.h:2
 msgid "template based emailing app"
 msgstr "template based emailing app"
 
-#: ../data/gnome-emailer.desktop.in.h:3
+#: ../data/facteur.desktop.in.h:3
 msgid "business;office;productivity"
 msgstr "business;office;productivity"

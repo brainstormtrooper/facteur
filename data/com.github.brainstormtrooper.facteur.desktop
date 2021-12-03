@@ -2,8 +2,8 @@
 Type=Application
 Name=Gnome emailer
 Comment=template based emailing app
-Icon=com.github.brainstormtrooper.gnome-emailer
-Exec=gapplication launch com.github.brainstormtrooper.gnome-emailer
+Icon=com.github.brainstormtrooper.facteur
+Exec=gapplication launch com.github.brainstormtrooper.facteur
 DBusActivatable=true
 StartupNotify=true
 Keywords=business;office;productivity;

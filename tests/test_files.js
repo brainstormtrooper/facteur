@@ -10,9 +10,9 @@ const appData = new imports.object.Data.Data().data;
 /* eslint-disable no-unused-vars */
 
 function testUnrollFile(path) {
-  appData.ID = 'com.github.brainstormtrooper.gnome-emailer';
+  appData.ID = 'com.github.brainstormtrooper.facteur';
   imports.package.init({
-    name: 'com.github.brainstormtrooper.gnome-emailer',
+    name: 'com.github.brainstormtrooper.facteur',
     version: '0.3.0',
     prefix: `${path}/fixtures`,
     libdir: 'lib',
@@ -26,7 +26,7 @@ function testUnrollFile(path) {
   JsUnit.assertEquals('FROM is sender@email.com', 'sender@email.com', appData.FROM);
   JsUnit.assertEquals('CSVA is object', 'object', typeof appData.CSVA);
   JsUnit.assertEquals('password is password', strings.password, appData.PASS);
-  JsUnit.assertEquals('hash is gnome-emailer', strings.hash, HASH);
+  JsUnit.assertEquals('hash is facteur', strings.hash, HASH);
 
   const pwhash = crypto.CryptoJS.AES.encrypt(strings.password, HASH).toString();
   // eslint-disable-next-line max-len

@@ -26,7 +26,7 @@ var msgBlock = `--BOUNDARY\nContent-Type: text/plain; charset=utf-8\nBob, red ca
 
 var password = 'password';
 
-var hash = 'gnome-emailer';
+var hash = 'facteur';
 
 var fileStr = `{
 	"FROM": "sender@email.com",

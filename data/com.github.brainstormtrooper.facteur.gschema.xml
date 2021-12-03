@@ -1,5 +1,5 @@
-<schemalist gettext-domain="com.github.brainstormtrooper.gnome-emailer">
-  <schema id="com.github.brainstormtrooper.gnome-emailer" path="/com/github/brainstormtrooper/gnome-emailer/">
+<schemalist gettext-domain="com.github.brainstormtrooper.facteur">
+  <schema id="com.github.brainstormtrooper.facteur" path="/com/github/brainstormtrooper/facteur/">
     <key name="force-ipv4" type="b">
       <default>false</default>
       <summary>Force ipv4</summary>

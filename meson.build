@@ -1,10 +1,10 @@
-project('gnome-emailer', 'c',
+project('facteur', 'c',
   version: '0.5.0',
   meson_version: '>= 0.50.0',
 )
 
-app_command = 'gnome-emailer'
-app_id = 'com.github.brainstormtrooper.gnome-emailer'
+app_command = 'facteur'
+app_id = 'com.github.brainstormtrooper.facteur'
 
 gnome = import('gnome')
 intl = import('i18n')

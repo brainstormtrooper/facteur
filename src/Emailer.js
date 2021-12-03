@@ -16,19 +16,19 @@ const Contents = new imports.UI.Contents.UIcontents();
 // import the app data singleton to hold persitant data
 const appData = new imports.object.Data.Data().data;
 
-var GNOMEeMailer = GObject.registerClass( // eslint-disable-line
+var Facteur = GObject.registerClass( // eslint-disable-line
     {
-      GTypeName: 'GNOMEeMailer',
+      GTypeName: 'Facteur',
     },
-    class GNOMEeMailer extends Gtk.Application {
+    class Facteur extends Gtk.Application {
       _init() {
-        this.ID = 'com.github.brainstormtrooper.gnome-emailer';
+        this.ID = 'com.github.brainstormtrooper.facteur';
         super._init({
           application_id: this.ID,
           flags: Gio.ApplicationFlags.HANDLES_OPEN,
         });
         GLib.set_prgname(this.application_id);
-        GLib.set_application_name('GNOMEeMailer');
+        GLib.set_application_name('Facteur');
       }
 
       vfunc_activate() {
