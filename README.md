@@ -1,8 +1,8 @@
-# GNOME-Emailer
+# Facteur (GNOME-Emailer)
 Gnome GTK app for sending template based emails
 
 ## Getting the program
-git clone git@github.com:brainstormtrooper/GNOME-Emailer.git
+git clone git@github.com:brainstormtrooper/facteur.git
 
 -or-
 
