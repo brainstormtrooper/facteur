@@ -7,7 +7,7 @@ app_resource_src = gnome.compile_resources(
 )
 
 app_launcher = configure_file(
-  output : app_command,
+  output : app_id,
   input : app_id + '.in',
   configuration: app_configuration
 )

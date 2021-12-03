@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=Gnome emailer
+Name=Facteur
 Comment=template based emailing app
 Icon=com.github.brainstormtrooper.facteur
 Exec=gapplication launch com.github.brainstormtrooper.facteur
