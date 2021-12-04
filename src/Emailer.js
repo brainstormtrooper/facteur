@@ -58,7 +58,7 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         // Create the application window
         this._window = new Gtk.ApplicationWindow({
           application: this,
-          title: 'GNOME Emailer',
+          title: 'Facteur',
           default_height: 200,
           default_width: 400,
           window_position: Gtk.WindowPosition.CENTER,

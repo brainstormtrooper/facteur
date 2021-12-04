@@ -1,5 +1,5 @@
-project('facteur', 'c',
-  version: '0.5.0',
+project('com.github.brainstormtrooper.facteur', 'c',
+  version: '0.5.4',
   meson_version: '>= 0.50.0',
 )
 
