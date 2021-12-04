@@ -1,5 +1,5 @@
-project('com.github.brainstormtrooper.facteur', 'c',
-  version: '0.5.4',
+project('facteur', 'c',
+  version: '0.5.5',
   meson_version: '>= 0.50.0',
 )
 
@@ -25,7 +25,8 @@ add_global_arguments([
 app_configuration = configuration_data()
 
 app_configuration.set('GJS', find_program('gjs').path())
-app_configuration.set('PACKAGE_NAME', meson.project_name())
+# app_configuration.set('PACKAGE_NAME', meson.project_name())
+app_configuration.set('PACKAGE_NAME', app_id)
 app_configuration.set('PACKAGE_VERSION', meson.project_version())
 app_configuration.set('prefix', get_option('prefix'))
 
