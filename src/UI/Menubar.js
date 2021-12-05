@@ -64,7 +64,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
 
       getHeader(app) {
         const headerBar = new Gtk.HeaderBar();
-        headerBar.set_title('Gnome Emailer');
+        headerBar.set_title('Facteur (Gnome Emailer)');
         headerBar.set_subtitle('Untitled Mailing');
         headerBar.set_show_close_button(true);
 

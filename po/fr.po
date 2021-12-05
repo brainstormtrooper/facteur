@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../data/facteur.desktop.in.h:1
-msgid "Gnome emailer"
-msgstr "Gnome emailer"
+msgid "Facteur"
+msgstr "Facteur"
 
 #: ../data/facteur.desktop.in.h:2
 msgid "template based emailing app"
