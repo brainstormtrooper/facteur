@@ -1,6 +1,8 @@
 project('facteur', 'c',
   version: '0.5.5',
   meson_version: '>= 0.50.0',
+  datadir: '/usr/share',
+  prefix: '/usr',
 )
 
 app_command = 'facteur'
@@ -31,7 +33,8 @@ app_configuration.set('PACKAGE_VERSION', meson.project_version())
 app_configuration.set('prefix', get_option('prefix'))
 
 pkgdatadir = join_paths(get_option('datadir'), meson.project_name())
-app_configuration.set('libdir', join_paths(get_option('prefix'), get_option('libdir')))
+# app_configuration.set('libdir', join_paths(get_option('prefix'), get_option('libdir')))
+app_configuration.set('libdir', datadir)
 app_configuration.set('pkgdatadir', pkgdatadir)
 
 subdir('src')

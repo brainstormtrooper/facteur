@@ -4,7 +4,7 @@ import os
 import pathlib
 import subprocess
 
-prefix = pathlib.Path(os.environ.get('MESON_INSTALL_PREFIX', '/usr/local'))
+prefix = pathlib.Path(os.environ.get('MESON_INSTALL_PREFIX', '/usr'))
 datadir = prefix / 'share'
 destdir = os.environ.get('DESTDIR', '')
 
