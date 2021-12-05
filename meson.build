@@ -34,7 +34,7 @@ app_configuration.set('prefix', get_option('prefix'))
 
 pkgdatadir = join_paths(get_option('datadir'), meson.project_name())
 # app_configuration.set('libdir', join_paths(get_option('prefix'), get_option('libdir')))
-app_configuration.set('libdir', datadir)
+app_configuration.set('libdir', get_option('datadir'))
 app_configuration.set('pkgdatadir', pkgdatadir)
 
 subdir('src')
