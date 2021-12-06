@@ -2,6 +2,14 @@
 Gnome GTK app for sending template based emails
 
 ## Getting the program
+
+### Binaries
+OpenSuse binaries are available here:
+
+https://software.opensuse.org/package/facteur
+
+### Source
+
 git clone git@github.com:brainstormtrooper/facteur.git
 
 -or-
@@ -44,7 +52,8 @@ You can save your mailing to a file for reuse or to send later by hitting the Sa
 
 You can open a saved file by hitting the file chooser button on the header bar.
 
-## Installing the program
+## Installing from source
+
 This project uses the meson build system.
 
 To install the application, run the following commands:
@@ -53,6 +62,6 @@ To install the application, run the following commands:
 
 ```cd <some build folder>```
 
-```ninja``` (here you can test the build with ```ninja run```)
+```ninja``` 
 
 ```meson install```
