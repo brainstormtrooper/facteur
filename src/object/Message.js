@@ -6,6 +6,8 @@ Create and send a compiled message.
 const Gio = imports.gi.Gio;
 const Config = imports.lib.settings;
 const Data = imports.object.Data;
+const myTemplate = imports.object.Template;
+const Template = new myTemplate.Template();
 const GObject = imports.gi.GObject;
 const appData = new Data.Data().data;
 
@@ -27,8 +29,8 @@ var Message = GObject.registerClass( // eslint-disable-line
 
       // METHODS
 
-      message() {
-        return true;
+      async compile() {
+        return await Template.compile();
       }
 
       sleep(milliseconds) {

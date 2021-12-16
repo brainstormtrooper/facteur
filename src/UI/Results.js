@@ -1,9 +1,8 @@
 const Gtk = imports.gi.Gtk;
 const Gettext = imports.gettext;
-const myTemplate = imports.object.Template;
 const myMessage = imports.object.Message;
 const GObject = imports.gi.GObject;
-const Template = new myTemplate.Template();
+
 const Message = new myMessage.Message();
 
 var UIresults = GObject.registerClass( // eslint-disable-line
@@ -49,7 +48,7 @@ var UIresults = GObject.registerClass( // eslint-disable-line
         });
 
         sendButton.connect('clicked', async () => {
-          const res = await Template.compile();
+          const res = await Message.compile();
           if (res) {
             Message.sendAll();
           } else {

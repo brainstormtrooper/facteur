@@ -4,6 +4,7 @@ Template object.
 Handle templates for mailings.
 */
 const myTemplate = imports.lib.template;
+const myFile = imports.lib.file;
 const Data = imports.object.Data;
 const GObject = imports.gi.GObject;
 const appData = new Data.Data().data;
@@ -28,6 +29,16 @@ var Template = GObject.registerClass( // eslint-disable-line
             reject(e);
           }
         });
+      }
+      /**
+       * opens or imports a file
+       * @param {string} path
+       * @return {string} file contents
+       */
+      async import(path) {
+        const str = await myFile.fopen(path);
+
+        return str;
       }
     },
 );
