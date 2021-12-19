@@ -2,7 +2,7 @@
 
 imports.package.init({
   name: 'com.github.brainstormtrooper.facteur',
-  version: '0.5.7',
+  version: '0.5.8',
   prefix: '/usr/local',
   libdir: 'lib',
 });
