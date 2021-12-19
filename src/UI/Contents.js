@@ -6,8 +6,8 @@ const GtkSource = imports.gi.GtkSource;
 const Webkit = imports.gi.WebKit2;
 const Gettext = imports.gettext;
 const GObject = imports.gi.GObject;
-const myContent = imports.object.Content;
-const Content = new myContent.Content();
+const myTemplate = imports.object.Template;
+const Template = new myTemplate.Template();
 const Data = imports.object.Data;
 const appData = new Data.Data().data;
 
@@ -84,7 +84,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           // app.ui.results._LOG(`Importing template from : ${path}`);
           this.emit('Logger', `Importing template from : ${path}`);
 
-          const content = await Content.import(path);
+          const content = await Template.import(path);
           const len = encodeURI(content).split(/%..|./).length - 1;
           this.htmlBuffer.set_text(content, len);
         });

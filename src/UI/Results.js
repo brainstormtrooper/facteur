@@ -1,19 +1,13 @@
 const Gtk = imports.gi.Gtk;
 const Gettext = imports.gettext;
-const myTemplate = imports.object.Template;
 const myMessage = imports.object.Message;
 const GObject = imports.gi.GObject;
-const Template = new myTemplate.Template();
+
 const Message = new myMessage.Message();
 
 var UIresults = GObject.registerClass( // eslint-disable-line
     {
       GTypeName: 'UIresults',
-      Signals: {
-        'Logger': {
-          param_types: [GObject.TYPE_STRING],
-        },
-      },
     },
     class UIresults extends GObject.Object {
       _init() {
@@ -44,12 +38,8 @@ var UIresults = GObject.registerClass( // eslint-disable-line
         vBox.pack_end(SendbuttonRow, false, false, 0);
 
 
-        Message.connect('Logger', (obj, msg) => {
-          this._LOG(msg);
-        });
-
         sendButton.connect('clicked', async () => {
-          const res = await Template.compile();
+          const res = await Message.compile();
           if (res) {
             Message.sendAll();
           } else {

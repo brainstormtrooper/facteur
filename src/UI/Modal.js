@@ -111,7 +111,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
                 'Special thanks to Andy Holmes',
               ],
               // translator_credits: _("translator-credits"),
-              program_name: 'Gnome-emailer',
+              program_name: 'Facteur',
               comments: Gettext.gettext(
                   'Application for sending template based emails',
               ),
@@ -119,7 +119,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
               license_type: Gtk.License.GPL_2_0,
               logo_icon_name: 'com.github.brainstormtrooper.facteur',
               version: pkg.version,
-              website: 'https://github.com/brainstormtrooper/GNOME-Emailer/wiki',
+              website: 'https://github.com/brainstormtrooper/facteur/wiki',
               wrap_license: true,
               modal: true,
               transient_for: window,

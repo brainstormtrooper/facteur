@@ -2,9 +2,9 @@
 UI for displaying mailing settings
 */
 const Gtk = imports.gi.Gtk;
+const Gio = imports.gi.Gio;
 const Gettext = imports.gettext;
 const Config = imports.lib.settings;
-const secret = imports.lib.secret;
 const GObject = imports.gi.GObject;
 
 const Data = imports.object.Data;
@@ -40,7 +40,9 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
 
       _buildUI() {
         // https://developer.gnome.org/gtk3/stable/GtkEntry.html
-        this.emit('Logger', '>>> building UI...');
+
+        this.App = Gio.Application.get_default();
+        this.App.emit('Logger', '>>> building UI...');
 
         /*
         const css = '#formbox { background-color: #f00; }';
@@ -218,10 +220,9 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           appData.data.SUBJECT = this.subjectField.get_text();
           appData.data.FROM = this.fromField.get_text();
           appData.data.DELAY = this.delayField.get_text();
-          secret.passwordSet(appData.data.PASS);
           // eslint-disable-next-line max-len
           const str = ` >>> SETTINGS: "${appData.data.USER}", "${appData.data.HOST}", "${appData.data.SUBJECT}", "${appData.data.FROM}"...`;
-          this.emit('Logger', str);
+          this.App.emit('Logger', str);
         });
 
         return vBox;

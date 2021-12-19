@@ -64,7 +64,9 @@ var Menubar = GObject.registerClass( // eslint-disable-line
 
       getHeader(app) {
         const headerBar = new Gtk.HeaderBar();
+        this.App = Gio.Application.get_default();
         headerBar.set_title('Facteur (Gnome Emailer)');
+        // https://tecnocode.co.uk/misc/platform-demos/tooltip.js.xhtml
         headerBar.set_subtitle('Untitled Mailing');
         headerBar.set_show_close_button(true);
 
@@ -91,9 +93,9 @@ var Menubar = GObject.registerClass( // eslint-disable-line
             promise.then((fileData) => {
               try {
                 File.unRoll(fileData);
-                this.emit('update_ui', true);
-                this.emit('Logger', `Opened file : ${appData.FILENAME}.`);
-                this.emit('filename_changed', true);
+                this.App.emit('update_ui', true);
+                this.App.emit('Logger', `Opened file : ${appData.FILENAME}.`);
+                this.App.emit('filename_changed', true);
               } catch (error) {
                 logError(error);
                 // const myModal = new Modal.UImodal();

@@ -1,5 +1,4 @@
 const Gio = imports.gi.Gio;
-const System = imports.system;
 const Data = imports.object.Data;
 const appData = new Data.Data().data;
 
@@ -23,7 +22,6 @@ function getSettings(schemaId, path) {
   if (!schemaObj) {
     const e = new Error('Missing GSettings schema ' + schemaId);
     logError(e);
-    System.exit(1);
   }
 
   const cnfblk = { settings_schema: schemaObj };

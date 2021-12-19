@@ -19,6 +19,17 @@ const appData = new imports.object.Data.Data().data;
 var Facteur = GObject.registerClass( // eslint-disable-line
     {
       GTypeName: 'Facteur',
+      Signals: {
+        'Logger': {
+          param_types: [GObject.TYPE_STRING],
+        },
+        'update_ui': {
+          param_types: [GObject.TYPE_BOOLEAN],
+        },
+        'filename_changed': {
+          param_types: [GObject.TYPE_BOOLEAN],
+        },
+      },
     },
     class Facteur extends Gtk.Application {
       _init() {
@@ -29,6 +40,32 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         });
         GLib.set_prgname(this.application_id);
         GLib.set_application_name('Facteur');
+
+        this.connect('update_ui', () => {
+          try {
+            this.updateUI();
+          } catch (e) {
+            logError(e);
+          }
+        });
+        this.connect('filename_changed', () => {
+          try {
+            // return ellipsis + str.slice(-(maxLength - ellipsis.length));
+            let path = appData.FILENAME;
+            if (path.length > 32) {
+              path = '...' + path.slice(-32);
+            }
+            appData.FILENAME.length;
+            this._window.get_titlebar().set_subtitle(path);
+          } catch (e) {
+            logError(e);
+          }
+        });
+
+        this.connect('Logger', (obj, msg) => {
+          log('bob got a message...');
+          Results._LOG(msg);
+        });
       }
 
       vfunc_activate() {
@@ -72,25 +109,6 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         //
 
         this._window.set_titlebar(Menubar.getHeader(this));
-
-        Menubar.connect('update_ui', () => {
-          try {
-            this.updateUI();
-          } catch (e) {
-            logError(e);
-          }
-        });
-        Menubar.connect('filename_changed', () => {
-          try {
-            this._window.get_titlebar().set_subtitle(appData.FILENAME);
-          } catch (e) {
-            logError(e);
-          }
-        });
-
-        Menubar.connect('Logger', (obj, msg) => {
-          Results._LOG(msg);
-        });
 
 
         /*
