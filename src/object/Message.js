@@ -77,6 +77,7 @@ var Message = GObject.registerClass( // eslint-disable-line
       // https://stackoverflow.com/questions/44728855/curl-send-html-email-with-embedded-image-and-attachment
       //
       async send(msgObj, to, cancellable = null) {
+        this.App = Gio.Application.get_default();
         const ipv4 = Config.getIpv4();
         let flagStr = '-svk';
         if (ipv4) {
@@ -142,14 +143,14 @@ var Message = GObject.registerClass( // eslint-disable-line
                     // zero causing the Promise to reject()
                     resolve(stdout);
                   } catch (e) {
-                    this.emit('Logger', `>>> ERR >>> : ${e}`);
+                    this.App.emit('Logger', `>>> ERR >>> : ${e}`);
                     reject(e);
                   }
                 },
             );
           });
           // log(`>>> RES >>> : ${stdout}`);
-          this.emit('Logger', `>>> RES >>> : ${stdout}`);
+          this.App.emit('Logger', `>>> RES >>> : ${stdout}`);
           // return stdout;
         } catch (e) {
           // This could be any number of errors, but probably it will be a

@@ -8,11 +8,6 @@ const Message = new myMessage.Message();
 var UIresults = GObject.registerClass( // eslint-disable-line
     {
       GTypeName: 'UIresults',
-      Signals: {
-        'Logger': {
-          param_types: [GObject.TYPE_STRING],
-        },
-      },
     },
     class UIresults extends GObject.Object {
       _init() {
@@ -42,10 +37,6 @@ var UIresults = GObject.registerClass( // eslint-disable-line
         vBox.pack_start(logWindow, true, true, 0);
         vBox.pack_end(SendbuttonRow, false, false, 0);
 
-
-        Message.connect('Logger', (obj, msg) => {
-          this._LOG(msg);
-        });
 
         sendButton.connect('clicked', async () => {
           const res = await Message.compile();
