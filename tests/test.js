@@ -32,5 +32,5 @@ const testFiles = imports.test_files;
 
 testRecipients.testConvert();
 testContents.testContent();
-testMessages.testMessage();
+testMessages.testMessage(fileInfo[1]);
 testFiles.testUnrollFile(fileInfo[1]);
