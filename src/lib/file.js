@@ -46,6 +46,7 @@ function rollUp() {
     VARS: appData.data.VARS,
     DELAY: appData.data.DELAY,
     FILEID: appData.data.FILEID,
+    SENT: appData.data.SENT,
   };
 
   return roll;
@@ -63,11 +64,13 @@ function verify(data) {
       valid = false;
     }
   });
+  /*
   Object.keys(data).forEach((key) => {
     if (!required.includes(key)) {
       valid = false;
     }
   });
+  */
 
   return valid;
 }
@@ -88,6 +91,7 @@ function unRoll(data) {
   appData.data.VARS = data.VARS;
   appData.data.DELAY = data.DELAY;
   appData.data.FILEID = data.FILEID;
+  appData.data.SENT = data.SENT;
   secret.passwordGet();
 }
 
@@ -97,3 +101,6 @@ async function open(path) {
   return JSON.parse(contents);
 }
 
+function namrFromPath($path) {
+  return $path.split('/')[-1];
+}

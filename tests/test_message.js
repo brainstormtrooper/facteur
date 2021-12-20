@@ -9,7 +9,13 @@ const myData = new imports.object.Data.Data().data;
 
 function testMessage() {
   myMessage.boundary = 'BOUNDARY';
+  myMessage.send = (msgObj, to, cancellable = null) => {
+    return new Promise((resolve, reject) => {
+      resolve('250 OK');
+    });
+  };
   myData.SUBJECT = 'test';
+
   const res = myMessage.build(strings.msgTxt, strings.msgHtml);
   JsUnit.assertEquals('type is object', 'object', typeof res);
   // eslint-disable-next-line max-len

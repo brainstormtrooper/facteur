@@ -5,7 +5,7 @@ const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
 const GObject = imports.gi.GObject;
 const Gettext = imports.gettext;
-
+const time = imports.lib.time;
 // import the panels
 const Menubar = new imports.UI.Menubar.Menubar();
 const Results = new imports.UI.Results.UIresults();
@@ -29,6 +29,9 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         'filename_changed': {
           param_types: [GObject.TYPE_BOOLEAN],
         },
+        'Sent': {
+          param_types: [GObject.TYPE_BOOLEAN],
+        },
       },
     },
     class Facteur extends Gtk.Application {
@@ -41,6 +44,10 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         GLib.set_prgname(this.application_id);
         GLib.set_application_name('Facteur');
 
+        /*
+        Signals
+        */
+
         this.connect('update_ui', () => {
           try {
             this.updateUI();
@@ -50,12 +57,10 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         });
         this.connect('filename_changed', () => {
           try {
-            // return ellipsis + str.slice(-(maxLength - ellipsis.length));
             let path = appData.FILENAME;
             if (path.length > 32) {
               path = '...' + path.slice(-32);
             }
-            appData.FILENAME.length;
             this._window.get_titlebar().set_subtitle(path);
           } catch (e) {
             logError(e);
@@ -63,10 +68,17 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         });
 
         this.connect('Logger', (obj, msg) => {
-          log('bob got a message...');
           Results._LOG(msg);
         });
+
+        this.connect('Sent', () => {
+          Results.sendButton.set_sensitive(false);
+          // eslint-disable-next-line max-len
+          const labelStr = Gettext.gettext('Sent on') + ': ' + time.humanDate(appData.SENT);
+          Results.sentLabel.set_text(labelStr);
+        });
       }
+
 
       vfunc_activate() {
         this._window.present();

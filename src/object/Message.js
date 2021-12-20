@@ -5,6 +5,7 @@ Create and send a compiled message.
 */
 const Gio = imports.gi.Gio;
 const Config = imports.lib.settings;
+const time = imports.lib.time;
 const Data = imports.object.Data;
 const myTemplate = imports.object.Template;
 const Template = new myTemplate.Template();
@@ -18,6 +19,9 @@ var Message = GObject.registerClass( // eslint-disable-line
         'Logger': {
           param_types: [GObject.TYPE_STRING],
         },
+        'Sent': {
+          param_types: [GObject.TYPE_BOOLEAN],
+        },
       },
     },
     class Message extends GObject.Object {
@@ -25,6 +29,7 @@ var Message = GObject.registerClass( // eslint-disable-line
         super._init();
         // eslint-disable-next-line max-len
         this.boundary = [...Array(16)].map(() => Math.random().toString(36)[2]).join('');
+        this.App = Gio.Application.get_default();
       }
 
       // METHODS
@@ -55,6 +60,8 @@ var Message = GObject.registerClass( // eslint-disable-line
           this.send(mobj, mailing.to);
           this.sleep(delay);
         });
+        appData.SENT = time.now();
+        this.App.emit('Sent', true);
       }
 
       build(t, h) {

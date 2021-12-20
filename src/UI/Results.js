@@ -29,16 +29,20 @@ var UIresults = GObject.registerClass( // eslint-disable-line
         const logText = new Gtk.TextView({
           buffer: this.textBuffer, editable: false,
         });
-        const sendButton = new Gtk.Button({ label: Gettext.gettext('Send') });
+        this.sentLabel = new Gtk.Label(
+            { halign: Gtk.Align.END, label: Gettext.gettext('Not yet sent') },
+        );
+        this.sendButton = new Gtk.Button({ label: Gettext.gettext('Send') });
 
         logWindow.add(logText);
-        SendbuttonRow.pack_end(sendButton, false, false, 0);
+        SendbuttonRow.pack_end(this.sendButton, false, false, 0);
+        SendbuttonRow.pack_end(this.sentLabel, false, false, 6);
         vBox.pack_start(checkboxRow, false, false, 0);
         vBox.pack_start(logWindow, true, true, 0);
         vBox.pack_end(SendbuttonRow, false, false, 0);
 
 
-        sendButton.connect('clicked', async () => {
+        this.sendButton.connect('clicked', async () => {
           const res = await Message.compile();
           if (res) {
             Message.sendAll();

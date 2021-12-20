@@ -18,5 +18,6 @@
     <file>lib/file.js</file>
     <file>lib/settings.js</file>
     <file>lib/template.js</file>
+    <file>lib/time.js</file>
   </gresource>
 </gresources>

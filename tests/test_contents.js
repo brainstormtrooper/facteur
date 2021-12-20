@@ -33,7 +33,7 @@ function testContent() {
     );
     JsUnit.assertEquals(
         'has correct html',
-        '<p><h2>Bob,</h2> red cars</p>',
+        '<h2>Bob,</h2><p>red cars</p>',
         myData.MAILINGS[0]['html'],
     );
     JsUnit.assertEquals(

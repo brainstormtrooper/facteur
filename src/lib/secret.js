@@ -37,7 +37,7 @@ function passwordSet(password) {
       mySchema,
       attributes,
       Secret.COLLECTION_DEFAULT,
-      'password',
+      'Facteur password',
       password,
       null,
       onPasswordStored,

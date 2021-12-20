@@ -27,6 +27,7 @@ var Data = class Data { // eslint-disable-line
       FILEID: uuid.uuid(),
       FILENAME: 'untitled',
       ID: '',
+      SENT: '',
     };
   }
 };

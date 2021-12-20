@@ -12,9 +12,9 @@ var testCsv2 = `"address","name","likes"
 
 var templateTxt = '{{name}}, {{likes}}';
 
-var templateHtml = '<p><h2>{{name}},</h2> {{likes}}</p>';
+var templateHtml = '<h2>{{name}},</h2><p>{{likes}}</p>';
 
-var msgHtml = '<p><h2>Bob,</h2> red cars</p>';
+var msgHtml = '<h2>Bob,</h2><p>red cars</p>';
 
 var msgTxt = 'Bob, red cars';
 
@@ -22,19 +22,18 @@ var msgTxt = 'Bob, red cars';
 var subBlock = `Subject: test\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=BOUNDARY\n\n`;
 
 // eslint-disable-next-line max-len
-var msgBlock = `--BOUNDARY\nContent-Type: text/plain; charset=utf-8\nBob, red cars\n--BOUNDARY\nContent-Type: text/html; charset=utf-8\n<p><h2>Bob,</h2> red cars</p>\n--BOUNDARY--`;
+var msgBlock = `--BOUNDARY\nContent-Type: text/plain; charset=utf-8\nBob, red cars\n--BOUNDARY\nContent-Type: text/html; charset=utf-8\n<h2>Bob,</h2><p>red cars</p>\n--BOUNDARY--`;
 
 var password = 'password';
 
-var hash = 'facteur';
+// var hash = 'facteur';
 
 var fileStr = `{
 	"FROM": "sender@email.com",
 	"USER": "username",
-	"PASS": "U2FsdGVkX19Lhn94BJI7n21YOM71UaJfKPGyUFAifL0=",
 	"HOST": "smtps://smtp.mail.domain.com:465",
 	"SUBJECT": "test",
-	"HTML": "<p>{{name}}, {{likes}}.</p>",
+	"HTML": "<h2>{{name}},</h2><p>{{likes}}</p>",
 	"TEXT": "{{name}}, {{likes}}.",
 	"TO": [
 		"recipient1@email.com",
@@ -63,5 +62,6 @@ var fileStr = `{
 		"name",
 		"likes"
 	],
-	"DELAY": "500"
+	"DELAY": "500",
+	"FILEID": "123"
 }`;
