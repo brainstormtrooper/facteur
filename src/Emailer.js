@@ -14,7 +14,7 @@ const Mailing = new imports.UI.Mailing.UImailing();
 const Contents = new imports.UI.Contents.UIcontents();
 
 // import the app data singleton to hold persitant data
-const appData = new imports.object.Data.Data().data;
+const appData = new imports.object.Data.Data();
 
 var Facteur = GObject.registerClass( // eslint-disable-line
     {
@@ -57,7 +57,7 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         });
         this.connect('filename_changed', () => {
           try {
-            let path = appData.FILENAME;
+            let path = appData.get('FILENAME');
             if (path.length > 32) {
               path = '...' + path.slice(-32);
             }
@@ -86,7 +86,7 @@ var Facteur = GObject.registerClass( // eslint-disable-line
 
       vfunc_startup() {
         super.vfunc_startup();
-        appData.ID = this.ID;
+        appData.set('ID', this.ID);
         this._buildUI();
       }
 

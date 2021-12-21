@@ -27,12 +27,12 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
 
       _updateUI() {
         try {
-          this.userField.set_text(appData.data.USER);
-          this.passField.set_text(appData.data.PASS);
-          this.smtpField.set_text(appData.data.HOST);
-          this.subjectField.set_text(appData.data.SUBJECT);
-          this.fromField.set_text(appData.data.FROM);
-          this.delayField.set_text(appData.data.DELAY);
+          this.userField.set_text(appData.get('USER'));
+          this.passField.set_text(appData.get('PASS'));
+          this.smtpField.set_text(appData.get('HOST'));
+          this.subjectField.set_text(appData.get('SUBJECT'));
+          this.fromField.set_text(appData.get('FROM'));
+          this.delayField.set_text(appData.get('DELAY'));
         } catch (err) {
           logError(err);
         }
@@ -214,14 +214,14 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         });
 
         saveButton.connect('clicked', () => {
-          appData.data.USER = this.userField.get_text();
-          appData.data.PASS = this.passField.get_text();
-          appData.data.HOST = this.smtpField.get_text();
-          appData.data.SUBJECT = this.subjectField.get_text();
-          appData.data.FROM = this.fromField.get_text();
-          appData.data.DELAY = this.delayField.get_text();
+          appData.set('USER', this.userField.get_text());
+          appData.set('PASS', this.passField.get_text());
+          appData.set('HOST', this.smtpField.get_text());
+          appData.set('SUBJECT', this.subjectField.get_text());
+          appData.set('FROM', this.fromField.get_text());
+          appData.set('DELAY', this.delayField.get_text());
           // eslint-disable-next-line max-len
-          const str = ` >>> SETTINGS: "${appData.data.USER}", "${appData.data.HOST}", "${appData.data.SUBJECT}", "${appData.data.FROM}"...`;
+          const str = ` >>> SETTINGS: "${appData.get('USER')}", "${appData.get('HOST')}", "${appData.get('SUBJECT')}", "${appData.get('FROM')}"...`;
           this.App.emit('Logger', str);
         });
 

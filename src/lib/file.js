@@ -33,20 +33,20 @@ function save(path, data) {
 }
 
 function rollUp() {
-  secret.passwordSet(appData.data.PASS);
+  secret.passwordSet(appData.get('PASS'));
   const roll = {
-    FROM: appData.data.FROM,
-    USER: appData.data.USER,
-    HOST: appData.data.HOST,
-    SUBJECT: appData.data.SUBJECT,
-    HTML: appData.data.HTML,
-    TEXT: appData.data.TEXT,
-    TO: appData.data.TO,
-    CSVA: appData.data.CSVA,
-    VARS: appData.data.VARS,
-    DELAY: appData.data.DELAY,
-    FILEID: appData.data.FILEID,
-    SENT: appData.data.SENT,
+    FROM: appData.get('FROM'),
+    USER: appData.get('USER'),
+    HOST: appData.get('HOST'),
+    SUBJECT: appData.get('SUBJECT'),
+    HTML: appData.get('HTML'),
+    TEXT: appData.get('TEXT'),
+    TO: appData.get('TO'),
+    CSVA: appData.get('CSVA'),
+    VARS: appData.get('VARS'),
+    DELAY: appData.get('DELAY'),
+    FILEID: appData.get('FILEID'),
+    SENT: appData.get('SENT'),
   };
 
   return roll;
@@ -80,18 +80,18 @@ function unRoll(data) {
     const bfe = new Error('Bad file');
     throw bfe;
   }
-  appData.data.FROM = data.FROM;
-  appData.data.USER = data.USER;
-  appData.data.HOST = data.HOST;
-  appData.data.SUBJECT = data.SUBJECT;
-  appData.data.HTML = data.HTML;
-  appData.data.TEXT = data.TEXT;
-  appData.data.TO = data.TO;
-  appData.data.CSVA = data.CSVA;
-  appData.data.VARS = data.VARS;
-  appData.data.DELAY = data.DELAY;
-  appData.data.FILEID = data.FILEID;
-  appData.data.SENT = data.SENT;
+  appData.set('FROM', data.FROM);
+  appData.set('USER', data.USER);
+  appData.set('HOST', data.HOST);
+  appData.set('SUBJECT', data.SUBJECT);
+  appData.set('HTML', data.HTML);
+  appData.set('TEXT', data.TEXT);
+  appData.set('TO', data.TO);
+  appData.set('CSVA', data.CSVA);
+  appData.set('VARS', data.VARS);
+  appData.set('DELAY', data.DELAY);
+  appData.set('FILEID', data.FILEID);
+  appData.set('SENT', data.SENT);
   secret.passwordGet();
 }
 
@@ -101,6 +101,6 @@ async function open(path) {
   return JSON.parse(contents);
 }
 
-function namrFromPath($path) {
+function nameFromPath($path) {
   return $path.split('/')[-1];
 }

@@ -7,7 +7,7 @@ const myTemplate = imports.lib.template;
 const myFile = imports.lib.file;
 const Data = imports.object.Data;
 const GObject = imports.gi.GObject;
-const appData = new Data.Data().data;
+const appData = new Data.Data();
 
 var Template = GObject.registerClass( // eslint-disable-line
     {

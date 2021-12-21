@@ -3,7 +3,7 @@ const myList = new imports.object.List.List();
 const strings = imports.fixtures.strings;
 
 const myTemplate = new imports.object.Template.Template();
-const myData = new imports.object.Data.Data().data;
+const myData = new imports.object.Data.Data();
 
 
 /* eslint-disable no-unused-vars */
@@ -13,33 +13,33 @@ const myData = new imports.object.Data.Data().data;
  * function in List.js
  */
 function testContent() {
-  myData.HTML = strings.templateHtml;
-  myData.TEXT = strings.templateTxt;
+  myData.set('HTML', strings.templateHtml);
+  myData.set('TEXT', strings.templateTxt);
   const res = myList.csvToArray(strings.testCsv2);
   JsUnit.assertEquals('type is object', 'object', typeof res);
   myList.csva = res;
-  myData.CSVA = res;
+  myData.set('CSVA', res);
   myList.dataHeadings();
   myList.trimData();
-  JsUnit.assertEquals('col count is 3', 3, myData.VARS.length);
-  myData.TO = myData.CSVA.map((x) => x[0]);
+  JsUnit.assertEquals('col count is 3', 3, myData.get('VARS').length);
+  myData.set('TO', myData.get('CSVA').map((x) => x[0]));
   const p = myTemplate.compile();
   p.then((res) => {
     JsUnit.assertEquals('mailings count is 3', 3, res);
     JsUnit.assertEquals(
         'has correct recipient',
         'recipient1@email.com',
-        myData.MAILINGS[0]['to'],
+        myData.get('MAILINGS')[0]['to'],
     );
     JsUnit.assertEquals(
         'has correct html',
         '<h2>Bob,</h2><p>red cars</p>',
-        myData.MAILINGS[0]['html'],
+        myData.get('MAILINGS')[0]['html'],
     );
     JsUnit.assertEquals(
         'has correct text',
         'Bob, red cars',
-        myData.MAILINGS[0]['text'],
+        myData.get('MAILINGS')[0]['text'],
     );
   });
 }

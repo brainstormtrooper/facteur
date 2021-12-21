@@ -7,7 +7,7 @@ Handle CSV data for mailings.
 const myFile = imports.lib.file;
 const Data = imports.object.Data;
 const GObject = imports.gi.GObject;
-const appData = new Data.Data().data;
+const appData = new Data.Data();
 
 var List = GObject.registerClass( // eslint-disable-line
     {
@@ -77,8 +77,8 @@ var List = GObject.registerClass( // eslint-disable-line
             try {
               this.dataHeadings();
               this.trimData();
-              appData.CSVA = this.csva;
-              appData.TO = this.csva.map((x) => x[0]);
+              appData.set('CSVA', this.csva);
+              appData.set('TO', this.csva.map((x) => x[0]));
               this.emit('Updated_sig', true);
             } catch (error) {
               logError(error);
@@ -96,7 +96,7 @@ var List = GObject.registerClass( // eslint-disable-line
       */
       dataHeadings() {
         this.headers = this.csva[0];
-        appData.VARS = this.headers;
+        appData.set('VARS', this.headers);
         this.colcount = Object.keys(this.headers).length;
       }
 

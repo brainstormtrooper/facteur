@@ -2,13 +2,13 @@ const JsUnit = imports.jsUnit;
 const myMessage = new imports.object.Message.Message();
 const strings = imports.fixtures.strings;
 
-const myData = new imports.object.Data.Data().data;
+const myData = new imports.object.Data.Data();
 const myList = new imports.object.List.List();
 
 /* eslint-disable no-unused-vars */
 
 function testMessage(path) {
-  myData.ID = 'com.github.brainstormtrooper.facteur';
+  myData.set('ID', 'com.github.brainstormtrooper.facteur');
   imports.package.init({
     name: 'com.github.brainstormtrooper.facteur',
     version: '0.3.0',
@@ -19,12 +19,12 @@ function testMessage(path) {
     return true;
   } };
   myMessage.boundary = 'BOUNDARY';
-  myMessage.send = (msgObj, to, cancellable = null) => {
+  myMessage.send = async (msgObj, to, cancellable = null) => {
     return new Promise((resolve, reject) => {
       resolve('250 OK');
     });
   };
-  myData.SUBJECT = 'test';
+  myData.set('SUBJECT', 'test');
 
   const res = myMessage.build(strings.msgTxt, strings.msgHtml);
   JsUnit.assertEquals('type is object', 'object', typeof res);
@@ -38,8 +38,8 @@ function testMessage(path) {
   myList.csva = myList.csvToArray(strings.testCsv2);
   myList.dataHeadings();
   myList.trimData();
-  myData.CSVA = myList.csva;
-  myData.TO = myList.csva.map((x) => x[0]);
+  myData.set('CSVA', myList.csva);
+  myData.set('TO', myList.csva.map((x) => x[0]));
   myMessage.sendAll();
-  JsUnit.assertNotEquals('send time has been set', '', myData.SENT);
+  JsUnit.assertNotEquals('send time has been set', '', myData.get('SENT'));
 }

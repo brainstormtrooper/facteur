@@ -9,7 +9,7 @@ const GObject = imports.gi.GObject;
 const myTemplate = imports.object.Template;
 const Template = new myTemplate.Template();
 const Data = imports.object.Data;
-const appData = new Data.Data().data;
+const appData = new Data.Data();
 
 var UIcontents = GObject.registerClass( // eslint-disable-line
     {
@@ -26,12 +26,10 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
       }
 
       _updateUI() {
-        this.emit('Logger', 'updating html content...');
-
-        let len = encodeURI(appData.HTML).split(/%..|./).length - 1;
-        this.htmlBuffer.set_text(appData.HTML, len);
-        len = encodeURI(appData.TEXT).split(/%..|./).length - 1;
-        this.textBuffer.set_text(appData.TEXT, len);
+        let len = encodeURI(appData.get('HTML')).split(/%..|./).length - 1;
+        this.htmlBuffer.set_text(appData.get('HTML'), len);
+        len = encodeURI(appData.get('TEXT')).split(/%..|./).length - 1;
+        this.textBuffer.set_text(appData.get('TEXT'), len);
       }
 
       _buildUI() {
@@ -81,8 +79,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         choosebutton.connect('file-set', async () => {
           const path = choosebutton.get_file().get_path();
           // do something with path
-          // app.ui.results._LOG(`Importing template from : ${path}`);
-          this.emit('Logger', `Importing template from : ${path}`);
+          // this.emit('Logger', `Importing template from : ${path}`);
 
           const content = await Template.import(path);
           const len = encodeURI(content).split(/%..|./).length - 1;
@@ -121,8 +118,8 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         vBox.pack_start(buttonBox, false, false, 0);
 
         button.connect('clicked', () => {
-          appData.HTML = this.htmlBuffer.text;
-          appData.TEXT = this.textBuffer.text;
+          appData.set('HTML', this.htmlBuffer.text);
+          appData.set('TEXT', this.textBuffer.text);
         });
 
         return vBox;

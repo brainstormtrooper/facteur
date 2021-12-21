@@ -1,12 +1,12 @@
 const Secret = imports.gi.Secret;
 const Data = imports.object.Data;
-const appData = new Data.Data().data;
+const appData = new Data.Data();
 
 /* eslint-disable no-unused-vars */
 
 /* This schema is usually defined once globally */
 // eslint-disable-next-line new-cap
-const mySchema = Secret.Schema.new(appData.ID,
+const mySchema = Secret.Schema.new(appData.get('ID'),
     Secret.SchemaFlags.NONE,
     {
       'type': Secret.SchemaAttributeType.STRING,
@@ -28,7 +28,7 @@ function onPasswordStored(source, result) {
 */
 const attributes = {
   'type': 'emailing',
-  'file': appData.FILEID,
+  'file': appData.get('FILEID'),
 };
 
 
@@ -47,10 +47,9 @@ function passwordSet(password) {
 function passwordGet() {
   const password = Secret.password_lookup_sync(
       mySchema,
-      { 'type': 'emailing', 'file': appData.FILEID },
+      { 'type': 'emailing', 'file': appData.get('FILEID') },
       null,
   );
-  log(password);
-  appData.PASS = password;
+  appData.set('PASS', password);
 }
 

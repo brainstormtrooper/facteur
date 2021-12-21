@@ -10,7 +10,7 @@ const Data = imports.object.Data;
 const myTemplate = imports.object.Template;
 const Template = new myTemplate.Template();
 const GObject = imports.gi.GObject;
-const appData = new Data.Data().data;
+const appData = new Data.Data();
 
 var Message = GObject.registerClass( // eslint-disable-line
     {
@@ -51,22 +51,22 @@ var Message = GObject.registerClass( // eslint-disable-line
 
       sendAll() {
         let delay = Config.getDelay();
-        if (appData.DELAY != delay) {
-          delay = appData.DELAY;
+        if (appData.get('DELAY') != delay) {
+          delay = appData.get('DELAY');
         }
-        appData.MAILINGS.forEach((mailing) => {
+        appData.get('MAILINGS').forEach((mailing) => {
           // eslint-disable-next-line max-len
           const mobj = this.build(mailing.text, mailing.html.replace(/(\r\n|\n|\r)/gm, ''));
           this.send(mobj, mailing.to);
           this.sleep(delay);
         });
-        appData.SENT = time.now();
+        appData.set('SENT', time.now());
         this.App.emit('Sent', true);
       }
 
       build(t, h) {
         // eslint-disable-next-line max-len
-        const subBlock = `Subject: ${appData.SUBJECT}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
+        const subBlock = `Subject: ${appData.get('SUBJECT')}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
         // eslint-disable-next-line max-len
         const msgBlock = `--${this.boundary}\nContent-Type: text/plain; charset=utf-8\n${t}\n--${this.boundary}\nContent-Type: text/html; charset=utf-8\n${h}\n--${this.boundary}--`;
         const res = { subBlock, msgBlock };
@@ -94,13 +94,13 @@ var Message = GObject.registerClass( // eslint-disable-line
         const argv = ['curl',
           flagStr,
           // Option switches and values are separate args
-          '--mail-from', appData.FROM,
-          '--url', appData.HOST,
+          '--mail-from', appData.get('FROM'),
+          '--url', appData.get('HOST'),
           '--mail-rcpt', to,
           '-T', '-',
-          '--user', `${appData.USER}:${appData.PASS}`,
+          '--user', `${appData.get('USER')}:${appData.get('PASS')}`,
         ];
-        if (appData.HOST.toLowerCase().includes('https')) {
+        if (appData.get('HOST').toLowerCase().includes('https')) {
           argv.push('--ssl-reqd');
         }
         try {

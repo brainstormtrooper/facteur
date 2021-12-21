@@ -1,6 +1,6 @@
 const Gio = imports.gi.Gio;
 const Data = imports.object.Data;
-const appData = new Data.Data().data;
+const appData = new Data.Data();
 
 /* eslint-disable no-unused-vars */
 
@@ -33,24 +33,24 @@ function getSettings(schemaId, path) {
 }
 
 function getIpv4() {
-  const config = getSettings(appData.ID);
+  const config = getSettings(appData.get('ID'));
 
   return config.get_boolean('force-ipv4');
 }
 
 function setIpv4(val) {
-  const config = getSettings(appData.ID);
+  const config = getSettings(appData.get('ID'));
 
   config.set_boolean('force-ipv4', val);
 }
 
 function setDelay(delay) {
-  const config = getSettings(appData.ID);
+  const config = getSettings(appData.get('ID'));
   config.set_int('delay', delay);
 }
 
 function getDelay() {
-  const config = getSettings(appData.ID);
+  const config = getSettings(appData.get('ID'));
 
   return config.get_int('delay');
 }

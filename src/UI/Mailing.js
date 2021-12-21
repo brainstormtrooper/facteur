@@ -9,7 +9,7 @@ const Lang = imports.lang;
 const myList = imports.object.List;
 const Modal = imports.UI.Modal;
 const Data = imports.object.Data;
-const appData = new Data.Data().data;
+const appData = new Data.Data();
 
 var UImailing = GObject.registerClass( // eslint-disable-line
     {
@@ -146,8 +146,8 @@ var UImailing = GObject.registerClass( // eslint-disable-line
         return this.vBox;
       }
       _updateUI() {
-        this.list.csva = appData.CSVA;
-        this.list.headers = appData.VARS;
+        this.list.csva = appData.get('CSVA');
+        this.list.headers = appData.get('VARS');
         this.updateTable();
       }
 

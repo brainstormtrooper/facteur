@@ -8,7 +8,7 @@ var Data = class Data { // eslint-disable-line
     }
     Data._instance = this;
 
-    this.data = {
+    this._data = {
       FROM: '',
       USER: '',
       PASS: '',
@@ -29,5 +29,20 @@ var Data = class Data { // eslint-disable-line
       ID: '',
       SENT: '',
     };
+  }
+
+  set(key, value) {
+    if (this._data[key] != value) {
+      // changed
+    }
+    this._data[key] = value;
+  }
+
+  get(key) {
+    return this._data[key];
+  }
+
+  push(arrayKey, value) {
+    this._data[arrayKey].push(value);
   }
 };

@@ -5,7 +5,7 @@ const Gettext = imports.gettext;
 const GObject = imports.gi.GObject;
 
 const Data = imports.object.Data;
-const appData = new Data.Data().data;
+const appData = new Data.Data();
 
 const File = imports.lib.file;
 const Modal = imports.UI.Modal;
@@ -88,13 +88,14 @@ var Menubar = GObject.registerClass( // eslint-disable-line
           const res = opener.run();
 
           if (res == Gtk.ResponseType.ACCEPT) {
-            appData.FILENAME = opener.get_filename();
-            const promise = File.open(appData.FILENAME);
+            appData.set('FILENAME', opener.get_filename());
+            const promise = File.open(appData.get('FILENAME'));
             promise.then((fileData) => {
               try {
                 File.unRoll(fileData);
                 this.App.emit('update_ui', true);
-                this.App.emit('Logger', `Opened file : ${appData.FILENAME}.`);
+                // eslint-disable-next-line max-len
+                this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);
                 this.App.emit('filename_changed', true);
               } catch (error) {
                 logError(error);
@@ -180,7 +181,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
             { title: 'Select a destination' },
         );
         saver.set_action(Gtk.FileChooserAction.SAVE);
-        const WP = appData.FILENAME.split('/');
+        const WP = appData.get('FILENAME').split('/');
         const filename = WP.pop();
         saver.set_current_name(filename);
         try {
@@ -194,10 +195,10 @@ var Menubar = GObject.registerClass( // eslint-disable-line
         saver.add_button('cancel', Gtk.ResponseType.CANCEL);
         const res = saver.run();
         if (res == Gtk.ResponseType.ACCEPT) {
-          appData.FILENAME = saver.get_filename();
+          appData.set('FILENAME', saver.get_filename());
 
           const data = File.rollUp();
-          File.save(appData.FILENAME, data);
+          File.save(appData.get('FILENAME'), data);
         }
         saver.destroy();
       }
@@ -243,9 +244,9 @@ var Menubar = GObject.registerClass( // eslint-disable-line
 
         const actionSave = new Gio.SimpleAction({ name: 'save' });
         actionSave.connect('activate', () => {
-          if (appData.FILENAME !== null) {
+          if (appData.get('FILENAME') !== null) {
             const data = File.rollUp();
-            File.save(appData.FILENAME, data);
+            File.save(appData.get('FILENAME'), data);
           } else {
             this.saveAs();
             try {

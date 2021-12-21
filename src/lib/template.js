@@ -1,16 +1,16 @@
 
 /* eslint-disable no-unused-vars */
 function iterRows(data) {
-  data.MAILINGS.length = 0;
-  for (let i = 0; i < data.CSVA.length; i++) {
+  data.get('MAILINGS').length = 0;
+  for (let i = 0; i < data.get('CSVA').length; i++) {
     const row = data.CSVA[i];
     const vals = {};
-    const to = data.TO[i].replace(/"/g, '').trim();
-    let cHTML = data.HTML;
-    let cTEXT = data.TEXT;
+    const to = data.get('TO')[i].replace(/"/g, '').trim();
+    let cHTML = data.get('HTML');
+    let cTEXT = data.get('TEXT');
 
     row.forEach((val, k) => {
-      vals[data.VARS[k]] = val;
+      vals[data.get('VARS')[k]] = val;
     });
 
     Object.entries(vals).forEach(([i, v]) => {
@@ -27,14 +27,14 @@ function iterRows(data) {
       });
     });
 
-    data.MAILINGS.push({
+    data.push('MAILINGS', {
       html: cHTML,
       text: cTEXT,
       to,
     });
   }
 
-  return data.MAILINGS.length;
+  return data.get('MAILINGS').length;
 }
 
 function _positions(template) {
