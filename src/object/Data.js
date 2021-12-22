@@ -1,4 +1,5 @@
 const uuid = imports.lib.uuid;
+const Gio = imports.gi.Gio;
 
 var Data = class Data { // eslint-disable-line
 
@@ -33,7 +34,7 @@ var Data = class Data { // eslint-disable-line
 
   set(key, value) {
     if (this._data[key] != value) {
-      // changed
+      Gio.Application.get_default().emit('dataChanged', true);
     }
     this._data[key] = value;
   }

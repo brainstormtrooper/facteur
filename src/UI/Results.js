@@ -13,6 +13,7 @@ var UIresults = GObject.registerClass( // eslint-disable-line
       _init() {
         super._init();
         this.textBuffer = new Gtk.TextBuffer();
+        this.defSentStr = Gettext.gettext('Not yet sent');
       }
 
       _buildUI() {
@@ -30,7 +31,7 @@ var UIresults = GObject.registerClass( // eslint-disable-line
           buffer: this.textBuffer, editable: false,
         });
         this.sentLabel = new Gtk.Label(
-            { halign: Gtk.Align.END, label: Gettext.gettext('Not yet sent') },
+            { halign: Gtk.Align.END, label: this.defSentStr },
         );
         this.sendButton = new Gtk.Button({ label: Gettext.gettext('Send') });
 
@@ -43,9 +44,7 @@ var UIresults = GObject.registerClass( // eslint-disable-line
 
 
         this.sendButton.connect('clicked', async () => {
-          log('here');
           const res = await Message.compile();
-          log('there');
           if (res) {
             Message.sendAll();
           } else {

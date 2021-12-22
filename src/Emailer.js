@@ -32,6 +32,9 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         'Sent': {
           param_types: [GObject.TYPE_BOOLEAN],
         },
+        'dataChanged': {
+          param_types: [GObject.TYPE_BOOLEAN],
+        },
       },
     },
     class Facteur extends Gtk.Application {
@@ -76,6 +79,11 @@ var Facteur = GObject.registerClass( // eslint-disable-line
           // eslint-disable-next-line max-len
           const labelStr = Gettext.gettext('Sent on') + ': ' + time.humanDate(appData.get('SENT'));
           Results.sentLabel.set_text(labelStr);
+        });
+
+        this.connect('dataChanged', () => {
+          Results.sentLabel.set_text(Results.defSentStr);
+          Results.sendButton.set_sensitive(true);
         });
       }
 
