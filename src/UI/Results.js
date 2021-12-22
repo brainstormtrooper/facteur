@@ -43,7 +43,9 @@ var UIresults = GObject.registerClass( // eslint-disable-line
 
 
         this.sendButton.connect('clicked', async () => {
+          log('here');
           const res = await Message.compile();
+          log('there');
           if (res) {
             Message.sendAll();
           } else {

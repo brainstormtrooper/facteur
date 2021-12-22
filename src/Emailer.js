@@ -74,7 +74,7 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         this.connect('Sent', () => {
           Results.sendButton.set_sensitive(false);
           // eslint-disable-next-line max-len
-          const labelStr = Gettext.gettext('Sent on') + ': ' + time.humanDate(appData.SENT);
+          const labelStr = Gettext.gettext('Sent on') + ': ' + time.humanDate(appData.get('SENT'));
           Results.sentLabel.set_text(labelStr);
         });
       }

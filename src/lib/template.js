@@ -3,7 +3,7 @@
 function iterRows(data) {
   data.get('MAILINGS').length = 0;
   for (let i = 0; i < data.get('CSVA').length; i++) {
-    const row = data.CSVA[i];
+    const row = data.get('CSVA')[i];
     const vals = {};
     const to = data.get('TO')[i].replace(/"/g, '').trim();
     let cHTML = data.get('HTML');
