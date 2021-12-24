@@ -1,5 +1,5 @@
 project('facteur', 'c',
-  version: '0.6.0',
+  version: '0.6.1',
   meson_version: '>= 0.50.0',
   datadir: '/usr/share',
   prefix: '/usr',

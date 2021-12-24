@@ -37,3 +37,4 @@ dbus_service = configure_file(
   install : true,
   install_dir : dbusservicedir
 )
+subdir('icons')

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="com.github.brainstormtrooper.facteur.symbolic.svg"
+   inkscape:export-filename="/home/rick/Documents/Work/BrainstormTrooper/Gnome_emailer/icon.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="1.515625"
+     inkscape:cx="119.75258"
+     inkscape:cy="256"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g7552" />
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3388">
+      <stop
+         style="stop-color:#7495a7;stop-opacity:1"
+         offset="0"
+         id="stop3384" />
+      <stop
+         style="stop-color:#ebebeb;stop-opacity:1"
+         offset="1"
+         id="stop3386" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3388"
+       id="linearGradient3390"
+       x1="126.07201"
+       y1="205.53551"
+       x2="285.80435"
+       y2="46.383442"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g7542-9"
+       transform="translate(25.858245,-13.796392)"
+       style="fill:#5e5c64;stroke:none">
+      <rect
+         style="fill:#5e5c64;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect31-5-3"
+         width="454.46133"
+         height="235.91237"
+         x="-23.228088"
+         y="83.711342"
+         rx="5"
+         ry="5" />
+      <rect
+         style="fill:#5e5c64;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="rect5787-2-8"
+         width="196.42268"
+         height="83.301544"
+         x="24.570869"
+         y="195.52319"
+         rx="5"
+         ry="5" />
+    </g>
+    <g
+       id="g7542"
+       transform="translate(50.136597,49.213668)"
+       style="fill:#9a9996">
+      <rect
+         style="fill:#9a9996;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect31-5"
+         width="454.46133"
+         height="235.91237"
+         x="-23.228088"
+         y="83.711342"
+         rx="5"
+         ry="5" />
+      <rect
+         style="fill:#9a9996;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="rect5787-2"
+         width="196.42268"
+         height="83.301544"
+         x="24.570869"
+         y="195.52319"
+         rx="5"
+         ry="5" />
+    </g>
+    <g
+       id="g7552"
+       transform="translate(32.203608,18.128866)"
+       style="fill:#ffffff;fill-opacity:1">
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+         id="rect31"
+         width="454.46133"
+         height="235.91237"
+         x="19.417526"
+         y="177.05412"
+         rx="5"
+         ry="5"
+         inkscape:export-filename="/home/rick/Documents/Work/BrainstormTrooper/Gnome_emailer/icon.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <g
+         id="g2213"
+         transform="translate(28.515464,-0.22938144)"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         style="fill:#5e5c64;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="rect5787"
+         width="196.42268"
+         height="83.301544"
+         x="67.216492"
+         y="288.86597"
+         rx="5"
+         ry="5" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="wings"
+     sodipodi:insensitive="true"
+     style="display:none">
+    <path
+       style="fill:url(#linearGradient3390);fill-opacity:1;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 228.78866,215.73711 c -9.95103,-21.76546 58.66495,-83.37886 62.7165,-109.3402 C 295.5567,80.435567 283.50515,46.471649 232.26804,27.219072 190.62839,11.572785 159.87113,9.7319588 156.4768,21.5 c -3.39433,11.768041 5.32732,16.780928 18.8531,25.927835 -27.97165,-5.092783 -36.0567,-8.365979 -39.51804,0.703609 -3.46134,9.069587 15.89175,22.783504 25.71907,26.780927 -17.13402,-2.82732 -34.68299,-9.953608 -39.54124,-0.891753 -4.85824,9.061856 8.37189,26.409922 29.46907,46.193302 17.20639,16.13488 42.4768,48.06443 21.20103,94.60824"
+       id="path2753"
+       sodipodi:nodetypes="cssscscssc" />
+  </g>
+</svg>
