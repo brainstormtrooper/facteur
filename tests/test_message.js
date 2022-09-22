@@ -42,4 +42,5 @@ function testMessage(path) {
   myData.set('TO', myList.csva.map((x) => x[0]));
   myMessage.sendAll();
   JsUnit.assertNotEquals('send time has been set', '', myData.get('SENT'));
+
 }

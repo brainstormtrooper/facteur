@@ -28,7 +28,6 @@ function getSettings(schemaId, path) {
   if (path !== undefined) {
     cnfblk.path = path;
   }
-
   return new Gio.Settings(cnfblk);
 }
 
