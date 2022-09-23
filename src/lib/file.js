@@ -1,6 +1,7 @@
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const secret = imports.lib.secret;
+const base64 = imports.lib.base64;
 const Data = imports.object.Data;
 
 const appData = new Data.Data();
@@ -42,7 +43,7 @@ function rollUp() {
     HTML: appData.get('HTML'),
     TEXT: appData.get('TEXT'),
     TO: appData.get('TO'),
-    CSVA: appData.get('CSVA'),
+    CSVA: base64.encode64(JSON.stringify(appData.get('CSVA'))),
     VARS: appData.get('VARS'),
     DELAY: appData.get('DELAY'),
     FILEID: appData.get('FILEID'),
@@ -64,6 +65,14 @@ function verify(data) {
       valid = false;
     }
   });
+
+  // fix legacy files
+
+  if(typeof data.CSVA == 'object') {
+
+    data.CSVA = base64.encode64(JSON.stringify(data.CSVA));
+  }
+
   /*
   Object.keys(data).forEach((key) => {
     if (!required.includes(key)) {
@@ -76,6 +85,9 @@ function verify(data) {
 }
 
 function unRoll(data) {
+
+// console.log(JSON.parse(data));
+
   if (!verify(data)) {
     const bfe = new Error('Bad file');
     throw bfe;
@@ -87,7 +99,7 @@ function unRoll(data) {
   appData.set('HTML', data.HTML);
   appData.set('TEXT', data.TEXT);
   appData.set('TO', data.TO);
-  appData.set('CSVA', data.CSVA);
+  appData.set('CSVA', JSON.parse(base64.decode64(data.CSVA)));
   appData.set('VARS', data.VARS);
   appData.set('DELAY', data.DELAY);
   appData.set('FILEID', data.FILEID);

@@ -16,14 +16,23 @@ function testUnrollFile(path) {
     libdir: 'lib',
   });
 
-  const data = JSON.parse(strings.fileStr);
+  const data = JSON.parse(strings.fileStr64);
+  const legacydata = JSON.parse(strings.fileStr);
   // const HASH = settings.getHash().toString();
   myFile.unRoll(data);
+
+ 
   JsUnit.assertEquals('SUBJECT is test', 'test', appData.get('SUBJECT'));
   // eslint-disable-next-line max-len
   JsUnit.assertEquals('FROM is sender@email.com', 'sender@email.com', appData.get('FROM'));
+
   JsUnit.assertEquals('CSVA is object', 'object', typeof appData.get('CSVA'));
 
   // eslint-disable-next-line max-len
   JsUnit.assertEquals('correct first element', 'recipient1@email.com', appData.get('CSVA')[0][0]);
+
+  myFile.unRoll(legacydata);
+
+  JsUnit.assertEquals('CSVA is object', 'object', typeof appData.get('CSVA'));
+
 }
