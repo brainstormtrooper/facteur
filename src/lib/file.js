@@ -16,7 +16,8 @@ function fopen(path) {
       try {
         // read the file into a variable...
         const contents = file.load_contents_finish(res)[1];
-        const dataString = contents.toString();
+        const decoder = new TextDecoder('utf-8');
+        const dataString = decoder.decode(contents);
 
         resolve(dataString);
       } catch (e) {
@@ -109,7 +110,7 @@ function unRoll(data) {
 
 async function open(path) {
   const contents = await fopen(path);
-
+  
   return JSON.parse(contents);
 }
 
