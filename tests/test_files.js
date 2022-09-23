@@ -35,4 +35,11 @@ function testUnrollFile(path) {
 
   JsUnit.assertEquals('CSVA is object', 'object', typeof appData.get('CSVA'));
 
+  appData.set('PASS', 'abc123');
+
+  const testFile = myFile.rollUp();
+
+  JsUnit.assertEquals('Legacy file is updated properly', strings.fileStr64.replace(/(\s)/gm, ""), JSON.stringify(testFile).replace(/(\s)/gm, ""));
+
+
 }

@@ -113,6 +113,6 @@ async function open(path) {
   return JSON.parse(contents);
 }
 
-function nameFromPath($path) {
-  return $path.split('/')[-1];
+function nameFromPath(path) {
+  return path.split('/')[-1];
 }

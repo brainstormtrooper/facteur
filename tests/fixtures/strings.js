@@ -28,6 +28,13 @@ var password = 'password';
 
 // var hash = 'facteur';
 
+
+// base64 from object?
+// WwoJCVsKCQkJInJlY2lwaWVudDFAZW1haWwuY29tIiwKCQkJInJpY2siLAoJCQkicmVkIGNhcnMiCgkJXSwKCQlbCgkJCSJyZWNpcGllbnQyQG90aGVyZW1haWwuY29tIiwKCQkJIlJpY2t5IiwKCQkJImZhc3QiCgkJXSwKCQlbCgkJCSJyZWNpcGllbnQzQGVtYWlsLmNvbSIsCgkJCSJCb2IiLAoJCQkibHV4dXJ5IgoJCV0KCV0=
+// base64 from JSON string
+// JTVCJTVCJTIycmVjaXBpZW50MUBlbWFpbC5jb20lMjIsJTIycmljayUyMiwlMjJyZWQlMjBjYXJzJTIyJTVELCU1QiUyMnJlY2lwaWVudDJAb3RoZXJlbWFpbC5jb20lMjIsJTIyUmlja3klMjIsJTIyZmFzdCUyMiU1RCwlNUIlMjJyZWNpcGllbnQzQGVtYWlsLmNvbSUyMiwlMjJCb2IlMjIsJTIybHV4dXJ5JTIyJTVEJTVE
+
+
 var fileStr64 = `{
 	"FROM": "sender@email.com",
 	"USER": "username",
@@ -40,7 +47,7 @@ var fileStr64 = `{
 		"recipient2@otheremail.com",
 		"recipient3@email.com"
 	],
-	"CSVA": "WwoJCVsKCQkJInJlY2lwaWVudDFAZW1haWwuY29tIiwKCQkJInJpY2siLAoJCQkicmVkIGNhcnMiCgkJXSwKCQlbCgkJCSJyZWNpcGllbnQyQG90aGVyZW1haWwuY29tIiwKCQkJIlJpY2t5IiwKCQkJImZhc3QiCgkJXSwKCQlbCgkJCSJyZWNpcGllbnQzQGVtYWlsLmNvbSIsCgkJCSJCb2IiLAoJCQkibHV4dXJ5IgoJCV0KCV0=",
+	"CSVA": "JTVCJTVCJTIycmVjaXBpZW50MUBlbWFpbC5jb20lMjIsJTIycmljayUyMiwlMjJyZWQlMjBjYXJzJTIyJTVELCU1QiUyMnJlY2lwaWVudDJAb3RoZXJlbWFpbC5jb20lMjIsJTIyUmlja3klMjIsJTIyZmFzdCUyMiU1RCwlNUIlMjJyZWNpcGllbnQzQGVtYWlsLmNvbSUyMiwlMjJCb2IlMjIsJTIybHV4dXJ5JTIyJTVEJTVE",
 	"VARS": [
 		"address",
 		"name",
