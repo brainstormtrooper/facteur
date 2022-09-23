@@ -28,6 +28,35 @@ var password = 'password';
 
 // var hash = 'facteur';
 
+
+// base64 from object?
+// WwoJCVsKCQkJInJlY2lwaWVudDFAZW1haWwuY29tIiwKCQkJInJpY2siLAoJCQkicmVkIGNhcnMiCgkJXSwKCQlbCgkJCSJyZWNpcGllbnQyQG90aGVyZW1haWwuY29tIiwKCQkJIlJpY2t5IiwKCQkJImZhc3QiCgkJXSwKCQlbCgkJCSJyZWNpcGllbnQzQGVtYWlsLmNvbSIsCgkJCSJCb2IiLAoJCQkibHV4dXJ5IgoJCV0KCV0=
+// base64 from JSON string
+// JTVCJTVCJTIycmVjaXBpZW50MUBlbWFpbC5jb20lMjIsJTIycmljayUyMiwlMjJyZWQlMjBjYXJzJTIyJTVELCU1QiUyMnJlY2lwaWVudDJAb3RoZXJlbWFpbC5jb20lMjIsJTIyUmlja3klMjIsJTIyZmFzdCUyMiU1RCwlNUIlMjJyZWNpcGllbnQzQGVtYWlsLmNvbSUyMiwlMjJCb2IlMjIsJTIybHV4dXJ5JTIyJTVEJTVE
+
+
+var fileStr64 = `{
+	"FROM": "sender@email.com",
+	"USER": "username",
+	"HOST": "smtps://smtp.mail.domain.com:465",
+	"SUBJECT": "test",
+	"HTML": "<h2>{{name}},</h2><p>{{likes}}</p>",
+	"TEXT": "{{name}}, {{likes}}.",
+	"TO": [
+		"recipient1@email.com",
+		"recipient2@otheremail.com",
+		"recipient3@email.com"
+	],
+	"CSVA": "JTVCJTVCJTIycmVjaXBpZW50MUBlbWFpbC5jb20lMjIsJTIycmljayUyMiwlMjJyZWQlMjBjYXJzJTIyJTVELCU1QiUyMnJlY2lwaWVudDJAb3RoZXJlbWFpbC5jb20lMjIsJTIyUmlja3klMjIsJTIyZmFzdCUyMiU1RCwlNUIlMjJyZWNpcGllbnQzQGVtYWlsLmNvbSUyMiwlMjJCb2IlMjIsJTIybHV4dXJ5JTIyJTVEJTVE",
+	"VARS": [
+		"address",
+		"name",
+		"likes"
+	],
+	"DELAY": "500",
+	"FILEID": "123"
+}`;
+
 var fileStr = `{
 	"FROM": "sender@email.com",
 	"USER": "username",
