@@ -1,4 +1,5 @@
 const Gtk = imports.gi.Gtk;
+const Gio = imports.gi.Gio;
 const Gettext = imports.gettext;
 const myMessage = imports.object.Message;
 const GObject = imports.gi.GObject;

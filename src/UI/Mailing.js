@@ -2,6 +2,7 @@
 UI for displaying mailing list data
 */
 const Gtk = imports.gi.Gtk;
+const Gio = imports.gi.Gio;
 const Gettext = imports.gettext;
 const GObject = imports.gi.GObject;
 const Pango = imports.gi.Pango;
@@ -30,6 +31,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
 
       // Build the application's UI
       _buildUI() {
+        this.App = Gio.Application.get_default();
         this.vBox = new Gtk.Box({
           orientation: Gtk.Orientation.VERTICAL,
           spacing: 6,
@@ -57,7 +59,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
           } catch (error) {
             logError(error);
           }
-          this.emit('Logger', 'CSV File path is : ' + path);
+          this.App.emit('Logger', 'CSV File path is : ' + path);
         }));
 
         this.list.connect('Import_error_sig', Lang.bind(this, function() {
@@ -152,6 +154,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
       }
 
       updateTable() {
+        console.log('updating table');
         let k;
         delete (this._listStore);
         this._listStore = new Gtk.ListStore();

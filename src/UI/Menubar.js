@@ -196,7 +196,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
         const res = saver.run();
         if (res == Gtk.ResponseType.ACCEPT) {
           appData.set('FILENAME', saver.get_filename());
-
+          
           const data = File.rollUp();
           File.save(appData.get('FILENAME'), data);
         }
@@ -238,7 +238,8 @@ var Menubar = GObject.registerClass( // eslint-disable-line
         const actionSaveAs = new Gio.SimpleAction({ name: 'saveAs' });
         actionSaveAs.connect('activate', () => {
           this.saveAs();
-          this.emit('filename_changed', true);
+          // this.emit('filename_changed', true);
+          this.App.emit('filename_changed', true);
         });
         app.add_action(actionSaveAs);
 

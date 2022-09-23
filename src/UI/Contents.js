@@ -2,6 +2,7 @@
 UI for displaying html message interface
 */
 const Gtk = imports.gi.Gtk;
+const Gio = imports.gi.Gio;
 const GtkSource = imports.gi.GtkSource;
 const Webkit = imports.gi.WebKit2;
 const Gettext = imports.gettext;
@@ -90,7 +91,10 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           webView.load_html(this.htmlBuffer.text, null);
         });
 
-        webView.load_html('<h1>Hi!</h1><p>this is text</p>', null);
+        const defhtmlstr = '<h1>Hi!</h1><p>this is text</p>';
+        const len = encodeURI(defhtmlstr).split(/%..|./).length - 1;
+        this.htmlBuffer.set_text(defhtmlstr, len);
+        webView.load_html(this.htmlBuffer.text, null);
         htmlNotebook.append_page(pagePreview, new Gtk.Label(
             { label: Gettext.gettext('Preview') },
         ));
