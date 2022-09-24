@@ -22,20 +22,13 @@ function onPasswordStored(source, result) {
   }
 }
 
-/*
-* The attributes used to later lookup the password. These
-* attributes should conform to the schema.
-*/
-const attributes = {
-  'type': 'emailing',
-  'file': appData.get('FILEID'),
-};
-
-
 function passwordSet(password) {
   Secret.password_store(
       mySchema,
-      attributes,
+      {
+        'type': 'emailing',
+        'file': appData.get('FILEID'),
+      },
       Secret.COLLECTION_DEFAULT,
       'Facteur password',
       password,

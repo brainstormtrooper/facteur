@@ -7,7 +7,7 @@ const GObject = imports.gi.GObject;
 const Data = imports.object.Data;
 const appData = new Data.Data();
 
-const File = imports.lib.file;
+const myFile = imports.lib.file;
 const Modal = imports.UI.Modal;
 const myModal = new Modal.UImodal();
 
@@ -89,10 +89,10 @@ var Menubar = GObject.registerClass( // eslint-disable-line
 
           if (res == Gtk.ResponseType.ACCEPT) {
             appData.set('FILENAME', opener.get_filename());
-            const promise = File.open(appData.get('FILENAME'));
+            const promise = myFile.open(appData.get('FILENAME'));
             promise.then((fileData) => {
               try {
-                File.unRoll(fileData);
+                myFile.unRoll(fileData);
                 this.App.emit('update_ui', true);
                 // eslint-disable-next-line max-len
                 this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);
@@ -197,8 +197,8 @@ var Menubar = GObject.registerClass( // eslint-disable-line
         if (res == Gtk.ResponseType.ACCEPT) {
           appData.set('FILENAME', saver.get_filename());
           
-          const data = File.rollUp();
-          File.save(appData.get('FILENAME'), data);
+          const data = myFile.rollUp();
+          myFile.save(appData.get('FILENAME'), data);
         }
         saver.destroy();
       }
@@ -245,9 +245,9 @@ var Menubar = GObject.registerClass( // eslint-disable-line
 
         const actionSave = new Gio.SimpleAction({ name: 'save' });
         actionSave.connect('activate', () => {
-          if (appData.get('FILENAME') !== null) {
-            const data = File.rollUp();
-            File.save(appData.get('FILENAME'), data);
+          if (appData.get('FILENAME') != null && appData.get('FILENAME') != 'untitled') {
+            const data = myFile.rollUp();
+            myFile.save(appData.get('FILENAME'), data);
           } else {
             this.saveAs();
             try {
