@@ -82,8 +82,10 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         });
 
         this.connect('dataChanged', () => {
-          Results.sentLabel.set_text(Results.defSentStr);
-          Results.sendButton.set_sensitive(true);
+          if (Results.sentLabel) {
+            Results.sentLabel.set_text(Results.defSentStr);
+            Results.sendButton.set_sensitive(true);
+          }
         });
       }
 
