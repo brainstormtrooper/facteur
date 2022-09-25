@@ -13,6 +13,55 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         super._init();
       }
 
+      newConnection(app) {
+        const window = (app ? app._window : null);
+        // Create the dialog
+        this._dialog = new Gtk.Dialog({
+          transient_for: window,
+          modal: true,
+          title: 'New connection',
+        });
+        // Create the dialog's content area, which contains a message
+        this._contentArea = this._dialog.get_content_area();
+        this._message = new Gtk.Label(
+            // eslint-disable-next-line max-len
+            { label: 'Please configure your connectoin here.' },
+        );
+        this.settings = new Settings.UIsettings();
+        this.configFields = this.settings._buildNewConnection();
+        
+        this._contentArea.add(this._message);
+        this._contentArea.add(this.configFields);
+        // Handlers for button actions
+        const _OKHandler = () => {
+          // Destroy the dialog
+          this._dialog.destroy();
+        };
+
+        const _saveHandler = () => {
+          let ipv4 = false;
+          ipv4 = this.settings.ipv4Field.get_active();
+          Config.setIpv4(ipv4);
+          Config.setDelay(this.settings.delayField.get_text());
+          // Destroy the dialog
+          this._dialog.destroy();
+        };
+
+        // Create the dialog's action area, which contains a stock OK button
+        this._actionArea = this._dialog.get_action_area();
+        this.cancelButton = Gtk.Button.new_from_stock(Gtk.STOCK_CANCEL);
+        this._actionArea.add(this.cancelButton);
+        this.saveButton = new Gtk.Button({ label: Gettext.gettext('Save') });
+        this._actionArea.add(this.saveButton);
+
+        // Connect the button to the function that handles what it does
+        this.cancelButton.connect('clicked', _OKHandler.bind(this));
+        this.saveButton.connect('clicked', _saveHandler.bind(this));
+
+        this._dialog.show_all();
+
+      }
+
       showOpenModal(title, message, app = null) {
         const window = (app ? app._window : null);
 
