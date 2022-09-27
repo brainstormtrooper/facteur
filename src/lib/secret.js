@@ -6,7 +6,7 @@ const appData = new Data.Data();
 
 /* This schema is usually defined once globally */
 // eslint-disable-next-line new-cap
-const mySchema = Secret.Schema.new(appData.get('ID'),
+const mySchema = Secret.Schema.new(appData.get('APP'),
     Secret.SchemaFlags.NONE,
     {
       'type': Secret.SchemaAttributeType.STRING,
@@ -20,6 +20,21 @@ function onPasswordStored(source, result) {
   } else {
     log('failed to store password');
   }
+}
+
+function connPasswordSet(cid, password) {
+  Secret.password_store(
+      mySchema,
+      {
+        'type': 'emailingConnection',
+        'file': cid,
+      },
+      Secret.COLLECTION_DEFAULT,
+      'Facteur connection password',
+      password,
+      null,
+      onPasswordStored,
+  );
 }
 
 function passwordSet(password) {
@@ -46,3 +61,11 @@ function passwordGet() {
   appData.set('PASS', password);
 }
 
+function connPasswordGet(cid) {
+  const password = Secret.password_lookup_sync(
+      mySchema,
+      { 'type': 'emailingConnection', 'file': cid },
+      null,
+  );
+  return password;
+}

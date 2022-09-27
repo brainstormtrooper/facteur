@@ -2,6 +2,8 @@ const Gio = imports.gi.Gio;
 const Data = imports.object.Data;
 const appData = new Data.Data();
 
+const gConfig = getSettings(appData.get('APP'));
+
 /* eslint-disable no-unused-vars */
 
 function getSettings(schemaId, path) {
@@ -31,25 +33,26 @@ function getSettings(schemaId, path) {
   return new Gio.Settings(cnfblk);
 }
 
-function getIpv4() {
-  const config = getSettings(appData.get('ID'));
-
-  return config.get_boolean('force-ipv4');
+function getBoolean(key){
+  return gConfig.get_boolean(key);
 }
 
-function setIpv4(val) {
-  const config = getSettings(appData.get('ID'));
-
-  config.set_boolean('force-ipv4', val);
+function setBoolean(key, val){
+  gConfig.set_boolean(key, val);
 }
 
-function setDelay(delay) {
-  const config = getSettings(appData.get('ID'));
-  config.set_int('delay', delay);
+function getInt(key){
+  return gConfig.get_int(key);
 }
 
-function getDelay() {
-  const config = getSettings(appData.get('ID'));
+function setInt(key, val){
+  gConfig.set_int(key, val);
+}
 
-  return config.get_int('delay');
+function getString(key){
+  return gConfig.get_string(key);
+}
+
+function setString(key, val){
+  gConfig.set_string(key, val);
 }

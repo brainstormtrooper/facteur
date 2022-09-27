@@ -29,6 +29,19 @@ var password = 'password';
 // var hash = 'facteur';
 
 
+var connStr = `{
+	"ID": "abc123",
+	"NAME": "test connection 1",
+	"USER": "bob",
+	"HOST": "proto.domain.ext:1234",
+	"DELAY": "500",
+	"IPv4": "1",
+	"HEADERS": [
+		"x-api-key": "123abc"
+	]
+}`;
+
+
 // base64 from object?
 // WwoJCVsKCQkJInJlY2lwaWVudDFAZW1haWwuY29tIiwKCQkJInJpY2siLAoJCQkicmVkIGNhcnMiCgkJXSwKCQlbCgkJCSJyZWNpcGllbnQyQG90aGVyZW1haWwuY29tIiwKCQkJIlJpY2t5IiwKCQkJImZhc3QiCgkJXSwKCQlbCgkJCSJyZWNpcGllbnQzQGVtYWlsLmNvbSIsCgkJCSJCb2IiLAoJCQkibHV4dXJ5IgoJCV0KCV0=
 // base64 from JSON string

@@ -4,10 +4,11 @@ UI for displaying mailing settings
 const Gtk = imports.gi.Gtk;
 const Gio = imports.gi.Gio;
 const Gettext = imports.gettext;
-const Config = imports.lib.settings;
+const Settings = imports.object.Settings;
 const GObject = imports.gi.GObject;
 
 const Data = imports.object.Data;
+const Config = new Settings.Settings();
 const appData = new Data.Data();
 const Modal = imports.UI.Modal;
 
@@ -25,14 +26,17 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         super._init();
       }
 
-      _updateUI() {
+      _updateUI(obj) {
         try {
-          this.userField.set_text(appData.get('USER'));
-          this.passField.set_text(appData.get('PASS'));
-          this.smtpField.set_text(appData.get('HOST'));
-          this.subjectField.set_text(appData.get('SUBJECT'));
-          this.fromField.set_text(appData.get('FROM'));
-          this.delayField.set_text(appData.get('DELAY'));
+console.log(obj);
+          if (!obj) {
+            obj = {};
+          }
+          const sub = (obj.SUBJECT ? obj.SUBJECT : appData.get('SUBJECT'));
+          const conn = (obj.CONN ? obj.CONN : appData.get('CONN'));
+
+          this.sselectCombo.set_active_id(conn);
+          this.subjectField.set_text(sub);
         } catch (err) {
           logError(err);
         }
@@ -115,14 +119,22 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             { halign: Gtk.Align.START, label: Gettext.gettext('E-mail subject') },
         );
         
-
+        const availableCns = JSON.parse(Config.getConnections());
+        
         this.sselectCombo = new Gtk.ComboBoxText();
-        this.sselectCombo.insert(0, "0", "24-hour");
-        this.sselectCombo.insert(1, "1", "AM/PM");
+
+        if(availableCns.length >= 1) {
+          availableCns.forEach((v, k) => {
+            this.sselectCombo.insert(k, v.ID, v.NAME);
+          });
+        } else {
+          this.sselectCombo.insert(0, "0", "No Connections Available");
+        }
+        
 
         this.snewButton = new Gtk.Button({ label: Gettext.gettext('New') });
         this.snewButton.connect('clicked', () => {
-          myModal.newConnection();
+          myModal.newConnection(this);
         });
 
 
@@ -175,6 +187,9 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
       }
 
       _buildNewConnection(){
+
+        const ipv4 = Config.getIpv4();
+
         const vBox = new Gtk.Box(
           { orientation: Gtk.Orientation.VERTICAL, spacing: 6 },
         );
@@ -189,6 +204,15 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           spacing: 6,
           name: 'formbox',
           hexpand: false,
+        });
+
+        const namelabelBox = new Gtk.Box({
+          orientation: Gtk.Orientation.HORIZONTAL,
+          spacing: 6,
+        });
+        const nameBox = new Gtk.Box({
+          orientation: Gtk.Orientation.HORIZONTAL,
+          spacing: 6,
         });
         const fromlabelBox = new Gtk.Box({
           orientation: Gtk.Orientation.HORIZONTAL,
@@ -230,7 +254,20 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           orientation: Gtk.Orientation.HORIZONTAL,
           spacing: 6,
         });
+        const ipv4Box = new Gtk.Box(
+          { orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 },
+        );
+        const headerslabelBox = new Gtk.Box({
+          orientation: Gtk.Orientation.HORIZONTAL,
+          spacing: 6,
+        });
+        const headersBox = new Gtk.Box(
+          { orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 },
+        );
 
+        const namelabel = new Gtk.Label(
+          { halign: Gtk.Align.START, label: Gettext.gettext('Connection name') },
+        );
         const fromlabel = new Gtk.Label(
           { halign: Gtk.Align.START, label: Gettext.gettext('From e-mail') },
         );
@@ -248,7 +285,15 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           // eslint-disable-next-line max-len
           { halign: Gtk.Align.START, label: Gettext.gettext('Delay between sending emails (in millisaconds)') },
         );
+        const headerslabel = new Gtk.Label(
+          // eslint-disable-next-line max-len
+          { halign: Gtk.Align.START, label: Gettext.gettext('Extra headers to send with requests') },
+        );
 
+        this.nameField = new Gtk.Entry(
+          // eslint-disable-next-line max-len
+          { placeholder_text: Gettext.gettext('My Connection'), width_chars: 32 },
+        );
         this.fromField = new Gtk.Entry(
           // eslint-disable-next-line max-len
           { placeholder_text: Gettext.gettext('me@domain.ext'), width_chars: 32 },
@@ -280,7 +325,20 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           // eslint-disable-next-line max-len
           { placeholder_text: '1000', width_chars: 32, text: Config.getDelay().toString() },
         );
+        this.ipv4Field = new Gtk.CheckButton(
+          { label: Gettext.gettext('Force ipv4') },
+        );
+        this.headersField = new Gtk.Entry(
+          { placeholder_text: '[]', width_chars: 32 },
+        );
 
+        if (ipv4) {
+          this.ipv4Field.set_active(true);
+        }
+
+        
+        namelabelBox.pack_start(namelabel, false, false, 0);
+        nameBox.pack_start(this.nameField, false, false, 0);
         fromlabelBox.pack_start(fromlabel, false, false, 0);
         fromBox.pack_start(this.fromField, false, false, 0);
         smtplabelBox.pack_start(smtplabel, false, false, 0);
@@ -292,7 +350,12 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         passBox.pack_start(passButton, false, false, 0);
         delaylabelBox.pack_start(delaylabel, false, false, 0);
         delayBox.pack_start(this.delayField, false, false, 0);
+        ipv4Box.pack_start(this.ipv4Field, false, false, 0);
+        headerslabelBox.pack_start(headerslabel, false, false, 0);
+        headersBox.pack_start(this.headersField, false, false, 0);
 
+        formBox.pack_start(namelabelBox, false, false, 0);
+        formBox.pack_start(nameBox, false, false, 0);
         formBox.pack_start(fromlabelBox, false, false, 0);
         formBox.pack_start(fromBox, false, false, 0);
         formBox.pack_start(smtplabelBox, false, false, 0);
@@ -303,6 +366,9 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         formBox.pack_start(passBox, false, false, 0);
         formBox.pack_start(delaylabelBox, false, false, 0);
         formBox.pack_start(delayBox, false, false, 0);
+        formBox.pack_start(ipv4Box, false, false, 0);
+        formBox.pack_start(headerslabelBox, false, false, 0);
+        formBox.pack_start(headersBox, false, false, 0);
 
         hBox.set_center_widget(formBox);
         vBox.pack_start(hBox, true, true, 0);

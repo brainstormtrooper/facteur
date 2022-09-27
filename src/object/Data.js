@@ -10,15 +10,11 @@ var Data = class Data { // eslint-disable-line
     Data._instance = this;
 
     this._data = {
-      FROM: '',
-      USER: '',
-      PASS: '',
-      HOST: '',
+      CONN: '',
 
       SUBJECT: '',
       HTML: '',
       TEXT: '',
-      DELAY: '',
 
       TO: [],
       CSVA: [],
@@ -27,6 +23,7 @@ var Data = class Data { // eslint-disable-line
 
       FILEID: uuid.uuid(),
       FILENAME: 'untitled',
+      APP: 'com.github.brainstormtrooper.facteur',
       ID: '',
       SENT: '',
     };

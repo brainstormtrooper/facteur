@@ -1,6 +1,7 @@
 const Gtk = imports.gi.Gtk;
 const Settings = imports.UI.Settings;
 const Config = imports.lib.settings;
+const Connection = imports.object.Settings;
 const Gettext = imports.gettext;
 const GObject = imports.gi.GObject;
 
@@ -11,10 +12,11 @@ var UImodal = GObject.registerClass( // eslint-disable-line
     class UImodal extends GObject.Object {
       _init() {
         super._init();
+        // this.settings = new Settings.UIsettings();
       }
 
-      newConnection(app) {
-        const window = (app ? app._window : null);
+      newConnection(settings) {
+        const window = settings.App._window;
         // Create the dialog
         this._dialog = new Gtk.Dialog({
           transient_for: window,
@@ -27,8 +29,8 @@ var UImodal = GObject.registerClass( // eslint-disable-line
             // eslint-disable-next-line max-len
             { label: 'Please configure your connectoin here.' },
         );
-        this.settings = new Settings.UIsettings();
-        this.configFields = this.settings._buildNewConnection();
+        // this.settings = new Settings.UIsettings();
+        this.configFields = settings._buildNewConnection();
         
         this._contentArea.add(this._message);
         this._contentArea.add(this.configFields);
@@ -39,11 +41,18 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         };
 
         const _saveHandler = () => {
-          let ipv4 = false;
-          ipv4 = this.settings.ipv4Field.get_active();
-          Config.setIpv4(ipv4);
-          Config.setDelay(this.settings.delayField.get_text());
+          const myConnection = new Connection.Settings();
+          const CONN = myConnection.saveConnection(settings);
+          
+          settings.sselectCombo.insert(0, CONN, settings.nameField.get_text());
+
+          settings._updateUI({ CONN });
+          // let ipv4 = false;
+          // ipv4 = this.settings.ipv4Field.get_active();
+          // Config.setIpv4(ipv4);
+          // Config.setDelay(this.settings.delayField.get_text());
           // Destroy the dialog
+
           this._dialog.destroy();
         };
 
