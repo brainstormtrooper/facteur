@@ -172,14 +172,10 @@ console.log(obj);
         
 
         saveButton.connect('clicked', () => {
-          appData.set('USER', this.userField.get_text());
-          appData.set('PASS', this.passField.get_text());
-          appData.set('HOST', this.smtpField.get_text());
           appData.set('SUBJECT', this.subjectField.get_text());
-          appData.set('FROM', this.fromField.get_text());
-          appData.set('DELAY', this.delayField.get_text());
+          appData.set('CONN', this.sselectCombo.get_active_id());
           // eslint-disable-next-line max-len
-          const str = ` >>> SETTINGS: "${appData.get('USER')}", "${appData.get('HOST')}", "${appData.get('SUBJECT')}", "${appData.get('FROM')}"...`;
+          const str = ` >>> Started Mailing "${this.subjectField.get_text()}"...`;
           this.App.emit('Logger', str);
         });
 

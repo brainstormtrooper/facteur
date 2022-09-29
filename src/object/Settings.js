@@ -9,6 +9,11 @@ var Settings = class Settings { // eslint-disable-line
     return cns;
   }
 
+  getConnection(id) {
+    const cns = JSON.parse(this.getConnections());
+    return cns.find((c) => c.ID === id);
+  }
+
   setConnections(cnsstr) {
     Config.setString('connections', cnsstr);
   }
@@ -32,6 +37,7 @@ var Settings = class Settings { // eslint-disable-line
     const connection = {
         ID,
         NAME: obj.nameField.get_text(),
+        FROM: obj.fromField.get_text(),
         USER: obj.userField.get_text(),
         HOST: obj.smtpField.get_text(),
         DELAY: obj.delayField.get_text(),

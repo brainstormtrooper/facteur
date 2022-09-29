@@ -39,7 +39,8 @@ function iterRows(data) {
 
 function _positions(template) {
   const re = /{{([a-zA-Z0-9_]+)}}/g;
-  const res = template.match(re);
+  const positions = template.match(re)
+  res = (positions ? positions : []);
 
   return res;
 }

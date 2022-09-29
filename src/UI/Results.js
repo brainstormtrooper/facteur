@@ -45,13 +45,18 @@ var UIresults = GObject.registerClass( // eslint-disable-line
 
 
         this.sendButton.connect('clicked', async () => {
-          const res = await Message.compile();
-          if (res) {
-            Message.sendAll();
-          } else {
-            const e = new Error('Failed to compile template');
-            logError(e);
+          try {
+            const res = await Message.compile();
+            if (res) {
+              Message.sendAll();
+            } else {
+              const e = new Error('Failed to compile template');
+              logError(e);
+            }
+          } catch (error) {
+            logError(error);
           }
+          
         });
 
         return vBox;

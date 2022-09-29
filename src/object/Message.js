@@ -4,13 +4,14 @@ Message object.
 Create and send a compiled message.
 */
 const Gio = imports.gi.Gio;
-const Config = imports.lib.settings;
+const Settings = imports.object.Settings;
 const time = imports.lib.time;
 const Data = imports.object.Data;
 const myTemplate = imports.object.Template;
 const Template = new myTemplate.Template();
 const GObject = imports.gi.GObject;
 const appData = new Data.Data();
+const Config = new Settings.Settings();
 
 var Message = GObject.registerClass( // eslint-disable-line
     {
@@ -50,14 +51,17 @@ var Message = GObject.registerClass( // eslint-disable-line
       }
 
       sendAll() {
-        let delay = Config.getDelay();
-        if (appData.get('DELAY') != delay) {
-          delay = appData.get('DELAY');
-        }
+        this.curConn = Config.getConnection(appData.get('CONN'));
+        const delay = this.curConn.DELAY;
         appData.get('MAILINGS').forEach((mailing) => {
           // eslint-disable-next-line max-len
           const mobj = this.build(mailing.text, mailing.html.replace(/(\r\n|\n|\r)/gm, ''));
-          this.send(mobj, mailing.to);
+          try {
+            this.send(mobj, mailing.to);
+          } catch (error) {
+            logError(error);
+          }
+          
           this.sleep(delay);
         });
         appData.set('SENT', time.now());
@@ -94,16 +98,19 @@ var Message = GObject.registerClass( // eslint-disable-line
         const argv = ['curl',
           flagStr,
           // Option switches and values are separate args
-          '--mail-from', appData.get('FROM'),
-          '--url', appData.get('HOST'),
+          '--mail-from', this.curConn.FROM,
+          '--url', this.curConn.HOST,
           '--mail-rcpt', to,
           '-T', '-',
-          '--user', `${appData.get('USER')}:${appData.get('PASS')}`,
+          '--user', `${this.curConn.USER}:${this.curConn.PASS}`,
         ];
-        if (appData.get('HOST').toLowerCase().includes('https')) {
+        if (this.curConn.HOST.toLowerCase().includes('https')) {
           argv.push('--ssl-reqd');
         }
         try {
+
+console.log('argv : ', argv);
+
           const proc = new Gio.Subprocess({
             argv,
             flags: Gio.SubprocessFlags.STDIN_PIPE |
