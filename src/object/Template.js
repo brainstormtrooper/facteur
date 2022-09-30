@@ -14,12 +14,12 @@ var Template = GObject.registerClass( // eslint-disable-line
       GTypeName: 'Template',
     },
     class Template extends GObject.Object {
-      _init() {
+      _init () {
         super._init();
       }
       // METHODS
 
-      compile() {
+      compile () {
         return new Promise((resolve, reject) => {
           const res = myTemplate.iterRows(appData);
           if (res) {
@@ -35,7 +35,7 @@ var Template = GObject.registerClass( // eslint-disable-line
        * @param {string} path
        * @return {string} file contents
        */
-      async import(path) {
+      async import (path) {
         const str = await myFile.fopen(path);
 
         return str;

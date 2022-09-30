@@ -1,6 +1,6 @@
 
 /* eslint-disable no-unused-vars */
-function iterRows(data) {
+function iterRows (data) {
   data.get('MAILINGS').length = 0;
   for (let i = 0; i < data.get('CSVA').length; i++) {
     const row = data.get('CSVA')[i];
@@ -37,7 +37,7 @@ function iterRows(data) {
   return data.get('MAILINGS').length;
 }
 
-function _positions(template) {
+function _positions (template) {
   const re = /{{([a-zA-Z0-9_]+)}}/g;
   const positions = template.match(re)
   res = (positions ? positions : []);

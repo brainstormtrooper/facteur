@@ -6,7 +6,7 @@ const gConfig = getSettings(appData.get('APP'));
 
 /* eslint-disable no-unused-vars */
 
-function getSettings(schemaId, path) {
+function getSettings (schemaId, path) {
   const GioSSS = Gio.SettingsSchemaSource;
   let schemaSource;
 
@@ -30,29 +30,30 @@ function getSettings(schemaId, path) {
   if (path !== undefined) {
     cnfblk.path = path;
   }
-  return new Gio.Settings(cnfblk);
+  
+return new Gio.Settings(cnfblk);
 }
 
-function getBoolean(key){
+function getBoolean (key) {
   return gConfig.get_boolean(key);
 }
 
-function setBoolean(key, val){
+function setBoolean (key, val) {
   gConfig.set_boolean(key, val);
 }
 
-function getInt(key){
+function getInt (key) {
   return gConfig.get_int(key);
 }
 
-function setInt(key, val){
+function setInt (key, val) {
   gConfig.set_int(key, val);
 }
 
-function getString(key){
+function getString (key) {
   return gConfig.get_string(key);
 }
 
-function setString(key, val){
+function setString (key, val) {
   gConfig.set_string(key, val);
 }

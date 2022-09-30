@@ -25,7 +25,7 @@ var List = GObject.registerClass( // eslint-disable-line
       },
     },
     class List extends GObject.Object {
-      _init() {
+      _init () {
         super._init();
 
         //
@@ -54,7 +54,7 @@ var List = GObject.registerClass( // eslint-disable-line
       // METHODS
       //
 
-      verify(csva) {
+      verify (csva) {
         let res = true;
         if (csva[0][0] != 'address') {
           res = false;
@@ -67,7 +67,7 @@ var List = GObject.registerClass( // eslint-disable-line
        * Imports a new CSV file
        * @param {string} path
        */
-      import(path) {
+      import (path) {
         const strp = myFile.fopen(path);
         strp.then((str) => {
           this.csva = this.csvToArray(str);
@@ -94,7 +94,7 @@ var List = GObject.registerClass( // eslint-disable-line
       Sets the data for the gtk listview column count and headings
       based on first row of the CSV data array.
       */
-      dataHeadings() {
+      dataHeadings () {
         this.headers = this.csva[0];
         appData.set('VARS', this.headers);
         this.colcount = Object.keys(this.headers).length;
@@ -105,7 +105,7 @@ var List = GObject.registerClass( // eslint-disable-line
       http://www.electrictoolbox.com/loop-key-value-pairs-associative-array-javascript/
       Also removes the first row since it is only used for headers and vars...
       */
-      trimData() {
+      trimData () {
         this.csva.shift();
         for (let k = 0; k < this.csva.length; k++) {
           // app.ui.results._LOG('Trimming... : ' + this.csva[k]);
@@ -117,7 +117,7 @@ var List = GObject.registerClass( // eslint-disable-line
       }
 
 
-      csvToArray(data) {
+      csvToArray (data) {
         const re = /(,|\r?\n|\r|^)(?:"([^"]*(?:""[^"]*)*)"|([^,\r\n]*))/gi;
         const result = [[]];
         let matches;
@@ -132,7 +132,7 @@ var List = GObject.registerClass( // eslint-disable-line
         return result;
       }
 
-      CSV2JSON(csv) {
+      CSV2JSON (csv) {
         this.csva = this.csvToArray(csv);
         const objArray = [];
         for (let i = 1; i < this.csva.length; i++) {
@@ -152,11 +152,11 @@ var List = GObject.registerClass( // eslint-disable-line
       }
 
 
-      Clear() {
+      Clear () {
         return true;
       }
 
-      GetRow() {
+      GetRow () {
         return true;
       }
     },

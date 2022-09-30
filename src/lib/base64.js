@@ -4,7 +4,7 @@ var keyStr = "ABCDEFGHIJKLMNOP" +
                "wxyz0123456789+/" +
                "=";
 
-function encode64(input) {
+function encode64 (input) {
   input = encodeURI(input);
   var output = "";
   var chr1, chr2, chr3 = "";
@@ -38,7 +38,7 @@ function encode64(input) {
 
   return output;
 }
-function decode64(input) {
+function decode64 (input) {
   var output = "";
   var chr1, chr2, chr3 = "";
   var enc1, enc2, enc3, enc4 = "";

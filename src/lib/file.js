@@ -8,7 +8,7 @@ const appData = new Data.Data();
 
 /* eslint-disable no-unused-vars */
 
-function fopen(path) {
+function fopen (path) {
   return new Promise((resolve, reject) => {
     const file = Gio.File.new_for_path(path);
     // asynchronous file loading...
@@ -29,12 +29,12 @@ function fopen(path) {
   });
 }
 
-function save(path, data) {
+function save (path, data) {
   const dataStr = JSON.stringify(data, null, '\t');
   GLib.file_set_contents(path, dataStr);
 }
 
-function rollUp() {
+function rollUp () {
   secret.passwordSet(appData.get('PASS'));
   const roll = {
     FROM: appData.get('FROM'),
@@ -54,7 +54,7 @@ function rollUp() {
   return roll;
 }
 
-function verify(data) {
+function verify (data) {
   const required = [
     'FROM', 'USER', 'HOST', 'SUBJECT',
     'FILEID', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS', 'DELAY',
@@ -85,7 +85,7 @@ function verify(data) {
   return valid;
 }
 
-function unRoll(data) {
+function unRoll (data) {
 
 // console.log(JSON.parse(data));
 
@@ -108,12 +108,12 @@ function unRoll(data) {
   secret.passwordGet();
 }
 
-async function open(path) {
+async function open (path) {
   const contents = await fopen(path);
   
   return JSON.parse(contents);
 }
 
-function nameFromPath(path) {
+function nameFromPath (path) {
   return path.split('/')[-1];
 }

@@ -25,12 +25,12 @@ var UImailing = GObject.registerClass( // eslint-disable-line
       },
     },
     class UImailing extends GObject.Object {
-      _init() {
+      _init () {
         super._init();
       }
 
       // Build the application's UI
-      _buildUI() {
+      _buildUI () {
         this.App = Gio.Application.get_default();
         this.vBox = new Gtk.Box({
           orientation: Gtk.Orientation.VERTICAL,
@@ -51,7 +51,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
         });
         this.choosebutton.set_action(Gtk.FileChooserAction.OPEN);
 
-        this.choosebutton.connect('file-set', Lang.bind(this, function() {
+        this.choosebutton.connect('file-set', Lang.bind(this, function () {
           const path = this.choosebutton.get_file().get_path();
           // do something with path
           try {
@@ -62,7 +62,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
           this.App.emit('Logger', 'CSV File path is : ' + path);
         }));
 
-        this.list.connect('Import_error_sig', Lang.bind(this, function() {
+        this.list.connect('Import_error_sig', Lang.bind(this, function () {
           const myModal = new Modal.UImodal();
           myModal.showOpenModal(
               'Error',
@@ -72,7 +72,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
           );
         }));
 
-        this.list.connect('Updated_sig', Lang.bind(this, function() {
+        this.list.connect('Updated_sig', Lang.bind(this, function () {
           // app.ui.results._LOG('imported.');
           this.emit('Logger', 'imported...');
 
@@ -147,13 +147,13 @@ var UImailing = GObject.registerClass( // eslint-disable-line
 
         return this.vBox;
       }
-      _updateUI() {
+      _updateUI () {
         this.list.csva = appData.get('CSVA');
         this.list.headers = appData.get('VARS');
         this.updateTable();
       }
 
-      updateTable() {
+      updateTable () {
         let k;
         delete (this._listStore);
         this._listStore = new Gtk.ListStore();

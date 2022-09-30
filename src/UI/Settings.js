@@ -23,11 +23,11 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
       },
     },
     class UIsettings extends GObject.Object {
-      _init() {
+      _init () {
         super._init();
       }
 
-      _updateUI(obj) {
+      _updateUI (obj) {
         try {
 console.log(obj);
           if (!obj) {
@@ -43,7 +43,7 @@ console.log(obj);
         }
       }
 
-      _buildUI() {
+      _buildUI () {
         // https://developer.gnome.org/gtk3/stable/GtkEntry.html
         const myModal = new Modal.UImodal();
         this.App = Gio.Application.get_default();
@@ -183,7 +183,7 @@ console.log(obj);
         return vBox;
       }
 
-      _buildNewConnection(){
+      _buildNewConnection () {
 
         const ipv4 = Config.getIpv4();
 
@@ -373,7 +373,7 @@ console.log(obj);
         return vBox;
       }
 
-      _buildModal() {
+      _buildModal () {
         this.App = Gio.Application.get_default();
         const myModal = new Modal.UImodal();
         const vBox = new Gtk.Box(

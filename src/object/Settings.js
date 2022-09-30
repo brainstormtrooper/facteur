@@ -4,28 +4,30 @@ const secret = imports.lib.secret;
 
 var Settings = class Settings { // eslint-disable-line
 
-  getConnections() {
+  getConnections () {
     const cns = Config.getString('connections');
-    return cns;
+    
+return cns;
   }
 
-  getConnection(id) {
+  getConnection (id) {
     const cns = JSON.parse(this.getConnections());
-    return cns.find((c) => c.ID === id);
+    
+return cns.find((c) => c.ID === id);
   }
 
-  setConnections(cnsstr) {
+  setConnections (cnsstr) {
     Config.setString('connections', cnsstr);
   }
 
-  addConnection(cobj) {
+  addConnection (cobj) {
     const cns = JSON.parse(this.getConnections());
     cns.push(cobj);
     const cnsstr = JSON.stringify(cns);
     this.setConnections(cnsstr);
   }
 
-  saveConnection(obj) {
+  saveConnection (obj) {
 
     const ID = uuid.uuid();
 
@@ -52,19 +54,19 @@ var Settings = class Settings { // eslint-disable-line
     return ID;
   }
 
-  getIpv4() {
+  getIpv4 () {
     return Config.getBoolean('force-ipv4');
   }
   
-  setIpv4(val) {
+  setIpv4 (val) {
     Config.setBoolean('force-ipv4', val);
   }
   
-  setDelay(delay) {
+  setDelay (delay) {
     Config.setInt('delay', delay);
   }
   
-  getDelay() {
+  getDelay () {
     return Config.getInt('delay');
   }
 }

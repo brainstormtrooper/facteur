@@ -3,7 +3,7 @@ const Gio = imports.gi.Gio;
 
 var Data = class Data { // eslint-disable-line
 
-  constructor() {
+  constructor () {
     if (Data._instance) {
       return Data._instance;
     }
@@ -29,18 +29,18 @@ var Data = class Data { // eslint-disable-line
     };
   }
 
-  set(key, value) {
+  set (key, value) {
     if (this._data[key] != value && Gio.Application.get_default()) {
       Gio.Application.get_default().emit('dataChanged', true);
     }
     this._data[key] = value;
   }
 
-  get(key) {
+  get (key) {
     return this._data[key];
   }
 
-  push(arrayKey, value) {
+  push (arrayKey, value) {
     this._data[arrayKey].push(value);
   }
 };

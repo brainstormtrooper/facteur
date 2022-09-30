@@ -13,12 +13,12 @@ var UImodal = GObject.registerClass( // eslint-disable-line
       GTypeName: 'UImodal',
     },
     class UImodal extends GObject.Object {
-      _init() {
+      _init () {
         super._init();
         // this.settings = new Settings.UIsettings();
       }
 
-      newConnection(settings) {
+      newConnection (settings) {
         const window = settings.App._window;
         // Create the dialog
         this._dialog = new Gtk.Dialog({
@@ -74,7 +74,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
 
       }
 
-      showOpenModal(title, message, app = null) {
+      showOpenModal (title, message, app = null) {
         const window = (app ? app._window : null);
 
         const label = new Gtk.Label({
@@ -91,7 +91,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
           use_header_bar: false,
         });
 
-        modal.connect('response', function() {
+        modal.connect('response', function () {
           modal.destroy();
         });
 
@@ -109,7 +109,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         modal.show_all();
       }
 
-      config(app) {
+      config (app) {
         const window = (app ? app._window : null);
         // Create the dialog
         this._dialog = new Gtk.Dialog({
@@ -163,7 +163,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         this._dialog.show_all();
       }
 
-      about(app) {
+      about (app) {
         const window = (app ? app._window : null);
         const aboutDialog = new Gtk.AboutDialog(
             {

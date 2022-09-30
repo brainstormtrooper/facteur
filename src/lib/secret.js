@@ -14,7 +14,7 @@ const mySchema = Secret.Schema.new(appData.get('APP'),
     },
 );
 
-function onPasswordStored(source, result) {
+function onPasswordStored (source, result) {
   if (Secret.password_store_finish(result)) {
     log('stored password');
   } else {
@@ -22,7 +22,7 @@ function onPasswordStored(source, result) {
   }
 }
 
-function connPasswordSet(cid, password) {
+function connPasswordSet (cid, password) {
   Secret.password_store(
       mySchema,
       {
@@ -37,7 +37,7 @@ function connPasswordSet(cid, password) {
   );
 }
 
-function passwordSet(password) {
+function passwordSet (password) {
   Secret.password_store(
       mySchema,
       {
@@ -52,7 +52,7 @@ function passwordSet(password) {
   );
 }
 
-function passwordGet() {
+function passwordGet () {
   const password = Secret.password_lookup_sync(
       mySchema,
       { 'type': 'emailing', 'file': appData.get('FILEID') },
@@ -61,11 +61,12 @@ function passwordGet() {
   appData.set('PASS', password);
 }
 
-function connPasswordGet(cid) {
+function connPasswordGet (cid) {
   const password = Secret.password_lookup_sync(
       mySchema,
       { 'type': 'emailingConnection', 'file': cid },
       null,
   );
-  return password;
+  
+return password;
 }

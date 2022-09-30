@@ -26,7 +26,7 @@ var Message = GObject.registerClass( // eslint-disable-line
       },
     },
     class Message extends GObject.Object {
-      _init() {
+      _init () {
         super._init();
         // eslint-disable-next-line max-len
         this.boundary = [...Array(16)].map(() => Math.random().toString(36)[2]).join('');
@@ -35,11 +35,11 @@ var Message = GObject.registerClass( // eslint-disable-line
 
       // METHODS
 
-      async compile() {
+      async compile () {
         return await Template.compile();
       }
 
-      sleep(milliseconds) {
+      sleep (milliseconds) {
         const timeStart = new Date().getTime();
         // eslint-disable-next-line
         while (true) {
@@ -50,7 +50,7 @@ var Message = GObject.registerClass( // eslint-disable-line
         }
       }
 
-      sendAll() {
+      sendAll () {
         this.curConn = Config.getConnection(appData.get('CONN'));
         const delay = this.curConn.DELAY;
         appData.get('MAILINGS').forEach((mailing) => {
@@ -68,7 +68,7 @@ var Message = GObject.registerClass( // eslint-disable-line
         this.App.emit('Sent', true);
       }
 
-      build(t, h) {
+      build (t, h) {
         // eslint-disable-next-line max-len
         const subBlock = `Subject: ${appData.get('SUBJECT')}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
         // eslint-disable-next-line max-len
@@ -78,7 +78,7 @@ var Message = GObject.registerClass( // eslint-disable-line
         return res;
       }
 
-      preview() {
+      preview () {
         return true;
       }
 
@@ -87,7 +87,7 @@ var Message = GObject.registerClass( // eslint-disable-line
       // https://www.mailjet.com/feature/smtp-relay/
       // https://stackoverflow.com/questions/44728855/curl-send-html-email-with-embedded-image-and-attachment
       //
-      async send(msgObj, to, cancellable = null) {
+      async send (msgObj, to, cancellable = null) {
         this.App = Gio.Application.get_default();
         const ipv4 = Config.getIpv4();
         let flagStr = '-svk';
