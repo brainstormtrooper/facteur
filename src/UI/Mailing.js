@@ -154,7 +154,6 @@ var UImailing = GObject.registerClass( // eslint-disable-line
       }
 
       updateTable() {
-        console.log('updating table');
         let k;
         delete (this._listStore);
         this._listStore = new Gtk.ListStore();

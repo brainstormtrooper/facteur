@@ -6,6 +6,7 @@ const Gio = imports.gi.Gio;
 const Gettext = imports.gettext;
 const Settings = imports.object.Settings;
 const GObject = imports.gi.GObject;
+const Pango = imports.gi.Pango;
 
 const Data = imports.object.Data;
 const Config = new Settings.Settings();
@@ -373,6 +374,8 @@ console.log(obj);
       }
 
       _buildModal() {
+        this.App = Gio.Application.get_default();
+        const myModal = new Modal.UImodal();
         const vBox = new Gtk.Box(
             { orientation: Gtk.Orientation.VERTICAL, spacing: 6 },
         );
@@ -387,6 +390,25 @@ console.log(obj);
             { orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 },
         );
 
+
+        // Connection selection
+
+        const sselectlabelBox = new Gtk.Box({
+          orientation: Gtk.Orientation.HORIZONTAL,
+          spacing: 6,
+        });
+        const sselectBox = new Gtk.Box({
+          orientation: Gtk.Orientation.HORIZONTAL,
+          spacing: 6,
+        });
+        const sButtonBox = new Gtk.ButtonBox({
+          orientation: Gtk.Orientation.HORIZONTAL,
+          layout_style: Gtk.ButtonBoxStyle.START,
+          spacing: 6,
+        });
+
+        // /Selection
+
         this.ipv4Field = new Gtk.CheckButton(
             { label: Gettext.gettext('Force ipv4') },
         );
@@ -395,14 +417,56 @@ console.log(obj);
             { halign: Gtk.Align.START, label: Gettext.gettext('sending delay in milliseconds') },
         );
         this.delayField = new Gtk.Entry({ placeholder_text: '1000' });
+        const cfgSselectlabel = new Gtk.Label(
+          { halign: Gtk.Align.START, label: Gettext.gettext('Select a server connection') },
+        );
+
+        const availableCns = JSON.parse(Config.getConnections());
+        
+        this.cfgSselectCombo = new Gtk.ComboBoxText();
+
+        if(availableCns.length >= 1) {
+          availableCns.forEach((v, k) => {
+            this.cfgSselectCombo.insert(k, v.ID, v.NAME);
+          });
+        } else {
+          this.cfgSselectCombo.insert(0, "0", "No Connections Available");
+        }
+        this.cfgSdeleteButton = new Gtk.Button({ label: Gettext.gettext('Delete') });
+        this.cfgSdeleteButton.connect('clicked', () => {
+          console.log('DELETE pressed');
+        });
+        this.cfgSeditButton = new Gtk.Button({ label: Gettext.gettext('Edit') });
+        this.cfgSeditButton.connect('clicked', () => {
+          console.log('EDIT pressed');
+          
+        });
+        this.cfgSexportButton = new Gtk.Button({ label: Gettext.gettext('Export') });
+        this.cfgSexportButton.connect('clicked', () => {
+          console.log('EXPORT pressed');
+        });
+        this.cfgSnewButton = new Gtk.Button({ label: Gettext.gettext('New') });
+        this.cfgSnewButton.connect('clicked', () => {
+          console.log(this);
+          myModal.newConnection(this);
+        });
 
         ipv4Box.pack_start(this.ipv4Field, false, false, 0);
         delayLabelBox.pack_start(this.delayLabel, false, false, 0);
         delayBox.pack_start(this.delayField, false, false, 0);
+        sselectlabelBox.pack_start(cfgSselectlabel, false, false, 0);
+        sselectBox.pack_start(this.cfgSselectCombo, false, false, 0);
+        sButtonBox.pack_start(this.cfgSdeleteButton, false, false, 0);
+        sButtonBox.pack_start(this.cfgSeditButton, false, false, 0);
+        sButtonBox.pack_start(this.cfgSexportButton, false, false, 0);
+        sButtonBox.pack_start(this.cfgSnewButton, false, false, 0);
 
         vBox.pack_start(ipv4Box, false, false, 0);
         vBox.pack_start(delayLabelBox, false, false, 0);
         vBox.pack_start(delayBox, false, false, 0);
+        vBox.pack_start(sselectlabelBox, false, false, 0);
+        vBox.pack_start(sselectBox, false, false, 0);
+        vBox.pack_start(sButtonBox, false, false, 0);
 
         return vBox;
       }

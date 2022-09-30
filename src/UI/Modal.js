@@ -1,9 +1,12 @@
 const Gtk = imports.gi.Gtk;
 const Settings = imports.UI.Settings;
-const Config = imports.lib.settings;
+// const Config = imports.lib.settings;
 const Connection = imports.object.Settings;
 const Gettext = imports.gettext;
 const GObject = imports.gi.GObject;
+const Config = new imports.object.Settings.Settings();
+
+
 
 var UImodal = GObject.registerClass( // eslint-disable-line
     {
