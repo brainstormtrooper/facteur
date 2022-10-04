@@ -7,17 +7,31 @@ var Settings = class Settings { // eslint-disable-line
   getConnections () {
     const cns = Config.getString('connections');
     
-return cns;
+    return cns;
   }
 
   getConnection (id) {
     const cns = JSON.parse(this.getConnections());
     
-return cns.find((c) => c.ID === id);
+    return cns.find((c) => c.ID === id);
   }
 
   setConnections (cnsstr) {
     Config.setString('connections', cnsstr);
+  }
+
+  deleteConnection(id) {
+    let cns = JSON.parse(this.getConnections());
+    cns = cns.filter( el => el.ID !== id );
+    this.setConnections(JSON.stringify(cns));
+  }
+
+  updateConnection(cobj) {
+    let cns = JSON.parse(this.getConnections());
+    // cconn = cns.find((c) => c.ID === cobj.ID);
+    cns = cns.filter(el => el.ID !== cobj.ID);
+    cns.push(cobj);
+    this.setConnections(JSON.stringify(cns));
   }
 
   addConnection (cobj) {
@@ -27,9 +41,9 @@ return cns.find((c) => c.ID === id);
     this.setConnections(cnsstr);
   }
 
-  saveConnection (obj) {
+  saveConnection (obj, id) {
 
-    const ID = uuid.uuid();
+    const ID = (id ? id : uuid.uuid());
 
     let IPv4 = 0;
     if (obj.ipv4Field.get_active()) {
@@ -47,9 +61,16 @@ return cns.find((c) => c.ID === id);
         HEADERS: obj.headersField.get_text()
     }
 
-    secret.connPasswordSet(ID, obj.passField.get_text());
+    if (obj.passField.get_text() != '') {
+      secret.connPasswordSet(ID, obj.passField.get_text());
+    }
 
-    this.addConnection(connection);
+    if (id) {
+      this.updateConnection(connection);
+    } else {
+      this.addConnection(connection);
+    }
+    
 
     return ID;
   }

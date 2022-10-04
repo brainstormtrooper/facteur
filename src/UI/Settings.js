@@ -29,14 +29,24 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
 
       _updateUI (obj) {
         try {
-console.log(obj);
           if (!obj) {
             obj = {};
           }
           const sub = (obj.SUBJECT ? obj.SUBJECT : appData.get('SUBJECT'));
           const conn = (obj.CONN ? obj.CONN : appData.get('CONN'));
 
-          this.sselectCombo.set_active_id(conn);
+          this.sselectCombo.remove_all();
+
+          const availableCns = JSON.parse(Config.getConnections());
+
+          if(availableCns.length >= 1) {
+            availableCns.forEach((v, k) => {
+              this.sselectCombo.insert(k, v.ID, v.NAME);
+            });
+            this.sselectCombo.set_active_id(conn);
+          } else {
+            this.sselectCombo.insert(0, "0", "No Connections Available");
+          }
           this.subjectField.set_text(sub);
         } catch (err) {
           logError(err);
@@ -183,9 +193,14 @@ console.log(obj);
         return vBox;
       }
 
-      _buildNewConnection () {
-
-        const ipv4 = Config.getIpv4();
+      _buildNewConnection (connId = null) {
+        let myConn = null;
+        let ipv4 = Config.getIpv4();
+        if (connId != null) {
+          myConn = Config.getConnection(connId);
+          // ipv4 = (myConn.ipv4 == 1 ? true : false);
+          ipv4 = myConn.ipv4;
+        } 
 
         const vBox = new Gtk.Box(
           { orientation: Gtk.Orientation.VERTICAL, spacing: 6 },
@@ -333,6 +348,17 @@ console.log(obj);
           this.ipv4Field.set_active(true);
         }
 
+        console.log('myConn : ', myConn);
+
+        if (myConn) {
+          this.nameField.set_text(myConn.NAME);
+          this.fromField.set_text(myConn.FROM);
+          this.smtpField.set_text(myConn.HOST);
+          this.userField.set_text(myConn.USER);
+          this.delayField.set_text(myConn.DELAY);
+          this.headersField.set_text(myConn.HEADERS);
+        }
+
         
         namelabelBox.pack_start(namelabel, false, false, 0);
         nameBox.pack_start(this.nameField, false, false, 0);
@@ -373,9 +399,39 @@ console.log(obj);
         return vBox;
       }
 
+      reallyDelete() {
+        Config.deleteConnection(this.sselectCombo.get_active_id());
+        this.sselectCombo.remove_all();
+
+        const availableCns = JSON.parse(Config.getConnections());
+
+        if(availableCns.length >= 1) {
+          availableCns.forEach((v, k) => {
+            this.sselectCombo.insert(k, v.ID, v.NAME);
+          });
+        } else {
+          this.sselectCombo.insert(0, "0", "No Connections Available");
+        }
+      }
+
       _buildModal () {
         this.App = Gio.Application.get_default();
         const myModal = new Modal.UImodal();
+
+        /*
+        // Set menu actions
+        const actionConnDelete = new Gio.SimpleAction({ name: 'deleteConnection' });
+        actionConnDelete.connect('activate', () => {
+          this.reallyDelete();
+          
+        });
+        this.App.add_action(actionConnDelete);
+
+        const deleteConfirm = new Gio.Menu();
+        // const section = new Gio.Menu();
+        deleteConfirm.append(Gettext.gettext('Confirm Delete'), 'app.deleteConnection');
+        // deleteConfirm.append_section(null, section);
+        */
         const vBox = new Gtk.Box(
             { orientation: Gtk.Orientation.VERTICAL, spacing: 6 },
         );
@@ -409,37 +465,36 @@ console.log(obj);
 
         // /Selection
 
-        this.ipv4Field = new Gtk.CheckButton(
+        this.defIpv4Field = new Gtk.CheckButton(
             { label: Gettext.gettext('Force ipv4') },
         );
         this.delayLabel = new Gtk.Label(
             // eslint-disable-next-line max-len
             { halign: Gtk.Align.START, label: Gettext.gettext('sending delay in milliseconds') },
         );
-        this.delayField = new Gtk.Entry({ placeholder_text: '1000' });
+        this.defDelayField = new Gtk.Entry({ placeholder_text: '1000' });
         const cfgSselectlabel = new Gtk.Label(
           { halign: Gtk.Align.START, label: Gettext.gettext('Select a server connection') },
         );
 
         const availableCns = JSON.parse(Config.getConnections());
         
-        this.cfgSselectCombo = new Gtk.ComboBoxText();
+        this.sselectCombo = new Gtk.ComboBoxText();
 
         if(availableCns.length >= 1) {
           availableCns.forEach((v, k) => {
-            this.cfgSselectCombo.insert(k, v.ID, v.NAME);
+            this.sselectCombo.insert(k, v.ID, v.NAME);
           });
         } else {
-          this.cfgSselectCombo.insert(0, "0", "No Connections Available");
+          this.sselectCombo.insert(0, "0", "No Connections Available");
         }
-        this.cfgSdeleteButton = new Gtk.Button({ label: Gettext.gettext('Delete') });
-        this.cfgSdeleteButton.connect('clicked', () => {
-          console.log('DELETE pressed');
-        });
+        
+        this.cfgSdeleteButton = new Gtk.MenuButton({ label: Gettext.gettext('Delete') });
+        
         this.cfgSeditButton = new Gtk.Button({ label: Gettext.gettext('Edit') });
         this.cfgSeditButton.connect('clicked', () => {
-          console.log('EDIT pressed');
-          
+          console.log('EDIT pressed', this.sselectCombo.get_active_id());
+          myModal.editConnection(this, this.sselectCombo.get_active_id())
         });
         this.cfgSexportButton = new Gtk.Button({ label: Gettext.gettext('Export') });
         this.cfgSexportButton.connect('clicked', () => {
@@ -447,15 +502,34 @@ console.log(obj);
         });
         this.cfgSnewButton = new Gtk.Button({ label: Gettext.gettext('New') });
         this.cfgSnewButton.connect('clicked', () => {
-          console.log(this);
           myModal.newConnection(this);
         });
 
-        ipv4Box.pack_start(this.ipv4Field, false, false, 0);
+        
+        this.reallyDeleteButton = new Gtk.Button({ label: Gettext.gettext('Confirm Delete') });
+        this.reallyDeleteButton.connect('clicked', () => {
+          this.reallyDelete();
+          this.popDelete.hide();
+        });
+        
+        const deleteConfirm = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
+        // const section = new Gio.Menu();
+        deleteConfirm.pack_start(this.reallyDeleteButton, false, false, 0);
+        // deleteConfirm.append_section(null, section);
+        deleteConfirm.show_all();
+        this.popDelete = new Gtk.Popover();
+        this.cfgSdeleteButton.set_popover(this.popDelete);
+        this.popDelete.set_size_request(-1, -1);
+
+        this.popDelete.add(deleteConfirm);
+
+
+
+        ipv4Box.pack_start(this.defIpv4Field, false, false, 0);
         delayLabelBox.pack_start(this.delayLabel, false, false, 0);
-        delayBox.pack_start(this.delayField, false, false, 0);
+        delayBox.pack_start(this.defDelayField, false, false, 0);
         sselectlabelBox.pack_start(cfgSselectlabel, false, false, 0);
-        sselectBox.pack_start(this.cfgSselectCombo, false, false, 0);
+        sselectBox.pack_start(this.sselectCombo, false, false, 0);
         sButtonBox.pack_start(this.cfgSdeleteButton, false, false, 0);
         sButtonBox.pack_start(this.cfgSeditButton, false, false, 0);
         sButtonBox.pack_start(this.cfgSexportButton, false, false, 0);

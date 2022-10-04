@@ -18,6 +18,53 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         // this.settings = new Settings.UIsettings();
       }
 
+      editConnection (settings, connId) {
+        const window = settings.App._window;
+        // Create the dialog
+        this._dialog = new Gtk.Dialog({
+          transient_for: window,
+          modal: true,
+          title: 'Edit connection',
+        });
+        this._contentArea = this._dialog.get_content_area();
+        this._message = new Gtk.Label(
+            // eslint-disable-next-line max-len
+            { label: 'Please configure your connectoin here.' },
+        );
+        // this.settings = new Settings.UIsettings();
+        this.configFields = settings._buildNewConnection(connId);
+        
+        this._contentArea.add(this._message);
+        this._contentArea.add(this.configFields);
+        // Handlers for button actions
+        const _OKHandler = () => {
+          // Destroy the dialog
+          this._dialog.destroy();
+        };
+
+        const _saveHandler = () => {
+          const myConnection = new Connection.Settings();
+          const CONN = myConnection.saveConnection(settings, connId);
+          
+          settings.App.emit('update_ui', true);
+          this._dialog.destroy();
+        };
+
+        // Create the dialog's action area, which contains a stock OK button
+        this._actionArea = this._dialog.get_action_area();
+        this.cancelButton = Gtk.Button.new_from_stock(Gtk.STOCK_CANCEL);
+        this._actionArea.add(this.cancelButton);
+        this.saveButton = new Gtk.Button({ label: Gettext.gettext('Save') });
+        this._actionArea.add(this.saveButton);
+
+        // Connect the button to the function that handles what it does
+        this.cancelButton.connect('clicked', _OKHandler.bind(this));
+        this.saveButton.connect('clicked', _saveHandler.bind(this));
+
+        this._dialog.show_all();
+
+      }
+
       newConnection (settings) {
         const window = settings.App._window;
         // Create the dialog
@@ -47,9 +94,9 @@ var UImodal = GObject.registerClass( // eslint-disable-line
           const myConnection = new Connection.Settings();
           const CONN = myConnection.saveConnection(settings);
           
-          settings.sselectCombo.insert(0, CONN, settings.nameField.get_text());
-
-          settings._updateUI({ CONN });
+          // settings.sselectCombo.insert(0, CONN, settings.nameField.get_text());
+          settings.App.emit('update_ui', true);
+          // settings._updateUI({ CONN });
           // let ipv4 = false;
           // ipv4 = this.settings.ipv4Field.get_active();
           // Config.setIpv4(ipv4);
@@ -129,22 +176,24 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         this.configFields = this.settings._buildModal();
         const ipv4 = Config.getIpv4();
         if (ipv4) {
-          this.settings.ipv4Field.set_active(true);
+          this.settings.defIpv4Field.set_active(true);
         }
-        this.settings.delayField.set_text(Config.getDelay().toString());
+        this.settings.defDelayField.set_text(Config.getDelay().toString());
         this._contentArea.add(this._message);
         this._contentArea.add(this.configFields);
         // Handlers for button actions
         const _OKHandler = () => {
+          app.emit('update_ui', true);
           // Destroy the dialog
           this._dialog.destroy();
         };
 
         const _saveHandler = () => {
           let ipv4 = false;
-          ipv4 = this.settings.ipv4Field.get_active();
+          ipv4 = this.settings.defIpv4Field.get_active();
           Config.setIpv4(ipv4);
-          Config.setDelay(this.settings.delayField.get_text());
+          Config.setDelay(this.settings.defDelayField.get_text());
+          app.emit('update_ui', true);
           // Destroy the dialog
           this._dialog.destroy();
         };
