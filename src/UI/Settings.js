@@ -46,19 +46,22 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             const delay = (obj.DELAY ? obj.DELAY : conn.DELAY);
             const ipv4 = (obj.IPv4 ? obj.IPv4 : conn.IPv4);
             const headers = (obj.HEADERS ? obj.HEADERS : conn.HEADERS);
-
-            this.nameField.set_text(name);
-            this.fromField.set_text(from);
-            this.smtpField.set_text(host);
-            this.userField.set_text(user);
-            if (pass) {
-              this.passField.set_text(pass);
+            if (this.nameField) {
+              this.nameField.set_text(name);
+              this.fromField.set_text(from);
+              this.smtpField.set_text(host);
+              this.userField.set_text(user);
+              if (pass) {
+                this.passField.set_text(pass);
+              }
+              this.delayField.set_text(delay);
+              if (ipv4) {
+                this.ipv4Field.set_active(true);
+              }
+              this.headersField.set_text(headers);
             }
-            this.delayField.set_text(delay);
-            if (ipv4) {
-              this.ipv4Field.set_active(true);
-            }
-            this.headersField.set_text(headers);
+            
+            
           }
           
           this.sselectCombo.remove_all();
