@@ -34,6 +34,14 @@ function save (path, data) {
   GLib.file_set_contents(path, dataStr);
 }
 
+function rollConn (conn, savePW) {
+  if (savePW) {
+    conn.PASS = secret.connPasswordGet(conn.ID);
+  }
+
+  return conn;
+}
+
 function rollUp () {
   secret.passwordSet(appData.get('PASS'));
   const roll = {

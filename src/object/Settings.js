@@ -24,6 +24,7 @@ var Settings = class Settings { // eslint-disable-line
     let cns = JSON.parse(this.getConnections());
     cns = cns.filter( el => el.ID !== id );
     this.setConnections(JSON.stringify(cns));
+    secret.connPasswordDelete(id);
   }
 
   updateConnection(cobj) {

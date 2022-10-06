@@ -22,6 +22,26 @@ function onPasswordStored (source, result) {
   }
 }
 
+function onPasswordCleared (source, result) {
+  if (Secret.password_clear_finish(result)) {
+    log('deleted password');
+  } else {
+    log('failed to delete password');
+  }
+}
+
+function connPasswordDelete (cid) {
+  Secret.password_clear(
+      mySchema,
+      {
+        'type': 'emailingConnection',
+        'file': cid,
+      },
+      null,
+      onPasswordCleared,
+  );
+}
+
 function connPasswordSet (cid, password) {
   Secret.password_store(
       mySchema,

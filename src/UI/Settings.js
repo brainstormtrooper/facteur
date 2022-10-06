@@ -12,6 +12,7 @@ const Data = imports.object.Data;
 const Config = new Settings.Settings();
 const appData = new Data.Data();
 const Modal = imports.UI.Modal;
+const myFile = imports.lib.file;
 
 var UIsettings = GObject.registerClass( // eslint-disable-line
     {
@@ -33,8 +34,33 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             obj = {};
           }
           const sub = (obj.SUBJECT ? obj.SUBJECT : appData.get('SUBJECT'));
-          const conn = (obj.CONN ? obj.CONN : appData.get('CONN'));
+          const connId = (obj.CONN ? obj.CONN : appData.get('CONN'));
 
+          if (connId || obj.ID) {
+            const conn = (obj.ID ? obj : Config.getConnection(connId));
+            const name = (obj.NAME ? obj.NAME : conn.NAME);
+            const from = (obj.FROM ? obj.FROM : conn.FROM);
+            const host = (obj.HOST ? obj.HOST : conn.HOST);
+            const user = (obj.USER ? obj.USER : conn.USER);
+            const pass = (obj.PASS ? obj.PASS : false);
+            const delay = (obj.DELAY ? obj.DELAY : conn.DELAY);
+            const ipv4 = (obj.IPv4 ? obj.IPv4 : conn.IPv4);
+            const headers = (obj.HEADERS ? obj.HEADERS : conn.HEADERS);
+
+            this.nameField.set_text(name);
+            this.fromField.set_text(from);
+            this.smtpField.set_text(host);
+            this.userField.set_text(user);
+            if (pass) {
+              this.passField.set_text(pass);
+            }
+            this.delayField.set_text(delay);
+            if (ipv4) {
+              this.ipv4Field.set_active(true);
+            }
+            this.headersField.set_text(headers);
+          }
+          
           this.sselectCombo.remove_all();
 
           const availableCns = JSON.parse(Config.getConnections());
@@ -43,11 +69,13 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             availableCns.forEach((v, k) => {
               this.sselectCombo.insert(k, v.ID, v.NAME);
             });
-            this.sselectCombo.set_active_id(conn);
+            this.sselectCombo.set_active_id(connId);
           } else {
             this.sselectCombo.insert(0, "0", "No Connections Available");
           }
-          this.subjectField.set_text(sub);
+          if (sub) {
+            this.subjectField.set_text(sub);
+          }
         } catch (err) {
           logError(err);
         }
@@ -218,6 +246,26 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           hexpand: false,
         });
 
+        const chooseBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
+        const choosebutton = new Gtk.FileChooserButton(
+          { title: Gettext.gettext('Import a connection') },
+        );
+        const chooselabel = new Gtk.Label(
+            { halign: Gtk.Align.START, label: Gettext.gettext('Open a file') },
+        );
+        choosebutton.set_action(Gtk.FileChooserAction.OPEN);
+        choosebutton.connect('file-set', async () => {
+          const path = choosebutton.get_file().get_path();
+          // do something with path
+          this.App.emit('Logger', `Importing connection from : ${path}`);
+          const promise = myFile.open(path);
+          promise.then((content) => {
+            this._updateUI(content);
+          }).catch((e) => {
+            console.log(e);
+          });
+          
+        });
         const namelabelBox = new Gtk.Box({
           orientation: Gtk.Orientation.HORIZONTAL,
           spacing: 6,
@@ -350,6 +398,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
 
         console.log('myConn : ', myConn);
 
+        /*
         if (myConn) {
           this.nameField.set_text(myConn.NAME);
           this.fromField.set_text(myConn.FROM);
@@ -358,8 +407,11 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           this.delayField.set_text(myConn.DELAY);
           this.headersField.set_text(myConn.HEADERS);
         }
+        */
 
-        
+        chooseBox.pack_end(choosebutton, false, false, 0);
+        chooseBox.pack_end(chooselabel, false, false, 0);
+
         namelabelBox.pack_start(namelabel, false, false, 0);
         nameBox.pack_start(this.nameField, false, false, 0);
         fromlabelBox.pack_start(fromlabel, false, false, 0);
@@ -377,6 +429,9 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         headerslabelBox.pack_start(headerslabel, false, false, 0);
         headersBox.pack_start(this.headersField, false, false, 0);
 
+        if (!connId) {
+          formBox.pack_start(chooseBox, false, false, 0);
+        }
         formBox.pack_start(namelabelBox, false, false, 0);
         formBox.pack_start(nameBox, false, false, 0);
         formBox.pack_start(fromlabelBox, false, false, 0);
@@ -396,7 +451,38 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         hBox.set_center_widget(formBox);
         vBox.pack_start(hBox, true, true, 0);
 
+        if (myConn) {
+          this._updateUI(myConn);
+        }
+
         return vBox;
+      }
+
+      exportConnection() {
+        const saver = new Gtk.FileChooserDialog(
+          { title: 'Select a destination' },
+        );
+        saver.set_action(Gtk.FileChooserAction.SAVE);
+        const WP = appData.get('FILENAME').split('/');
+        const filename = WP.pop();
+        saver.set_current_name(filename);
+        try {
+          const foldername = `/${WP.join('/')}`;
+          saver.set_current_folder(foldername);
+        } catch (e) {
+          logError(e);
+        }
+
+        saver.add_button('save', Gtk.ResponseType.ACCEPT);
+        saver.add_button('cancel', Gtk.ResponseType.CANCEL);
+        const res = saver.run();
+        if (res == Gtk.ResponseType.ACCEPT) {
+          const savePW = this.exportPasswordField.get_active();
+          const conn = Config.getConnection(this.sselectCombo.get_active_id());
+          const data = myFile.rollConn(conn, savePW);
+          myFile.save(saver.get_filename(), data);
+        }
+        saver.destroy();
       }
 
       reallyDelete() {
@@ -496,7 +582,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           console.log('EDIT pressed', this.sselectCombo.get_active_id());
           myModal.editConnection(this, this.sselectCombo.get_active_id())
         });
-        this.cfgSexportButton = new Gtk.Button({ label: Gettext.gettext('Export') });
+        this.cfgSexportButton = new Gtk.MenuButton({ label: Gettext.gettext('Export') });
         this.cfgSexportButton.connect('clicked', () => {
           console.log('EXPORT pressed');
         });
@@ -505,7 +591,30 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           myModal.newConnection(this);
         });
 
+        this.reallyExportButton = new Gtk.Button({ label: Gettext.gettext('Save As') });
+        this.reallyExportButton.connect('clicked', () => {
+
+          const savePW = this.exportPasswordField.get_active();
+          this.exportConnection(savePW);
+          this.popExport.hide();
+        });
+        this.exportPasswordField = new Gtk.CheckButton(
+            { label: Gettext.gettext('Export password') },
+        );
         
+        const exportConfirm = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
+        exportConfirm.pack_start(this.exportPasswordField, false, false, 0);
+        exportConfirm.pack_start(this.reallyExportButton, false, false, 0);
+        // deleteConfirm.append_section(null, section);
+        exportConfirm.show_all();
+        this.popExport = new Gtk.Popover();
+        this.cfgSexportButton.set_popover(this.popExport);
+        this.popExport.set_size_request(-1, -1);
+
+        this.popExport.add(exportConfirm);
+
+
+
         this.reallyDeleteButton = new Gtk.Button({ label: Gettext.gettext('Confirm Delete') });
         this.reallyDeleteButton.connect('clicked', () => {
           this.reallyDelete();
