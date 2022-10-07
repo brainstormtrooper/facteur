@@ -69,6 +69,12 @@ function verify (data) {
     'FILEID', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS',
   ];
   let valid = true;
+/*
+  const legacy = ['HOST', 'USER', 'FROM', 'SUBJECT',
+  'FILEID', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS',];
+*/
+  
+
   required.forEach((key) => {
     // eslint-disable-next-line no-prototype-builtins
     if (!data.hasOwnProperty(key)) {
@@ -102,6 +108,9 @@ function unRoll (data) {
     const bfe = new Error('Bad file');
     throw bfe;
   }
+
+
+
   appData.set('CONN', data.CONN);
   appData.set('SUBJECT', data.SUBJECT);
   appData.set('HTML', data.HTML);

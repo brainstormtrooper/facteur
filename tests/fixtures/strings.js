@@ -37,17 +37,33 @@ var connStr = `{
 	"DELAY": "500",
 	"IPv4": "1",
 	"HEADERS": [
-		"x-api-key": "123abc"
+		"x-api-key: 123abc"
 	]
 }`;
 
+var fileWithConn = `{
+	"CONN": "75df39cb-6cf9-44ea-9dbe-2c5bbf320df6",
+	"SUBJECT": "Test Mailing",
+	"HTML": "<h1>Hi {{name}}!</h1><p>this is text about {{likes}}</p>",
+	"TEXT": "{{name}}, {{likes}}",
+	"TO": [
+		"recipient1@email.com",
+		"recipient2@otheremail.com",
+		"recipient3@email.com",
+		""
+	],
+	"CSVA": "JTVCJTVCJTIycmVjaXBpZW50MUBlbWFpbC5jb20lMjIsJTIyQm9iJTIyLCUyMnJlZCUyMGNhcnMlMjIlNUQsJTVCJTIycmVjaXBpZW50MkBvdGhlcmVtYWlsLmNvbSUyMiwlMjJUb20lMjIsJTIyUG9yY2hlcywlMjBhbmQlMjBGZXJyYXJpcyUyMiU1RCwlNUIlMjJyZWNpcGllbnQzQGVtYWlsLmNvbSUyMiwlMjJTYW0lMjIsJTIyVHJ1Y2tzLCUyMGFuZCUyMFNVVnMlMjIlNUQsJTVCJTIyJTIyJTVEJTVE",
+	"VARS": [
+		"address",
+		"name",
+		"likes"
+	],
+	"FILEID": "27c95efd-5ab3-4350-a4e8-3320fe0ccae4",
+	"SENT": ""
+}`;
 
-// base64 from object?
-// WwoJCVsKCQkJInJlY2lwaWVudDFAZW1haWwuY29tIiwKCQkJInJpY2siLAoJCQkicmVkIGNhcnMiCgkJXSwKCQlbCgkJCSJyZWNpcGllbnQyQG90aGVyZW1haWwuY29tIiwKCQkJIlJpY2t5IiwKCQkJImZhc3QiCgkJXSwKCQlbCgkJCSJyZWNpcGllbnQzQGVtYWlsLmNvbSIsCgkJCSJCb2IiLAoJCQkibHV4dXJ5IgoJCV0KCV0=
+
 // base64 from JSON string
-// JTVCJTVCJTIycmVjaXBpZW50MUBlbWFpbC5jb20lMjIsJTIycmljayUyMiwlMjJyZWQlMjBjYXJzJTIyJTVELCU1QiUyMnJlY2lwaWVudDJAb3RoZXJlbWFpbC5jb20lMjIsJTIyUmlja3klMjIsJTIyZmFzdCUyMiU1RCwlNUIlMjJyZWNpcGllbnQzQGVtYWlsLmNvbSUyMiwlMjJCb2IlMjIsJTIybHV4dXJ5JTIyJTVEJTVE
-
-
 var fileStr64 = `{
 	"FROM": "sender@email.com",
 	"USER": "username",

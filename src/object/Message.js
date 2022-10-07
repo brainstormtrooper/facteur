@@ -109,8 +109,6 @@ var Message = GObject.registerClass( // eslint-disable-line
         }
         try {
 
-console.log('argv : ', argv);
-
           const proc = new Gio.Subprocess({
             argv,
             flags: Gio.SubprocessFlags.STDIN_PIPE |

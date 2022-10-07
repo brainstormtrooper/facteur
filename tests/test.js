@@ -30,6 +30,8 @@ const testContents = imports.test_contents;
 const testMessages = imports.test_message;
 const testFiles = imports.test_files;
 
+const testConnections = imports.test_connections;
+
 testRecipients.testConvert();
 testContents.testContent();
 testMessages.testMessage(fileInfo[1]);
