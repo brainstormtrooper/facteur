@@ -30,7 +30,7 @@ var Message = GObject.registerClass( // eslint-disable-line
         super._init();
         // eslint-disable-next-line max-len
         this.boundary = [...Array(16)].map(() => Math.random().toString(36)[2]).join('');
-        this.App = Gio.Application.get_default();
+        
       }
 
       // METHODS
@@ -51,6 +51,7 @@ var Message = GObject.registerClass( // eslint-disable-line
       }
 
       sendAll () {
+        this.App = Gio.Application.get_default();
         this.curConn = Config.getConnection(appData.get('CONN'));
         const delay = this.curConn.DELAY;
         appData.get('MAILINGS').forEach((mailing) => {

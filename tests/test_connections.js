@@ -4,10 +4,10 @@ const GObject = imports.gi.GObject;
 
 const mini = imports.minijasmine;
     
-  describe("A suite", function() {
-    it("contains spec with an expectation", function() {
-      expect(true).toBe(true);
-    });
+describe("Connections tests", function() {
+  it("contains spec with an expectation", function() {
+    expect(true).toBe(true);
   });
+});
 
  

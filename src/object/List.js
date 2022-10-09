@@ -97,7 +97,7 @@ var List = GObject.registerClass( // eslint-disable-line
       dataHeadings () {
         this.headers = this.csva[0];
         appData.set('VARS', this.headers);
-        this.colcount = Object.keys(this.headers).length;
+        thistrimData.colcount = Object.keys(this.headers).length;
       }
 
       /**
