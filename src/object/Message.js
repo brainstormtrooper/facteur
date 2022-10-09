@@ -4,13 +4,14 @@ Message object.
 Create and send a compiled message.
 */
 const Gio = imports.gi.Gio;
-const Config = imports.lib.settings;
+const Settings = imports.object.Settings;
 const time = imports.lib.time;
 const Data = imports.object.Data;
 const myTemplate = imports.object.Template;
 const Template = new myTemplate.Template();
 const GObject = imports.gi.GObject;
 const appData = new Data.Data();
+const Config = new Settings.Settings();
 
 var Message = GObject.registerClass( // eslint-disable-line
     {
@@ -25,20 +26,20 @@ var Message = GObject.registerClass( // eslint-disable-line
       },
     },
     class Message extends GObject.Object {
-      _init() {
+      _init () {
         super._init();
         // eslint-disable-next-line max-len
         this.boundary = [...Array(16)].map(() => Math.random().toString(36)[2]).join('');
-        this.App = Gio.Application.get_default();
+        
       }
 
       // METHODS
 
-      async compile() {
+      async compile () {
         return await Template.compile();
       }
 
-      sleep(milliseconds) {
+      sleep (milliseconds) {
         const timeStart = new Date().getTime();
         // eslint-disable-next-line
         while (true) {
@@ -49,22 +50,26 @@ var Message = GObject.registerClass( // eslint-disable-line
         }
       }
 
-      sendAll() {
-        let delay = Config.getDelay();
-        if (appData.get('DELAY') != delay) {
-          delay = appData.get('DELAY');
-        }
+      sendAll () {
+        this.App = Gio.Application.get_default();
+        this.curConn = Config.getConnection(appData.get('CONN'));
+        const delay = this.curConn.DELAY;
         appData.get('MAILINGS').forEach((mailing) => {
           // eslint-disable-next-line max-len
           const mobj = this.build(mailing.text, mailing.html.replace(/(\r\n|\n|\r)/gm, ''));
-          this.send(mobj, mailing.to);
+          try {
+            this.send(mobj, mailing.to);
+          } catch (error) {
+            logError(error);
+          }
+          
           this.sleep(delay);
         });
         appData.set('SENT', time.now());
         this.App.emit('Sent', true);
       }
 
-      build(t, h) {
+      build (t, h) {
         // eslint-disable-next-line max-len
         const subBlock = `Subject: ${appData.get('SUBJECT')}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
         // eslint-disable-next-line max-len
@@ -74,7 +79,7 @@ var Message = GObject.registerClass( // eslint-disable-line
         return res;
       }
 
-      preview() {
+      preview () {
         return true;
       }
 
@@ -83,7 +88,7 @@ var Message = GObject.registerClass( // eslint-disable-line
       // https://www.mailjet.com/feature/smtp-relay/
       // https://stackoverflow.com/questions/44728855/curl-send-html-email-with-embedded-image-and-attachment
       //
-      async send(msgObj, to, cancellable = null) {
+      async send (msgObj, to, cancellable = null) {
         this.App = Gio.Application.get_default();
         const ipv4 = Config.getIpv4();
         let flagStr = '-svk';
@@ -94,16 +99,17 @@ var Message = GObject.registerClass( // eslint-disable-line
         const argv = ['curl',
           flagStr,
           // Option switches and values are separate args
-          '--mail-from', appData.get('FROM'),
-          '--url', appData.get('HOST'),
+          '--mail-from', this.curConn.FROM,
+          '--url', this.curConn.HOST,
           '--mail-rcpt', to,
           '-T', '-',
-          '--user', `${appData.get('USER')}:${appData.get('PASS')}`,
+          '--user', `${this.curConn.USER}:${this.curConn.PASS}`,
         ];
-        if (appData.get('HOST').toLowerCase().includes('https')) {
+        if (this.curConn.HOST.toLowerCase().includes('https')) {
           argv.push('--ssl-reqd');
         }
         try {
+
           const proc = new Gio.Subprocess({
             argv,
             flags: Gio.SubprocessFlags.STDIN_PIPE |

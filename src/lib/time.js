@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 
-function now() {
+function now () {
   return Date.now();
 }
 
-function humanDate(stamp) {
+function humanDate (stamp) {
   const sent = new Date(stamp);
 
   return sent.toLocaleTimeString();

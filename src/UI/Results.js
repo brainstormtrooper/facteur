@@ -11,13 +11,13 @@ var UIresults = GObject.registerClass( // eslint-disable-line
       GTypeName: 'UIresults',
     },
     class UIresults extends GObject.Object {
-      _init() {
+      _init () {
         super._init();
         this.textBuffer = new Gtk.TextBuffer();
         this.defSentStr = Gettext.gettext('Not yet sent');
       }
 
-      _buildUI() {
+      _buildUI () {
         const vBox = new Gtk.Box({
           orientation: Gtk.Orientation.VERTICAL, spacing: 6,
         });
@@ -45,19 +45,24 @@ var UIresults = GObject.registerClass( // eslint-disable-line
 
 
         this.sendButton.connect('clicked', async () => {
-          const res = await Message.compile();
-          if (res) {
-            Message.sendAll();
-          } else {
-            const e = new Error('Failed to compile template');
-            logError(e);
+          try {
+            const res = await Message.compile();
+            if (res) {
+              Message.sendAll();
+            } else {
+              const e = new Error('Failed to compile template');
+              logError(e);
+            }
+          } catch (error) {
+            logError(error);
           }
+          
         });
 
         return vBox;
       }
 
-      _LOG(string, level = 'INFO') {
+      _LOG (string, level = 'INFO') {
         const entry = `[${level}] ${string} \r\n`;
         const len = encodeURI(entry).split(/%..|./).length - 1;
         this.textBuffer.insert(this.textBuffer.get_end_iter(), entry, len);

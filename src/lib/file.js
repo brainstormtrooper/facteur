@@ -8,7 +8,7 @@ const appData = new Data.Data();
 
 /* eslint-disable no-unused-vars */
 
-function fopen(path) {
+function fopen (path) {
   return new Promise((resolve, reject) => {
     const file = Gio.File.new_for_path(path);
     // asynchronous file loading...
@@ -29,24 +29,33 @@ function fopen(path) {
   });
 }
 
-function save(path, data) {
+function save (path, data) {
   const dataStr = JSON.stringify(data, null, '\t');
   GLib.file_set_contents(path, dataStr);
 }
 
-function rollUp() {
-  secret.passwordSet(appData.get('PASS'));
+function rollConn (conn, savePW) {
+  if (savePW) {
+    conn.PASS = secret.connPasswordGet(conn.ID);
+  }
+
+  return conn;
+}
+
+function rollUp () {
+  // secret.passwordSet(appData.get('PASS'));
   const roll = {
-    FROM: appData.get('FROM'),
-    USER: appData.get('USER'),
-    HOST: appData.get('HOST'),
+    // FROM: appData.get('FROM'),
+    // USER: appData.get('USER'),
+    // HOST: appData.get('HOST'),
+    CONN: appData.get('CONN'),
     SUBJECT: appData.get('SUBJECT'),
     HTML: appData.get('HTML'),
     TEXT: appData.get('TEXT'),
     TO: appData.get('TO'),
     CSVA: base64.encode64(JSON.stringify(appData.get('CSVA'))),
     VARS: appData.get('VARS'),
-    DELAY: appData.get('DELAY'),
+    // DELAY: appData.get('DELAY'),
     FILEID: appData.get('FILEID'),
     SENT: appData.get('SENT'),
   };
@@ -54,12 +63,18 @@ function rollUp() {
   return roll;
 }
 
-function verify(data) {
+function verify (data) {
   const required = [
-    'FROM', 'USER', 'HOST', 'SUBJECT',
-    'FILEID', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS', 'DELAY',
+    'CONN', 'SUBJECT',
+    'FILEID', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS',
   ];
   let valid = true;
+/*
+  const legacy = ['HOST', 'USER', 'FROM', 'SUBJECT',
+  'FILEID', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS',];
+*/
+  
+
   required.forEach((key) => {
     // eslint-disable-next-line no-prototype-builtins
     if (!data.hasOwnProperty(key)) {
@@ -85,7 +100,7 @@ function verify(data) {
   return valid;
 }
 
-function unRoll(data) {
+function unRoll (data) {
 
 // console.log(JSON.parse(data));
 
@@ -93,27 +108,28 @@ function unRoll(data) {
     const bfe = new Error('Bad file');
     throw bfe;
   }
-  appData.set('FROM', data.FROM);
-  appData.set('USER', data.USER);
-  appData.set('HOST', data.HOST);
+
+
+
+  appData.set('CONN', data.CONN);
   appData.set('SUBJECT', data.SUBJECT);
   appData.set('HTML', data.HTML);
   appData.set('TEXT', data.TEXT);
   appData.set('TO', data.TO);
   appData.set('CSVA', JSON.parse(base64.decode64(data.CSVA)));
   appData.set('VARS', data.VARS);
-  appData.set('DELAY', data.DELAY);
   appData.set('FILEID', data.FILEID);
   appData.set('SENT', data.SENT);
-  secret.passwordGet();
+
+  
 }
 
-async function open(path) {
+async function open (path) {
   const contents = await fopen(path);
   
   return JSON.parse(contents);
 }
 
-function nameFromPath(path) {
+function nameFromPath (path) {
   return path.split('/')[-1];
 }

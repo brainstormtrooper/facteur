@@ -27,11 +27,11 @@ var Menubar = GObject.registerClass( // eslint-disable-line
       },
     },
     class Menubar extends GObject.Object {
-      _init() {
+      _init () {
         super._init();
       }
 
-      PopWidget(properties) {
+      PopWidget (properties) {
         const label = new Gtk.Label({ label: properties.label });
         const image = new Gtk.Image(
             {
@@ -62,7 +62,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
         this.pop.add(properties.widget);
       }
 
-      getHeader(app) {
+      getHeader (app) {
         const headerBar = new Gtk.HeaderBar();
         this.App = Gio.Application.get_default();
         headerBar.set_title('Facteur (Gnome Emailer)');
@@ -158,7 +158,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
         return headerBar;
       }
 
-      getPopOpen() { // Widget popover
+      getPopOpen () { // Widget popover
         const widget = new Gtk.Grid();
         const label = new Gtk.Label({ label: 'Label 1' });
         const button = new Gtk.Button({ label: 'Other Documents ...' });
@@ -176,7 +176,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
         return widget;
       }
 
-      saveAs() {
+      saveAs () {
         const saver = new Gtk.FileChooserDialog(
             { title: 'Select a destination' },
         );
@@ -204,7 +204,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
       }
 
 
-      getSettingsMenu(app) {
+      getSettingsMenu (app) {
         const menu = new Gio.Menu();
         const section = new Gio.Menu();
         section.append('Preferences', 'app.preferences');
@@ -226,7 +226,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
         return menu;
       }
 
-      getFileMenu(app) { // GMenu popover
+      getFileMenu (app) { // GMenu popover
         const menu = new Gio.Menu();
 
         const section = new Gio.Menu();

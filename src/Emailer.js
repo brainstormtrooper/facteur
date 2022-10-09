@@ -38,7 +38,7 @@ var Facteur = GObject.registerClass( // eslint-disable-line
       },
     },
     class Facteur extends Gtk.Application {
-      _init() {
+      _init () {
         this.ID = 'com.github.brainstormtrooper.facteur';
         super._init({
           application_id: this.ID,
@@ -90,30 +90,30 @@ var Facteur = GObject.registerClass( // eslint-disable-line
       }
 
 
-      vfunc_activate() {
+      vfunc_activate () {
         this._window.present();
       }
 
-      vfunc_startup() {
+      vfunc_startup () {
         super.vfunc_startup();
         appData.set('ID', this.ID);
         this._buildUI();
       }
 
-      vfunc_shutdown() {
+      vfunc_shutdown () {
         // this._destroyUI();
         // TODO: see what cleanup needs to be done and create function
         super.vfunc_shutdown();
       }
 
-      updateUI() {
+      updateUI () {
         Settings._updateUI();
         Mailing._updateUI();
         Contents._updateUI();
       }
 
       // Build the application's UI
-      _buildUI() {
+      _buildUI () {
         // Create the application window
         this._window = new Gtk.ApplicationWindow({
           application: this,

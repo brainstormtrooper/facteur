@@ -15,5 +15,12 @@
         Default wait time in milliseconds between sending emails.
       </description>
     </key>
+    <key name="connections" type="s">
+      <default>'[]'</default>
+      <summary>Saved connections</summary>
+      <description>
+        List of saved connections (JSON string).
+      </description>
+    </key>
   </schema>
 </schemalist>

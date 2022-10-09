@@ -22,18 +22,18 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
       },
     },
     class UIcontents extends GObject.Object {
-      _init() {
+      _init () {
         super._init();
       }
 
-      _updateUI() {
+      _updateUI () {
         let len = encodeURI(appData.get('HTML')).split(/%..|./).length - 1;
         this.htmlBuffer.set_text(appData.get('HTML'), len);
         len = encodeURI(appData.get('TEXT')).split(/%..|./).length - 1;
         this.textBuffer.set_text(appData.get('TEXT'), len);
       }
 
-      _buildUI() {
+      _buildUI () {
         const vBox = new Gtk.Box(
             { orientation: Gtk.Orientation.VERTICAL, spacing: 6 },
         );
