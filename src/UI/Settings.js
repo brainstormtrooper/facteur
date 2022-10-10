@@ -461,7 +461,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         return vBox;
       }
 
-      exportConnection() {
+      exportConnection () {
         const saver = new Gtk.FileChooserDialog(
           { title: 'Select a destination' },
         );
@@ -488,7 +488,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         saver.destroy();
       }
 
-      reallyDelete() {
+      reallyDelete () {
         Config.deleteConnection(this.sselectCombo.get_active_id());
         this.sselectCombo.remove_all();
 
@@ -582,12 +582,12 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         
         this.cfgSeditButton = new Gtk.Button({ label: Gettext.gettext('Edit') });
         this.cfgSeditButton.connect('clicked', () => {
-          console.log('EDIT pressed', this.sselectCombo.get_active_id());
+          // console.log('EDIT pressed', this.sselectCombo.get_active_id());
           myModal.editConnection(this, this.sselectCombo.get_active_id())
         });
         this.cfgSexportButton = new Gtk.MenuButton({ label: Gettext.gettext('Export') });
         this.cfgSexportButton.connect('clicked', () => {
-          console.log('EXPORT pressed');
+          // console.log('EXPORT pressed');
         });
         this.cfgSnewButton = new Gtk.Button({ label: Gettext.gettext('New') });
         this.cfgSnewButton.connect('clicked', () => {

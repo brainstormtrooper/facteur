@@ -20,14 +20,14 @@ var Settings = class Settings { // eslint-disable-line
     Config.setString('connections', cnsstr);
   }
 
-  deleteConnection(id) {
+  deleteConnection (id) {
     let cns = JSON.parse(this.getConnections());
     cns = cns.filter( el => el.ID !== id );
     this.setConnections(JSON.stringify(cns));
     secret.connPasswordDelete(id);
   }
 
-  updateConnection(cobj) {
+  updateConnection (cobj) {
     let cns = JSON.parse(this.getConnections());
     // cconn = cns.find((c) => c.ID === cobj.ID);
     cns = cns.filter(el => el.ID !== cobj.ID);
