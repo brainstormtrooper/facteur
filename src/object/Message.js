@@ -4,6 +4,7 @@ Message object.
 Create and send a compiled message.
 */
 const Gio = imports.gi.Gio;
+const Soup = imports.gi.Soup;
 const Settings = imports.object.Settings;
 const time = imports.lib.time;
 const Data = imports.object.Data;
@@ -81,6 +82,24 @@ var Message = GObject.registerClass( // eslint-disable-line
 
       preview () {
         return true;
+      }
+
+
+      async soupSend(msgObj, to) {
+        this.App = Gio.Application.get_default();
+        // const ipv4 = Config.getIpv4();
+        let httpSession = new Soup.Session();
+        httpSession.user_agent = 'blah'
+        let authUri = new Soup.URI(url);
+        authUri.set_user(this.handle);
+        authUri.set_password(this.token);
+        let message = new Soup.Message({method: 'GET', uri: authUri});
+
+        let authManager = new Soup.AuthManager();
+        let auth = new Soup.AuthBasic({host: 'api.github.com', realm: 'Github Api'});
+
+        Soup.Session.prototype.add_feature.call(httpSession, authManager);
+        httpSession.queue_message(message, function() {});
       }
 
       //
