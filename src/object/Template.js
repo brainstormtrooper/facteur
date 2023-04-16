@@ -30,15 +30,5 @@ var Template = GObject.registerClass( // eslint-disable-line
           }
         });
       }
-      /**
-       * opens or imports a file
-       * @param {string} path
-       * @return {string} file contents
-       */
-      async import (path) {
-        const str = await myFile.fopen(path);
-
-        return str;
-      }
     },
 );

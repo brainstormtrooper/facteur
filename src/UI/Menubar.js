@@ -65,89 +65,65 @@ var Menubar = GObject.registerClass( // eslint-disable-line
       getHeader (app) {
         const headerBar = new Gtk.HeaderBar();
         this.App = Gio.Application.get_default();
-        headerBar.set_title('Facteur (Gnome Emailer)');
+
+        // headerBar.set_title('Facteur (Gnome Emailer)');
         // https://tecnocode.co.uk/misc/platform-demos/tooltip.js.xhtml
-        headerBar.set_subtitle('Untitled Mailing');
-        headerBar.set_show_close_button(true);
+        // headerBar.set_subtitle('Untitled Mailing');
+        headerBar.set_show_title_buttons(true)
 
-        const headerStart = new Gtk.Grid({ column_spacing: headerBar.spacing });
+        const headerStart = new Gtk.Grid({ column_spacing: 6 });
+  
+        const opener = new Gtk.FileDialog({ title: 'Select a file' });
+        const buttonNew = Gtk.Button.new_from_icon_name('document-open-symbolic');
+        buttonNew.connect('clicked', async () => {
+          try {
 
-
-        const imageNew = new Gtk.Image(
-            {
-              icon_name: 'document-open-symbolic',
-              icon_size: Gtk.IconSize.SMALL_TOOLBAR,
-            },
-        );
-        const buttonNew = new Gtk.Button({ image: imageNew });
-        buttonNew.connect('clicked', () => {
-          const opener = new Gtk.FileChooserDialog({ title: 'Select a file' });
-          opener.set_action(Gtk.FileChooserAction.OPEN);
-          opener.add_button('open', Gtk.ResponseType.ACCEPT);
-          opener.add_button('cancel', Gtk.ResponseType.CANCEL);
-          const res = opener.run();
-
-          if (res == Gtk.ResponseType.ACCEPT) {
-            appData.set('FILENAME', opener.get_filename());
-            const promise = myFile.open(appData.get('FILENAME'));
-            promise.then((fileData) => {
-              try {
-                myFile.unRoll(fileData);
-                this.App.emit('update_ui', true);
-                // eslint-disable-next-line max-len
-                this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);
-                this.App.emit('filename_changed', true);
-              } catch (error) {
-                logError(error);
-                // const myModal = new Modal.UImodal();
-                myModal.showOpenModal(
-                    'Error',
-                    Gettext.gettext(
-                        'Error opening file. Not a valid emailer file',
-                    ),
-                    app,
+            opener.open(null, null, async (o, r) => {
+           
+            try {
+              
+              const res = await o.open_finish(r);
+              appData.set('FILENAME', res.get_basename());
+             const [, contents] = res.load_contents(null)
+              log(contents);
+              myFile.unRoll(contents);
+              this.App.emit('update_ui', true);
+              // eslint-disable-next-line max-len
+              this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);
+              this.App.emit('filename_changed', true);
+            } catch (error) {
+              logError(error);
+              // const myModal = new Modal.UImodal();
+              myModal.showOpenModal(
+                  'Error',
+                  Gettext.gettext(
+                      'Error opening file. Not a valid emailer file',
+                  ),
+                  app,
                 );
               }
-            })
-                .catch((error) => {
-                  logError(error);
-                  // const myModal = new Modal.UImodal();
-                  myModal.showOpenModal(
-                      'Error',
-                      Gettext.gettext(
-                          'Error opening file. Not a valid emailer file',
-                      ),
-                      app,
-                  );
-                });
+            });
+          } catch (error) {
+            logError(error);
           }
-          opener.destroy();
+          
         });
 
         headerStart.attach(buttonNew, 1, 0, 1, 1);
         headerBar.pack_start(headerStart);
 
         const popMenu = new Gtk.Popover();
-        const imageMenu = new Gtk.Image(
-            {
-              icon_name: 'document-save-symbolic',
-              icon_size: Gtk.IconSize.SMALL_TOOLBAR,
-            },
-        );
-        const buttonMenu = new Gtk.MenuButton({ image: imageMenu });
+        
+        const buttonMenu = new Gtk.MenuButton({ 'icon-name': 'document-save-symbolic' });
+        // const buttonMenu = new Gtk.MenuButton({ image: imageMenu });
         buttonMenu.set_popover(popMenu);
         popMenu.set_size_request(-1, -1);
         buttonMenu.set_menu_model(this.getFileMenu(app));
 
 
         const configMenu = new Gtk.Popover();
-        const imageConfig = new Gtk.Image(
-            {
-              icon_name: 'open-menu-symbolic',
-              icon_size: Gtk.IconSize.SMALL_TOOLBAR,
-            },
-        );
-        const buttonConfig = new Gtk.MenuButton({ image: imageConfig });
+        
+        const buttonConfig = new Gtk.MenuButton({ 'icon-name': 'open-menu-symbolic' });
         buttonConfig.set_popover(configMenu);
         configMenu.set_size_request(-1, -1);
         buttonConfig.set_menu_model(this.getSettingsMenu(app));

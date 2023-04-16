@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-imports.gi.versions.Gtk = '3.0';
+imports.gi.versions.Gtk = '4.0';
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
@@ -46,7 +46,7 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         });
         GLib.set_prgname(this.application_id);
         GLib.set_application_name('Facteur');
-
+        
         /*
         Signals
         */
@@ -91,6 +91,8 @@ var Facteur = GObject.registerClass( // eslint-disable-line
 
 
       vfunc_activate () {
+        // Create the application window
+        
         this._window.present();
       }
 
@@ -114,17 +116,18 @@ var Facteur = GObject.registerClass( // eslint-disable-line
 
       // Build the application's UI
       _buildUI () {
-        // Create the application window
         this._window = new Gtk.ApplicationWindow({
           application: this,
           title: 'Facteur',
-          default_height: 200,
-          default_width: 400,
-          window_position: Gtk.WindowPosition.CENTER,
+          default_height: 400,
+          default_width: 600
         });
-
-        this._window.set_events('GDK_ENTER_NOTIFY_MASK');
+        
+        // how to do this in gtk4 (if needed)
+        /*
+        this._window.connect('GDK_ENTER_NOTIFY_MASK');
         this._window.add_events('GDK_LEAVE_NOTIFY_MASK');
+        */
 
         //
         // menu bar
@@ -193,15 +196,15 @@ var Facteur = GObject.registerClass( // eslint-disable-line
 
         // UI._buildStack();
 
-        this._Hbox.pack_start(this._stack_switcher, true, true, 0);
-        this._Vbox.pack_start(this._Hbox, false, false, 0);
-        this._Vbox.pack_start(this._Stack, true, true, 0);
+        this._Hbox.prepend(this._stack_switcher);
+        this._Vbox.prepend(this._Hbox);
+        this._Vbox.prepend(this._Stack);
 
         // Show the vbox widget
-        this._window.add(this._Vbox);
+        this._window.set_child(this._Vbox);
 
         // Show the window and all child widgets
-        this._window.show_all();
+        this._window.present();
       }
     },
 );

@@ -188,28 +188,29 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         
 
 
-        sselectlabelBox.pack_start(sselectlabel, false, false, 0);
-        sselectBox.pack_start(this.sselectCombo, false, false, 0);
-        snewBox.pack_end(this.snewButton, false, false, 0);
-        snewBox.pack_end(snewlabel, false, false, 0);
+        sselectlabelBox.prepend(sselectlabel);
+        sselectBox.prepend(this.sselectCombo);
+        snewBox.append(this.snewButton);
+        snewBox.append(snewlabel);
 
 
-        subjectlabelBox.pack_start(subjectlabel, false, false, 0);
-        subjectBox.pack_start(this.subjectField, false, false, 0);
+        subjectlabelBox.prepend(subjectlabel);
+        subjectBox.prepend(this.subjectField);
 
-        buttonBox.pack_end(saveButton, false, false, 0);
+        buttonBox.append(saveButton);
 
-        formBox.pack_start(sselectlabelBox, false, false, 0);
-        formBox.pack_start(sselectBox, false, false, 0);
-        formBox.pack_start(snewBox, false, false, 0);
+        formBox.prepend(sselectlabelBox);
+        formBox.prepend(sselectBox);
+        formBox.prepend(snewBox);
 
 
-        formBox.pack_start(subjectlabelBox, false, false, 0);
-        formBox.pack_start(subjectBox, false, false, 0);
-        
-        hBox.set_center_widget(formBox);
-        vBox.pack_start(hBox, true, true, 0);
-        vBox.pack_end(buttonBox, false, false, 0);
+        formBox.prepend(subjectlabelBox);
+        formBox.prepend(subjectBox);
+        hBox.append(formBox);
+        formBox.set_valign('GTK_ALIGN_CENTER'),
+        // hBox.set_center_widget(formBox);
+        vBox.prepend(hBox, true, true, 0);
+        vBox.append(buttonBox);
 
         
 
@@ -412,47 +413,47 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         }
         */
 
-        chooseBox.pack_end(choosebutton, false, false, 0);
-        chooseBox.pack_end(chooselabel, false, false, 0);
+        chooseBox.append(choosebutton);
+        chooseBox.append(chooselabel);
 
-        namelabelBox.pack_start(namelabel, false, false, 0);
-        nameBox.pack_start(this.nameField, false, false, 0);
-        fromlabelBox.pack_start(fromlabel, false, false, 0);
-        fromBox.pack_start(this.fromField, false, false, 0);
-        smtplabelBox.pack_start(smtplabel, false, false, 0);
-        smtpBox.pack_start(this.smtpField, false, false, 0);
-        userlabelBox.pack_start(userlabel, false, false, 0);
-        userBox.pack_start(this.userField, false, false, 0);
-        passlabelBox.pack_start(passlabel, false, false, 0);
-        passBox.pack_start(this.passField, false, false, 0);
-        passBox.pack_start(passButton, false, false, 0);
-        delaylabelBox.pack_start(delaylabel, false, false, 0);
-        delayBox.pack_start(this.delayField, false, false, 0);
-        ipv4Box.pack_start(this.ipv4Field, false, false, 0);
-        headerslabelBox.pack_start(headerslabel, false, false, 0);
-        headersBox.pack_start(this.headersField, false, false, 0);
+        namelabelBox.prepend(namelabel);
+        nameBox.prepend(this.nameField);
+        fromlabelBox.prepend(fromlabel);
+        fromBox.prepend(this.fromField);
+        smtplabelBox.prepend(smtplabel);
+        smtpBox.prepend(this.smtpField);
+        userlabelBox.prepend(userlabel);
+        userBox.prepend(this.userField);
+        passlabelBox.prepend(passlabel);
+        passBox.prepend(this.passField);
+        passBox.prepend(passButton);
+        delaylabelBox.prepend(delaylabel);
+        delayBox.prepend(this.delayField);
+        ipv4Box.prepend(this.ipv4Field);
+        headerslabelBox.prepend(headerslabel);
+        headersBox.prepend(this.headersField);
 
         if (!connId) {
-          formBox.pack_start(chooseBox, false, false, 0);
+          formBox.prepend(chooseBox);
         }
-        formBox.pack_start(namelabelBox, false, false, 0);
-        formBox.pack_start(nameBox, false, false, 0);
-        formBox.pack_start(fromlabelBox, false, false, 0);
-        formBox.pack_start(fromBox, false, false, 0);
-        formBox.pack_start(smtplabelBox, false, false, 0);
-        formBox.pack_start(smtpBox, false, false, 0);
-        formBox.pack_start(userlabelBox, false, false, 0);
-        formBox.pack_start(userBox, false, false, 0);
-        formBox.pack_start(passlabelBox, false, false, 0);
-        formBox.pack_start(passBox, false, false, 0);
-        formBox.pack_start(delaylabelBox, false, false, 0);
-        formBox.pack_start(delayBox, false, false, 0);
-        formBox.pack_start(ipv4Box, false, false, 0);
-        formBox.pack_start(headerslabelBox, false, false, 0);
-        formBox.pack_start(headersBox, false, false, 0);
+        formBox.prepend(namelabelBox);
+        formBox.prepend(nameBox);
+        formBox.prepend(fromlabelBox);
+        formBox.prepend(fromBox);
+        formBox.prepend(smtplabelBox);
+        formBox.prepend(smtpBox);
+        formBox.prepend(userlabelBox);
+        formBox.prepend(userBox);
+        formBox.prepend(passlabelBox);
+        formBox.prepend(passBox);
+        formBox.prepend(delaylabelBox);
+        formBox.prepend(delayBox);
+        formBox.prepend(ipv4Box);
+        formBox.prepend(headerslabelBox);
+        formBox.prepend(headersBox);
 
         hBox.set_center_widget(formBox);
-        vBox.pack_start(hBox, true, true, 0);
+        vBox.prepend(hBox, true, true, 0);
 
         if (myConn) {
           this._updateUI(myConn);
@@ -637,22 +638,22 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
 
 
 
-        ipv4Box.pack_start(this.defIpv4Field, false, false, 0);
-        delayLabelBox.pack_start(this.delayLabel, false, false, 0);
-        delayBox.pack_start(this.defDelayField, false, false, 0);
-        sselectlabelBox.pack_start(cfgSselectlabel, false, false, 0);
-        sselectBox.pack_start(this.sselectCombo, false, false, 0);
-        sButtonBox.pack_start(this.cfgSdeleteButton, false, false, 0);
-        sButtonBox.pack_start(this.cfgSeditButton, false, false, 0);
-        sButtonBox.pack_start(this.cfgSexportButton, false, false, 0);
-        sButtonBox.pack_start(this.cfgSnewButton, false, false, 0);
+        ipv4Box.prepend(this.defIpv4Field, false, false, 0);
+        delayLabelBox.prepend(this.delayLabel, false, false, 0);
+        delayBox.prepend(this.defDelayField, false, false, 0);
+        sselectlabelBox.prepend(cfgSselectlabel, false, false, 0);
+        sselectBox.prepend(this.sselectCombo, false, false, 0);
+        sButtonBox.prepend(this.cfgSdeleteButton, false, false, 0);
+        sButtonBox.prepend(this.cfgSeditButton, false, false, 0);
+        sButtonBox.prepend(this.cfgSexportButton, false, false, 0);
+        sButtonBox.prepend(this.cfgSnewButton, false, false, 0);
 
-        vBox.pack_start(ipv4Box, false, false, 0);
-        vBox.pack_start(delayLabelBox, false, false, 0);
-        vBox.pack_start(delayBox, false, false, 0);
-        vBox.pack_start(sselectlabelBox, false, false, 0);
-        vBox.pack_start(sselectBox, false, false, 0);
-        vBox.pack_start(sButtonBox, false, false, 0);
+        vBox.prepend(ipv4Box, false, false, 0);
+        vBox.prepend(delayLabelBox, false, false, 0);
+        vBox.prepend(delayBox, false, false, 0);
+        vBox.prepend(sselectlabelBox, false, false, 0);
+        vBox.prepend(sselectBox, false, false, 0);
+        vBox.prepend(sButtonBox, false, false, 0);
 
         return vBox;
       }

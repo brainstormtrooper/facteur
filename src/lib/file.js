@@ -100,9 +100,9 @@ function verify (data) {
   return valid;
 }
 
-function unRoll (data) {
-
-// console.log(JSON.parse(data));
+function unRoll (str) {
+  const data = JSON.parse(str);
+  // console.log(JSON.parse(data));
 
   if (!verify(data)) {
     const bfe = new Error('Bad file');

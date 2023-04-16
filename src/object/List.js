@@ -67,9 +67,9 @@ var List = GObject.registerClass( // eslint-disable-line
        * Imports a new CSV file
        * @param {string} path
        */
-      import (path) {
-        const strp = myFile.fopen(path);
-        strp.then((str) => {
+      import (filePromise) {
+        // const strp = myFile.fopen(path);
+        filePromise.then((str) => {
           this.csva = this.csvToArray(str);
           if (!this.verify(this.csva)) {
             this.emit('Import_error_sig', true);

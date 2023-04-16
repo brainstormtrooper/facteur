@@ -37,7 +37,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
           spacing: 6,
         });
         this.hBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
-        this.scrollView = new Gtk.ScrolledWindow({ vexpand: true });
+        this.scrollView = new Gtk.ScrolledWindow();
 
         //
         // choose the csv file for recipients and variables
@@ -45,12 +45,15 @@ var UImailing = GObject.registerClass( // eslint-disable-line
 
         /* eslint-disable no-invalid-this */
         this.list = new myList.List();
-
-        this.choosebutton = new Gtk.FileChooserButton({
-          title: Gettext.gettext('Select a file'),
+        const fileChooser = new Gtk.FileDialog();
+        this.choosebutton = new Gtk.Button({
+          label: Gettext.gettext('Select a file'),
         });
-        this.choosebutton.set_action(Gtk.FileChooserAction.OPEN);
 
+        this.choosebutton.connect('clicked', async () => {
+          fileChooser.open(this.App._window, null , async (res) => this.list.import(await fileChooser.open_finish(res)))
+        });
+        /*
         this.choosebutton.connect('file-set', Lang.bind(this, function () {
           const path = this.choosebutton.get_file().get_path();
           // do something with path
@@ -61,7 +64,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
           }
           this.App.emit('Logger', 'CSV File path is : ' + path);
         }));
-
+        */
         this.list.connect('Import_error_sig', Lang.bind(this, function () {
           const myModal = new Modal.UImodal();
           myModal.showOpenModal(
@@ -93,9 +96,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
         this._listStore.set_column_types(coltypes);
 
         // Create the treeview
-        this._treeView = new Gtk.TreeView({
-          expand: true,
-        });
+        this._treeView = new Gtk.TreeView();
 
         this._treeView.set_model(this._listStore);
         // Create a cell renderer for when bold text is needed
@@ -134,11 +135,11 @@ var UImailing = GObject.registerClass( // eslint-disable-line
         // Attach the treeview and label to the grid
         this._grid.attach(this._treeView, 0, 0, 1, 1);
         this._grid.attach(this._label, 0, 1, 1, 1);
-        this.scrollView.add(this._grid);
-        this.hBox.pack_start(this.chooselabel, false, false, 0);
-        this.hBox.pack_start(this.choosebutton, false, false, 0);
-        this.vBox.pack_start(this.hBox, false, false, 0);
-        this.vBox.pack_start(this.scrollView, true, true, 0);
+        this.scrollView.set_child(this._grid);
+        this.hBox.prepend(this.chooselabel);
+        this.hBox.prepend(this.choosebutton);
+        this.vBox.prepend(this.hBox);
+        this.vBox.prepend(this.scrollView);
 
         if (this.choosebutton.selection_changed) {
           log('You selected : ' + this.choosebutton.selection_changed);
