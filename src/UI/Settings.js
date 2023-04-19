@@ -538,7 +538,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         }
       }
 
-      _buildModal () {
+      appConfig () {
         this.App = Gio.Application.get_default();
         const myModal = new Modal.UImodal();
 
@@ -691,7 +691,28 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         vBox.prepend(sselectBox, false, false, 0);
         vBox.prepend(sButtonBox, false, false, 0);
 
-        return vBox;
+                
+        const _saveHandler = () => {
+          let ipv4 = false;
+          ipv4 = this.settings.defIpv4Field.get_active();
+          Config.setIpv4(ipv4);
+          Config.setDelay(this.settings.defDelayField.get_text());
+          app.emit('update_ui', true);
+          // Destroy the dialog
+          this._dialog.destroy();
+        };
+
+        const props = {
+          title: 'Edit Preferences',
+          label: 'Please configure your preferences here.',
+          content: vBox,
+          window: this.App._window,
+          saveHandler: _saveHandler
+        };
+
+        myModal.doModal(props);
+
+        // return vBox;
       }
     },
 );

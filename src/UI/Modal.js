@@ -149,6 +149,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         modal.show_all();
       }
 
+      /*
       config (app) {
         const window = (app ? app._window : null);
         // Create the dialog
@@ -201,7 +202,8 @@ var UImodal = GObject.registerClass( // eslint-disable-line
 
         this._dialog.present();
       }
-
+      */
+     
       about (app) {
         const window = (app ? app._window : null);
         const aboutDialog = new Gtk.AboutDialog(
