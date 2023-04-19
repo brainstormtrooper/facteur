@@ -10,6 +10,7 @@ const appData = new Data.Data();
 const myFile = imports.lib.file;
 const Modal = imports.UI.Modal;
 const Settings = imports.UI.Settings;
+const mySettings = new Settings.UIsettings();
 const myModal = new Modal.UImodal();
 
 var Menubar = GObject.registerClass( // eslint-disable-line
@@ -191,7 +192,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
         // Set menu actions
         const actionConfig = new Gio.SimpleAction({ name: 'preferences' });
         actionConfig.connect('activate', () => {
-          Settings.appConfig();
+          mySettings.appConfig();
         });
         const actionAbout = new Gio.SimpleAction({ name: 'about' });
         actionAbout.connect('activate', () => {
