@@ -18,108 +18,101 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         // this.settings = new Settings.UIsettings();
       }
 
-      editConnection (settings, connId) {
-        const window = settings.App._window;
-        // Create the dialog
-        this._dialog = new Gtk.Dialog({
-          transient_for: window,
-          modal: true,
-          title: 'Edit connection',
-        });
-        this._contentArea = this._dialog.get_content_area();
-        this._message = new Gtk.Label(
-            // eslint-disable-next-line max-len
-            { label: 'Please configure your connectoin here.' },
-        );
-        // this.settings = new Settings.UIsettings();
-        this.configFields = settings._buildNewConnection(connId);
+      doModal(props) {
+        try {
+          this._dialog = new Gtk.Window({
+            transient_for: props.window,
+            modal: true,
+            title: props.title,
+          });
+          const _contentArea = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
+          this._message = new Gtk.Label(
+              // eslint-disable-next-line max-len
+              { label: props.label },
+          );
+          _contentArea.append(props.content);
+          
+          const _OKHandler = () => {
+            // Destroy the dialog
+            this._dialog.destroy();
+          };
+  
+          this._saveHandler = props.saveHandler;
+  
+          if (this._saveHandler) {
+            this.saveButton = new Gtk.Button({ label: Gettext.gettext('Save') });
+            this.saveButton.connect('clicked', this._saveHandler.bind(this));
+            _contentArea.append(this.saveButton);
+          }
+  
+          this.cancelButton = new Gtk.Button({ label: Gettext.gettext('cancel') });
+          
+          _contentArea.append(this.cancelButton);
+
+          this.cancelButton.connect('clicked', _OKHandler.bind(this));
+          this._dialog.set_child(_contentArea);
+          this._dialog.present();
+        } catch (error) {
+          logError(error);
+          throw(error);
+        }
         
-        this._contentArea.add(this._message);
-        this._contentArea.add(this.configFields);
-        // Handlers for button actions
-        const _OKHandler = () => {
-          // Destroy the dialog
-          this._dialog.destroy();
-        };
+
+      }
+
+      editConnection(settings, connId) {
+
 
         const _saveHandler = () => {
           const myConnection = new Connection.Settings();
           const CONN = myConnection.saveConnection(settings, connId);
           
           settings.App.emit('update_ui', true);
-          this._dialog.destroy();
+          this._dialog.destroy()
         };
 
-        // Create the dialog's action area, which contains a stock OK button
-        this._actionArea = this._dialog.get_action_area();
-        this.cancelButton = Gtk.Button.new_from_stock(Gtk.STOCK_CANCEL);
-        this._actionArea.add(this.cancelButton);
-        this.saveButton = new Gtk.Button({ label: Gettext.gettext('Save') });
-        this._actionArea.add(this.saveButton);
 
-        // Connect the button to the function that handles what it does
-        this.cancelButton.connect('clicked', _OKHandler.bind(this));
-        this.saveButton.connect('clicked', _saveHandler.bind(this));
+        const props = {
+          title: 'Edit Connection',
+          label: 'Please configure your connectoin here.',
+          content: Settings._buildNewConnection(connId),
+          window: settings.App._window,
+          saveHandler: _saveHandler
+        };
 
-        this._dialog.show_all();
-
+        this.doModal(props);
+        
       }
 
       newConnection (settings) {
-        const window = settings.App._window;
-        // Create the dialog
-        this._dialog = new Gtk.Dialog({
-          transient_for: window,
-          modal: true,
-          title: 'New connection',
-        });
-        // Create the dialog's content area, which contains a message
-        this._contentArea = this._dialog.get_content_area();
-        this._message = new Gtk.Label(
-            // eslint-disable-next-line max-len
-            { label: 'Please configure your connectoin here.' },
-        );
-        // this.settings = new Settings.UIsettings();
-        this.configFields = settings._buildNewConnection();
-        
-        this._contentArea.add(this._message);
-        this._contentArea.add(this.configFields);
-        // Handlers for button actions
-        const _OKHandler = () => {
-          // Destroy the dialog
-          this._dialog.destroy();
-        };
+        try {
 
-        const _saveHandler = () => {
-          const myConnection = new Connection.Settings();
-          const CONN = myConnection.saveConnection(settings);
+          const _saveHandler = () => {
+            const myConnection = new Connection.Settings();
+            const CONN = myConnection.saveConnection(settings);
+            
+            settings.App.emit('update_ui', true);
+            this._dialog.destroy()
+          };
+
+          const props = {
+            title: 'New Connection',
+            label: 'Please configure your connectoin here.',
+            content: settings._buildNewConnection(),
+            window: settings.App._window,
+            saveHandler: _saveHandler
+          };
+  
+          this.doModal(props);
           
-          // settings.sselectCombo.insert(0, CONN, settings.nameField.get_text());
-          settings.App.emit('update_ui', true);
-          // settings._updateUI({ CONN });
-          // let ipv4 = false;
-          // ipv4 = this.settings.ipv4Field.get_active();
-          // Config.setIpv4(ipv4);
-          // Config.setDelay(this.settings.delayField.get_text());
-          // Destroy the dialog
+        } catch (error) {
+          logError(error);
+          throw(error);
+        }
+        
+      };
 
-          this._dialog.destroy();
-        };
 
-        // Create the dialog's action area, which contains a stock OK button
-        this._actionArea = this._dialog.get_action_area();
-        this.cancelButton = Gtk.Button.new_from_stock(Gtk.STOCK_CANCEL);
-        this._actionArea.add(this.cancelButton);
-        this.saveButton = new Gtk.Button({ label: Gettext.gettext('Save') });
-        this._actionArea.add(this.saveButton);
-
-        // Connect the button to the function that handles what it does
-        this.cancelButton.connect('clicked', _OKHandler.bind(this));
-        this.saveButton.connect('clicked', _saveHandler.bind(this));
-
-        this._dialog.show_all();
-
-      }
 
       showOpenModal (title, message, app = null) {
         const window = (app ? app._window : null);
@@ -174,13 +167,10 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         this.settings = new Settings.UIsettings();
 
         this.configFields = this.settings._buildModal();
-        const ipv4 = Config.getIpv4();
-        if (ipv4) {
-          this.settings.defIpv4Field.set_active(true);
-        }
-        this.settings.defDelayField.set_text(Config.getDelay().toString());
-        this._contentArea.add(this._message);
-        this._contentArea.add(this.configFields);
+        
+        
+        this._contentArea.append(this._message);
+        this._contentArea.append(this.configFields);
         // Handlers for button actions
         const _OKHandler = () => {
           app.emit('update_ui', true);
@@ -199,17 +189,17 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         };
 
         // Create the dialog's action area, which contains a stock OK button
-        this._actionArea = this._dialog.get_action_area();
-        this.cancelButton = Gtk.Button.new_from_stock(Gtk.STOCK_CANCEL);
-        this._actionArea.add(this.cancelButton);
+        // this._actionArea = this._dialog.action_area;
+        this.cancelButton = new Gtk.Button({ label: Gettext.gettext('Cancel') });
+        this._dialog.add_action_widget(this.cancelButton, 'GTK_RESPONSE_CANCEL_EVENT');
         this.saveButton = new Gtk.Button({ label: Gettext.gettext('Save') });
-        this._actionArea.add(this.saveButton);
+        // this._actionArea.add(this.saveButton);
 
         // Connect the button to the function that handles what it does
-        this.cancelButton.connect('clicked', _OKHandler.bind(this));
+        // this.cancelButton.connect('clicked', _OKHandler.bind(this));
         this.saveButton.connect('clicked', _saveHandler.bind(this));
 
-        this._dialog.show_all();
+        this._dialog.present();
       }
 
       about (app) {
