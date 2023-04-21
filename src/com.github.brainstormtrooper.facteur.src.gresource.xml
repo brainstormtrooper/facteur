@@ -3,6 +3,7 @@
   <gresource prefix="/com/github/brainstormtrooper/facteur/js">
     <file>main.js</file>
     <file>Emailer.js</file>
+    <file>UI/simpleModal.ui</file>
     <file>UI/Contents.js</file>
     <file>UI/Mailing.js</file>
     <file>UI/Menubar.js</file>

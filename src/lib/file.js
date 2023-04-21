@@ -1,3 +1,4 @@
+const Gtk = imports.gi.Gtk;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const secret = imports.lib.secret;
@@ -7,6 +8,59 @@ const Data = imports.object.Data;
 const appData = new Data.Data();
 
 /* eslint-disable no-unused-vars */
+
+
+function fileSave(props, ret) {
+  // const parent = props.parent ? props.parent : null;
+  const title = props.title ? props.title : 'Save a file';
+  const data = props.data;
+  const filename = props.filename;
+  const foldername = props.foldername;
+
+
+  const saver = new Gtk.FileDialog({ title });
+
+  if (filename) {
+    saver.set_initial_name(filename);
+  }
+  if (foldername) {
+    saver.set_initial_folder(Gio.File.new_for_path(foldername));
+  }
+  saver.save(null, null, async (o, r) => {
+  
+    try {
+      const dest = await o.save_finish(r);
+      dest.replace_contents(data, null, false,
+        Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+      ret(dest.get_basename());
+    } catch (e) {
+      log(e)
+      throw e;
+    }
+
+  });
+
+}
+
+function fileOpen(props, ret) {
+  
+  // const parent = props.parent ? props.parent : null;
+  const title = props.title ? props.title : 'Select a file';
+  const foldername = props.foldername ? props.foldername : '/home';
+
+  const opener = new Gtk.FileDialog({ title });
+  opener.set_initial_folder(Gio.File.new_for_path(foldername));
+
+  try {
+
+    opener.open(null, null, (o, r) => {
+      ret(o.open_finish(r));
+    });
+  } catch (error) {
+    log(error);
+    throw(error);
+  }
+}
 
 function fopen (path) {
   return new Promise((resolve, reject) => {

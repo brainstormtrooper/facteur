@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.10.3 -->
+<interface>
+  <!-- interface-name gtk4uis.ui -->
+  <requires lib="gtk" version="4.6"/>
+  <template class="settingsApp" parent="GtkBox">
+    <property name="css-classes">form_content_box</property>
+    <property name="orientation">vertical</property>
+    <property name="vexpand">true</property>
+    <property name="hexpand">true</property>
+    <child>
+      <object class="GtkBox" id="form_area">
+        <property name="css-classes">form_area_box</property>
+        <property name="orientation">vertical</property>
+        <property name="vexpand">true</property>
+        <property name="hexpand">true</property>
+        <child>
+          <object class="GtkBox" id="ipv4Box">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkCheckButton" id="defIpv4Field">
+                
+                <property name="label">Force IPv4</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="delayBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel" id="delaylabel">
+                <property name="justify">left</property>
+                <property name="label">Delay</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="delayField">
+               <property name="numeric">true</property>
+               <property name="digits">0</property>
+               <property name="climb_rate">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkFrame">
+            <property name="label">Connections</property>
+
+            <child>
+              <object class="GtkBox" id="cSelectBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="cSelectLabel">
+                    <property name="justify">left</property>
+                    <property name="label">Select a connection</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="cSelectField">
+                    
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="cButtonBox">
+                    <property name="orientation">horizontal</property>
+                    <child>
+                      <object class="GtkButton" id="cNewButton">
+                        <property name="label">New</property>
+                        <property name="hexpand">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="cExportButton">
+                        <property name="label">Export</property>
+                        <property name="hexpand">true</property>
+                        <property name="popover">cPopExport</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="cEditButton">
+                        <property name="label">Edit</property>
+                        <property name="hexpand">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="cDeleteButton">
+                        <property name="label">Delete</property>
+                        <property name="hexpand">true</property>
+                        <property name="popover">cPopDelete</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkPopover" id="cPopExport">
+                        <child>
+                          <object class="GtkBox" id="cPopExportBtnBox">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkCheckButton" id="cExportPasswords">
+                                <property name="label">Export Passwords</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="cExportAllButton">
+                                <property name="label">Export All</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="cExportSelButton">
+                                <property name="label">Export Selected</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkPopover" id="cPopDelete">
+                        <property name="autohide">false</property>
+                        <child>
+                          <object class="GtkBox" id="cPopDeleteBtnBox">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkButton" id="cDeleteConfirmButton">
+                                <property name="label">Really Delete Connection</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

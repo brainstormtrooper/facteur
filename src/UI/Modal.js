@@ -1,4 +1,5 @@
 const Gtk = imports.gi.Gtk;
+const Gio = imports.gi.Gio;
 const Settings = imports.UI.Settings;
 // const Config = imports.lib.settings;
 const Connection = imports.object.Settings;
@@ -6,7 +7,31 @@ const Gettext = imports.gettext;
 const GObject = imports.gi.GObject;
 const Config = new imports.object.Settings.Settings();
 
+const file = Gio.File.new_for_path('src/UI/simpleModal.ui');
+const [, template] = file.load_contents(null);
 
+var SimpleModal = GObject.registerClass( // eslint-disable-line
+{
+  GTypeName: 'SimpleModal',
+  Template: template,
+  // Children: [],
+  InternalChildren: ['dialog_content_area', 'dialog_action_area']
+},
+class SimpleModal extends Gtk.Window {
+  _init (props) {
+    super._init();
+    // this.settings = new Settings.UIsettings();
+    try {
+      this.set_transient_for(props.transient_for);
+      // this._dialog_box.append(new Gtk.Label({label: 'Here'}));
+      this._dialog_action_area.default_height = 24;
+      // this._dialog_box.visible = true;
+    } catch (error) {
+      throw (error);
+    }
+    
+  }
+});
 
 var UImodal = GObject.registerClass( // eslint-disable-line
     {
@@ -20,7 +45,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
 
       doModal(props) {
         try {
-          this._dialog = new Gtk.Window({
+          this._dialog = new SimpleModal({
             transient_for: props.window,
             modal: true,
             title: props.title,
@@ -30,7 +55,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
               // eslint-disable-next-line max-len
               { label: props.label },
           );
-          _contentArea.append(props.content);
+          // _contentArea.append(props.content);
           
           const _OKHandler = () => {
             // Destroy the dialog
@@ -40,18 +65,22 @@ var UImodal = GObject.registerClass( // eslint-disable-line
           this._saveHandler = props.saveHandler;
   
           if (this._saveHandler) {
-            this.saveButton = new Gtk.Button({ label: Gettext.gettext('Save') });
+            this.saveButton = new Gtk.Button({ label: Gettext.gettext('Save'), hexpand: true });
             this.saveButton.connect('clicked', this._saveHandler.bind(this));
-            _contentArea.append(this.saveButton);
+            this._dialog._dialog_action_area.append(this.saveButton);
           }
   
-          this.cancelButton = new Gtk.Button({ label: Gettext.gettext('cancel') });
+          this.cancelButton = new Gtk.Button({ label: Gettext.gettext('cancel'), hexpand: true  });
           
-          _contentArea.append(this.cancelButton);
+          this._dialog._dialog_action_area.append(this.cancelButton);
+
+          // log(this._dialog._dialog_contet_area.get_first_child());
 
           this.cancelButton.connect('clicked', _OKHandler.bind(this));
-          this._dialog.set_child(_contentArea);
+          this._dialog._dialog_content_area.append(props.content);
+          // this._dialog._dialog_box.get_first_child().show();
           this._dialog.present();
+          
         } catch (error) {
           logError(error);
           throw(error);
@@ -203,7 +232,6 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         this._dialog.present();
       }
       */
-     
       about (app) {
         const window = (app ? app._window : null);
         const aboutDialog = new Gtk.AboutDialog(

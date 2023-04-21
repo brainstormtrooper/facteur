@@ -14,6 +14,30 @@ const appData = new Data.Data();
 const Modal = imports.UI.Modal;
 const myFile = imports.lib.file;
 
+
+const file = Gio.File.new_for_path('src/UI/settingsApp.ui');
+const [, template] = file.load_contents(null);
+
+var settingsApp = GObject.registerClass( // eslint-disable-line
+{
+  GTypeName: 'settingsApp',
+  Template: template,
+  // Children: [],
+  InternalChildren: [
+    'form_area', 'defIpv4Field', 'delayField', 
+    'cSelectField', 'cNewButton', 'cEditButton', 
+    'cExportButton', 'cDeleteButton', 'cExportAllButton', 
+    'cPopDelete', 'cPopExport', 'cExportPasswords',
+    'cExportSelButton', 'cDeleteConfirmButton'
+  ]
+},
+class settingsApp extends Gtk.Box {
+  _init () {
+    super._init();
+    
+  }
+});
+
 var UIsettings = GObject.registerClass( // eslint-disable-line
     {
       GTypeName: 'UIsettings',
@@ -496,223 +520,109 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         
       }
 
-      exportConnection () {
-        const saver = new Gtk.FileChooserDialog(
-          { title: 'Select a destination' },
-        );
-        saver.set_action(Gtk.FileChooserAction.SAVE);
-        const WP = appData.get('FILENAME').split('/');
-        const filename = WP.pop();
-        saver.set_current_name(filename);
-        try {
-          const foldername = `/${WP.join('/')}`;
-          saver.set_current_folder(foldername);
-        } catch (e) {
-          logError(e);
-        }
 
-        saver.add_button('save', Gtk.ResponseType.ACCEPT);
-        saver.add_button('cancel', Gtk.ResponseType.CANCEL);
-        const res = saver.run();
-        if (res == Gtk.ResponseType.ACCEPT) {
-          const savePW = this.exportPasswordField.get_active();
-          const conn = Config.getConnection(this.sselectCombo.get_active_id());
-          const data = myFile.rollConn(conn, savePW);
-          myFile.save(saver.get_filename(), data);
+
+
+
+
+
+
+
+      
+      resetConSelect() {
+        try {
+          const availableCns = JSON.parse(Config.getConnections());
+          this.sselectCombo.remove_all();
+          if(availableCns.length >= 1) {
+            availableCns.forEach((v, k) => {
+              this.sselectCombo.insert(k, v.ID, v.NAME);
+            });
+          } else {
+            this.sselectCombo.insert(0, "0", "No Connections Available");
+          }
+        } catch (error) {
+          log(error);
         }
-        saver.destroy();
+        
       }
 
       reallyDelete () {
-        Config.deleteConnection(this.sselectCombo.get_active_id());
-        this.sselectCombo.remove_all();
-
-        const availableCns = JSON.parse(Config.getConnections());
-
-        if(availableCns.length >= 1) {
-          availableCns.forEach((v, k) => {
-            this.sselectCombo.insert(k, v.ID, v.NAME);
-          });
-        } else {
-          this.sselectCombo.insert(0, "0", "No Connections Available");
+        if (this.sselectCombo.get_active_id()) {
+          Config.deleteConnection(this.sselectCombo.get_active_id());
+          this.resetConSelect();
         }
       }
 
       appConfig () {
         this.App = Gio.Application.get_default();
-        const myModal = new Modal.UImodal();
-
-        /*
-        // Set menu actions
-        const actionConnDelete = new Gio.SimpleAction({ name: 'deleteConnection' });
-        actionConnDelete.connect('activate', () => {
-          this.reallyDelete();
-          
-        });
-        this.App.add_action(actionConnDelete);
-
-        const deleteConfirm = new Gio.Menu();
-        // const section = new Gio.Menu();
-        deleteConfirm.append(Gettext.gettext('Confirm Delete'), 'app.deleteConnection');
-        // deleteConfirm.append_section(null, section);
-        */
-        const vBox = new Gtk.Box(
-            { orientation: Gtk.Orientation.VERTICAL, spacing: 6 },
-        );
-
-        const ipv4Box = new Gtk.Box(
-            { orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 },
-        );
-        const delayLabelBox = new Gtk.Box(
-            { orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 },
-        );
-        const delayBox = new Gtk.Box(
-            { orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 },
-        );
-
-
-        // Connection selection
-
-        const sselectlabelBox = new Gtk.Box({
-          orientation: Gtk.Orientation.HORIZONTAL,
-          spacing: 6,
-        });
-        const sselectBox = new Gtk.Box({
-          orientation: Gtk.Orientation.HORIZONTAL,
-          spacing: 6,
-        });
-        const sButtonBox = new Gtk.Box({
-          orientation: Gtk.Orientation.HORIZONTAL,
-          spacing: 6,
-        });
-
-        // /Selection
-
-        this.defIpv4Field = new Gtk.CheckButton(
-            { label: Gettext.gettext('Force ipv4') },
-        );
-        this.delayLabel = new Gtk.Label(
-            // eslint-disable-next-line max-len
-            { halign: Gtk.Align.START, label: Gettext.gettext('sending delay in milliseconds') },
-        );
-        this.defDelayField = new Gtk.Entry({ placeholder_text: '1000' });
-        const cfgSselectlabel = new Gtk.Label(
-          { halign: Gtk.Align.START, label: Gettext.gettext('Select a server connection') },
-        );
-
+        
         const ipv4 = Config.getIpv4();
+        
+
+        this.settingsForm = new settingsApp();
+
+        // const cExportButton = this.settingsForm.get_template_child(Gtk.Box, 'cExportButton');
+
+        this.sselectCombo = this.settingsForm._cSelectField;
+        const ipv4Field = this.settingsForm._defIpv4Field;
+        const cExportPasswords = this.settingsForm._cExportPasswords;
+        const delayField = this.settingsForm._delayField;
+        // log(cExportButton);
+
+        this.resetConSelect();
+
         if (ipv4) {
-          this.defIpv4Field.set_active(true);
+          ipv4Field.set_active(true);
         }
-        this.defDelayField.set_text(Config.getDelay().toString());
-        const availableCns = JSON.parse(Config.getConnections());
-        
-        this.sselectCombo = new Gtk.ComboBoxText();
+        // Config.getDelay().toString()
+        delayField.set_numeric(true);
+        delayField.set_range(0, 5000);
+        delayField.set_digits(0);
+        delayField.set_increments(1, 1);
+        delayField.set_snap_to_ticks(true);
+        delayField.set_value(Config.getDelay().toString());
 
-        if(availableCns.length >= 1) {
-          availableCns.forEach((v, k) => {
-            this.sselectCombo.insert(k, v.ID, v.NAME);
-          });
-        } else {
-          this.sselectCombo.insert(0, "0", "No Connections Available");
-        }
-        
-        this.cfgSdeleteButton = new Gtk.MenuButton({ label: Gettext.gettext('Delete') });
-        
-        this.cfgSeditButton = new Gtk.Button({ label: Gettext.gettext('Edit') });
-        this.cfgSeditButton.connect('clicked', () => {
-          // console.log('EDIT pressed', this.sselectCombo.get_active_id());
-          myModal.editConnection(this, this.sselectCombo.get_active_id())
-        });
-        this.cfgSexportButton = new Gtk.MenuButton({ label: Gettext.gettext('Export') });
-        
-        this.cfgSnewButton = new Gtk.Button({ label: Gettext.gettext('New') });
-        this.cfgSnewButton.connect('clicked', () => {
-          myModal.newConnection(this);
+        delayField.connect('value-changed', ()=> {
+          Config.setDelay(delayField.get_value_as_int());
+        })
+        ipv4Field.connect('toggled', () => {
+          Config.setIpv4(ipv4Field.get_active());
         });
 
-        this.reallyExportButton = new Gtk.Button({ label: Gettext.gettext('Save As') });
-        this.reallyExportButton.connect('clicked', () => {
-
-          const savePW = this.exportPasswordField.get_active();
-          this.exportConnection(savePW);
-          this.popExport.hide();
-        });
-        this.exportPasswordField = new Gtk.CheckButton(
-            { label: Gettext.gettext('Export password') },
-        );
-        
-        const exportConfirm = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
-        exportConfirm.append(this.exportPasswordField, false, false, 0);
-        exportConfirm.append(this.reallyExportButton, false, false, 0);
-        // deleteConfirm.append_section(null, section);
-        // exportConfirm.show_all();
-        this.popExport = new Gtk.Popover();
-        this.cfgSexportButton.set_popover(this.popExport);
-        this.popExport.set_size_request(-1, -1);
-
-        this.popExport.set_child(exportConfirm);
-
-
-
-        this.reallyDeleteButton = new Gtk.Button({ label: Gettext.gettext('Confirm Delete') });
-        this.reallyDeleteButton.connect('clicked', () => {
+        this.settingsForm._cDeleteConfirmButton.connect('clicked', () => {
           this.reallyDelete();
-          this.popDelete.hide();
+          this.settingsForm._cPopDelete.hide();
         });
-        
-        const deleteConfirm = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
-        // const section = new Gio.Menu();
-        deleteConfirm.append(this.reallyDeleteButton, false, false, 0);
-        // deleteConfirm.append_section(null, section);
-        // deleteConfirm.show_all();
-        this.popDelete = new Gtk.Popover();
-        this.cfgSdeleteButton.set_popover(this.popDelete);
-        this.popDelete.set_size_request(-1, -1);
 
-        this.popDelete.set_child(deleteConfirm);
+        this.settingsForm._cExportSelButton.connect('clicked', () => {
+          const conn = Config.getConnection(this.sselectCombo.get_active_id());
+          const savePW = cExportPasswords.get_active();
+          const data = myFile.rollConn(conn, savePW);
+          const props = {
+            title: 'Export A Connection',
+            data: JSON.stringify(data)
+          };
+          myFile.fileSave(props, (res) => {
+            log(res);
+          });
 
+          this.settingsForm._cPopExport.hide();
+        });
 
+        this.settingsForm._cExportAllButton.connect('clicked', () => {
+          
+          const data = Config.getConnections();
+          const props = {
+            title: 'Export Connections',
+            data: JSON.stringify(data)
+          };
+          myFile.fileSave(props, (res) => {
+            log(res);
+          });
+          this.settingsForm._cPopExport.hide();
+        });
 
-        ipv4Box.prepend(this.defIpv4Field, false, false, 0);
-        delayLabelBox.prepend(this.delayLabel, false, false, 0);
-        delayBox.prepend(this.defDelayField, false, false, 0);
-        sselectlabelBox.prepend(cfgSselectlabel, false, false, 0);
-        sselectBox.prepend(this.sselectCombo, false, false, 0);
-        sButtonBox.prepend(this.cfgSdeleteButton, false, false, 0);
-        sButtonBox.prepend(this.cfgSeditButton, false, false, 0);
-        sButtonBox.prepend(this.cfgSexportButton, false, false, 0);
-        sButtonBox.prepend(this.cfgSnewButton, false, false, 0);
-
-        vBox.prepend(ipv4Box, false, false, 0);
-        vBox.prepend(delayLabelBox, false, false, 0);
-        vBox.prepend(delayBox, false, false, 0);
-        vBox.prepend(sselectlabelBox, false, false, 0);
-        vBox.prepend(sselectBox, false, false, 0);
-        vBox.prepend(sButtonBox, false, false, 0);
-
-                
-        const _saveHandler = () => {
-          let ipv4 = false;
-          ipv4 = this.settings.defIpv4Field.get_active();
-          Config.setIpv4(ipv4);
-          Config.setDelay(this.settings.defDelayField.get_text());
-          app.emit('update_ui', true);
-          // Destroy the dialog
-          this._dialog.destroy();
-        };
-
-        const props = {
-          title: 'Edit Preferences',
-          label: 'Please configure your preferences here.',
-          content: vBox,
-          window: this.App._window,
-          saveHandler: _saveHandler
-        };
-
-        myModal.doModal(props);
-
-        // return vBox;
+       return this.settingsForm;
       }
     },
 );
