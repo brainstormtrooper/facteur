@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.10.3 -->
+<interface>
+  <!-- interface-name gtk4uis.ui -->
+  <requires lib="gtk" version="4.6"/>
+  <template class="settingsMain" parent="GtkBox">
+    <property name="css-classes">form_content_box</property>
+    <property name="orientation">vertical</property>
+    <property name="vexpand">true</property>
+    <property name="hexpand">true</property>
+    <child>
+      <object class="GtkBox" id="form_area">
+        <property name="css-classes">form_area_box</property>
+        <property name="orientation">vertical</property>
+        <property name="vexpand">true</property>
+        <property name="halign">center</property>
+        <child>
+          <object class="GtkFrame">
+            <property name="label">Connections</property>
+            <child>
+              <object class="GtkLabel" id="sselectLabel">
+                <property name="label">Select a connection</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="sseletEntry">
+                <property name="css-classes">form_row_box</property>
+                <property name="orientation">horizontal</property>
+                <child>
+                  <object class="GtkComboBoxText" id="sselectCombo" />
+                </child>
+                <child>
+                  <object class="GtkButton" id="snewButton">
+                    <property name="label">New</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="subjectLabel">
+            <property name="label">Mailing Subject</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="subjectField" />
+        </child>
+        <child>
+          <object class="GtkButton" id="saveButton">
+            <property name="label">Save</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

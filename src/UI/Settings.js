@@ -15,13 +15,33 @@ const Modal = imports.UI.Modal;
 const myFile = imports.lib.file;
 
 
-const file = Gio.File.new_for_path('src/UI/settingsApp.ui');
-const [, template] = file.load_contents(null);
+const mainfile = Gio.File.new_for_path('src/UI/settingsMain.ui');
+const [, maintemplate] = mainfile.load_contents(null);
+
+var settingsMain = GObject.registerClass( // eslint-disable-line
+{
+  GTypeName: 'settingsMain',
+  Template: maintemplate,
+  // Children: [],
+  InternalChildren: [
+    'form_area', 'sselectCombo', 'snewButton', 
+    'subjectField', 'saveButton'
+  ]
+},
+class settingsMain extends Gtk.Box {
+  _init () {
+    super._init();
+    
+  }
+});
+
+const appfile = Gio.File.new_for_path('src/UI/settingsApp.ui');
+const [, apptemplate] = appfile.load_contents(null);
 
 var settingsApp = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'settingsApp',
-  Template: template,
+  Template: apptemplate,
   // Children: [],
   InternalChildren: [
     'form_area', 'defIpv4Field', 'delayField', 
@@ -124,120 +144,18 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         Gtk.StyleContext.add_provider_for_screen(screen, css_provider,
                                       Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
         */
-        const vBox = new Gtk.Box({
-          orientation: Gtk.Orientation.VERTICAL,
-          spacing: 6,
-        });
-        const hBox = new Gtk.Box({
-          orientation: Gtk.Orientation.HORIZONTAL,
-          spacing: 6,
-          name: 'hbox',
-          hexpand: true,
-        });
-        const formBox = new Gtk.Box({
-          orientation: Gtk.Orientation.VERTICAL,
-          spacing: 6,
-          name: 'formbox',
-          hexpand: false,
-        });
 
-        // Connection selection
+        this.settingsMain = new settingsMain();
 
-        const sselectlabelBox = new Gtk.Box({
-          orientation: Gtk.Orientation.HORIZONTAL,
-          spacing: 6,
-        });
-        const sselectBox = new Gtk.Box({
-          orientation: Gtk.Orientation.HORIZONTAL,
-          spacing: 6,
-        });
-        const snewBox = new Gtk.Box({
-          orientation: Gtk.Orientation.HORIZONTAL,
-          spacing: 6,
-        });
+        this.snewButton = this.settingsMain._snewButton;
+        this.sselectCombo = this.settingsMain._sselectCombo;
+        const saveButton = this.settingsMain._saveButton;
 
-        // /Selection
+        this.resetConSelect();
 
-        const subjectlabelBox = new Gtk.Box({
-          orientation: Gtk.Orientation.HORIZONTAL,
-          spacing: 6,
-        });
-        const subjectBox = new Gtk.Box({
-          orientation: Gtk.Orientation.HORIZONTAL,
-          spacing: 6,
-        });
-
-        const buttonBox = new Gtk.Box({
-          orientation: Gtk.Orientation.HORIZONTAL,
-          spacing: 6,
-        });
-
-
-        const sselectlabel = new Gtk.Label(
-          { halign: Gtk.Align.START, label: Gettext.gettext('Select a server connection') },
-        );
-        const snewlabel = new Gtk.Label(
-            { halign: Gtk.Align.START, label: Gettext.gettext('Create a new connection') },
-        );
-
-
-        const subjectlabel = new Gtk.Label(
-            // eslint-disable-next-line max-len
-            { halign: Gtk.Align.START, label: Gettext.gettext('E-mail subject') },
-        );
-        
-        const availableCns = JSON.parse(Config.getConnections());
-        
-        this.sselectCombo = new Gtk.ComboBoxText();
-
-        if(availableCns.length >= 1) {
-          availableCns.forEach((v, k) => {
-            this.sselectCombo.insert(k, v.ID, v.NAME);
-          });
-        } else {
-          this.sselectCombo.insert(0, "0", "No Connections Available");
-        }
-        
-
-        this.snewButton = new Gtk.Button({ label: Gettext.gettext('New') });
         this.snewButton.connect('clicked', () => {
           myModal.newConnection(this);
         });
-
-
-        this.subjectField = new Gtk.Entry(
-            { placeholder_text: Gettext.gettext('Subject'), width_chars: 32 },
-        );
-        
-        const saveButton = new Gtk.Button({ label: Gettext.gettext('Save') });
-        
-
-
-        sselectlabelBox.prepend(sselectlabel);
-        sselectBox.prepend(this.sselectCombo);
-        snewBox.append(this.snewButton);
-        snewBox.append(snewlabel);
-
-
-        subjectlabelBox.prepend(subjectlabel);
-        subjectBox.prepend(this.subjectField);
-
-        buttonBox.append(saveButton);
-
-        formBox.prepend(sselectlabelBox);
-        formBox.prepend(sselectBox);
-        formBox.prepend(snewBox);
-
-
-        formBox.prepend(subjectlabelBox);
-        formBox.prepend(subjectBox);
-        hBox.append(formBox);
-        formBox.set_valign('GTK_ALIGN_CENTER'),
-        // hBox.set_center_widget(formBox);
-        vBox.prepend(hBox, true, true, 0);
-        vBox.append(buttonBox);
-
-        
 
         saveButton.connect('clicked', () => {
           appData.set('SUBJECT', this.subjectField.get_text());
@@ -246,10 +164,11 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           const str = ` >>> Started Mailing "${this.subjectField.get_text()}"...`;
           this.App.emit('Logger', str);
         });
-
-        return vBox;
+        
+        return this.settingsMain;
+        
       }
-
+      
       _buildNewConnection (connId = null) {
         let myConn = null;
         let ipv4 = Config.getIpv4();
