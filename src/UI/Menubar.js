@@ -5,7 +5,9 @@ const Gettext = imports.gettext;
 const GObject = imports.gi.GObject;
 
 const Data = imports.object.Data;
+const oSettings = imports.object.Settings;
 const appData = new Data.Data();
+const Config = new oSettings.Settings();
 
 const myFile = imports.lib.file;
 const Modal = imports.UI.Modal;
@@ -31,6 +33,24 @@ var Menubar = GObject.registerClass( // eslint-disable-line
   class Menubar extends GObject.Object {
     _init() {
       super._init();
+    }
+
+    _updateUI() {
+      const availableCns = JSON.parse(Config.getConnections());
+      try {
+          
+        mySettings.mainSelectCombo.remove_all();
+        if(availableCns.length >= 1) {
+          availableCns.forEach((v, k) => {
+            mySettings.mainSelectCombo.insert(k, v.ID, v.NAME);
+          });
+        } else {
+          mySettings.mainSelectCombo.insert(0, "0", "No Connections Available");
+        }
+        // this.A.emit('update_ui', true);
+      } catch (error) {
+        log(`[menubar] ${error}`);
+      }
     }
 
     PopWidget(properties) {
@@ -73,6 +93,17 @@ var Menubar = GObject.registerClass( // eslint-disable-line
       // headerBar.set_subtitle('Untitled Mailing');
       headerBar.set_show_title_buttons(true)
 
+      const ttlWidget = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL });
+      const appTtl = new Gtk.Label( { label: 'Facteur' } );
+      const appSubTtl = new Gtk.Label( { name: 'appSubTtl', label: 'Untitled Mailing' } );
+
+      appTtl.get_style_context().add_class('title');
+      appSubTtl.get_style_context().add_class('subtitle');
+
+      ttlWidget.append(appTtl);
+      ttlWidget.append(appSubTtl);
+      headerBar.set_title_widget(ttlWidget);
+
       const headerStart = new Gtk.Grid({ column_spacing: 6 });
 
       
@@ -87,8 +118,8 @@ var Menubar = GObject.registerClass( // eslint-disable-line
             appData.set('FILENAME', res.get_basename());
             // appData.set('FILENAME', 'test');
             const [, contents] = res.load_contents(null);
-
-            myFile.unRoll(contents);
+            const td = new TextDecoder();
+            myFile.unRoll(td.decode(contents));
             this.App.emit('update_ui', true);
             // eslint-disable-next-line max-len
             this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);

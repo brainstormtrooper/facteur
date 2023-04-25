@@ -3,6 +3,7 @@ imports.gi.versions.Gtk = '4.0';
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
+const Gdk = imports.gi.Gdk;
 const GObject = imports.gi.GObject;
 const Gettext = imports.gettext;
 const time = imports.lib.time;
@@ -64,7 +65,8 @@ var Facteur = GObject.registerClass( // eslint-disable-line
             if (path.length > 32) {
               path = '...' + path.slice(-32);
             }
-            this._window.get_titlebar().set_subtitle(path);
+            const widget = this._window.get_titlebar().get_title_widget().get_first_child().get_next_sibling();// set_subtitle(path);
+            widget.set_label(path);
           } catch (e) {
             logError(e);
           }
@@ -112,6 +114,7 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         Settings._updateUI();
         Mailing._updateUI();
         Contents._updateUI();
+        Menubar._updateUI();
       }
 
       // Build the application's UI
@@ -123,11 +126,22 @@ var Facteur = GObject.registerClass( // eslint-disable-line
           default_width: 600
         });
         
-        // how to do this in gtk4 (if needed)
-        /*
-        this._window.connect('GDK_ENTER_NOTIFY_MASK');
-        this._window.add_events('GDK_LEAVE_NOTIFY_MASK');
-        */
+
+        //
+        // CSS
+        //
+
+        try {
+          const css_provider = Gtk.CssProvider.new();
+          css_provider.load_from_path('src/UI/facteur.css');
+          // const context = new Gtk.StyleContext();
+          const display = Gdk.Display.get_default();
+          // const screen = Gtk.StyleContext.get_screen();
+          Gtk.StyleContext.add_provider_for_display(display, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        
+        } catch (error) {
+          log(error);
+        }
 
         //
         // menu bar

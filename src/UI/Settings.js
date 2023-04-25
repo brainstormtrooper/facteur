@@ -14,6 +14,27 @@ const appData = new Data.Data();
 const Modal = imports.UI.Modal;
 const myFile = imports.lib.file;
 
+const conxfile = Gio.File.new_for_path('src/UI/settingsConx.ui');
+const [, conxtemplate] = conxfile.load_contents(null);
+
+var settingsConx = GObject.registerClass( // eslint-disable-line
+{
+  GTypeName: 'settingsConx',
+  Template: conxtemplate,
+  // Children: [],
+  InternalChildren: [
+    'form_area', 'cImportButton', 'conxNameEntry', 
+    'conxFromEntry', 'conxHostEntry', 'conxUserEntry',
+    'conxPassEntry', 'conxDelayEntry', 'conxHeadersEntry',
+    'conxIPv4Entry'
+  ]
+},
+class settingsConx extends Gtk.Box {
+  _init () {
+    super._init();
+    
+  }
+});
 
 const mainfile = Gio.File.new_for_path('src/UI/settingsMain.ui');
 const [, maintemplate] = mainfile.load_contents(null);
@@ -65,6 +86,9 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         'Logger': {
           param_types: [GObject.TYPE_STRING],
         },
+        'update_ui': {
+          param_types: [GObject.TYPE_BOOLEAN],
+        },
       },
     },
     class UIsettings extends GObject.Object {
@@ -107,19 +131,12 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             
             
           }
-          
-          this.sselectCombo.remove_all();
-
-          const availableCns = JSON.parse(Config.getConnections());
-
-          if(availableCns.length >= 1) {
-            availableCns.forEach((v, k) => {
-              this.sselectCombo.insert(k, v.ID, v.NAME);
-            });
-            this.sselectCombo.set_active_id(connId);
-          } else {
-            this.sselectCombo.insert(0, "0", "No Connections Available");
+          if (this.sselectCombo) {
+            this.resetConSelect(this.sselectCombo);
           }
+          
+          
+
           if (sub) {
             this.subjectField.set_text(sub);
           }
@@ -135,23 +152,18 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         this.App = Gio.Application.get_default();
         this.App.emit('Logger', '>>> building UI...');
 
-        /*
-        const css = '#formbox { background-color: #f00; }';
-        const css_provider = new Gtk.CssProvider();
-        css_provider.load_from_data(css);
-        // context = new Gtk.StyleContext();
-        const screen = Gdk.Screen.get_default();
-        Gtk.StyleContext.add_provider_for_screen(screen, css_provider,
-                                      Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-        */
+        
+        // const css = '#formbox { background-color: #f00; }';
+        
 
         this.settingsMain = new settingsMain();
 
+        this.subjectField = this.settingsMain._subjectField
         this.snewButton = this.settingsMain._snewButton;
         this.sselectCombo = this.settingsMain._sselectCombo;
         const saveButton = this.settingsMain._saveButton;
 
-        this.resetConSelect();
+        this.resetConSelect(this.sselectCombo);
 
         this.snewButton.connect('clicked', () => {
           myModal.newConnection(this);
@@ -174,301 +186,105 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         let ipv4 = Config.getIpv4();
         try {
           
-        
           if (connId != null) {
             myConn = Config.getConnection(connId);
             // ipv4 = (myConn.ipv4 == 1 ? true : false);
             ipv4 = myConn.ipv4;
           } 
-
-          const vBox = new Gtk.Box(
-            { orientation: Gtk.Orientation.VERTICAL, spacing: 6 },
-          );
-          const hBox = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 6,
-            name: 'hbox',
-            hexpand: true,
-          });
-          const formBox = new Gtk.Box({
-            orientation: Gtk.Orientation.VERTICAL,
-            spacing: 6,
-            name: 'formbox',
-            hexpand: false,
-          });
-
-          const chooseBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 });
-
-          const opener = new Gtk.FileDialog({ title: Gettext.gettext('Import a connection') });
-          const buttonNew = Gtk.Button.new_from_icon_name('document-open-symbolic');
-          buttonNew.connect('clicked', async () => {
-            try {
-
-              opener.open(null, null, async (o, r) => {
-            
-              try {
-                
-                const res = await o.open_finish(r);
-                const [, contents] = res.load_contents(null)
-                // log(contents);
-                this._updateUI(JSON.parse(contents));
-                // eslint-disable-next-line max-len
-                this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);
-              } catch (error) {
-                logError(error);
-                // const myModal = new Modal.UImodal();
-                myModal.showOpenModal(
-                    'Error',
-                    Gettext.gettext(
-                        'Error opening file. Not a valid emailer file',
-                    ),
-                    app,
-                  );
-                }
-              });
-            } catch (error) {
-              logError(error);
-              
-            }
-            
-          });
+          this.settingsConx = new settingsConx();
 
 
-
-
-
-
-
-
-
-          
-          const namelabelBox = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 6,
-          });
-          const nameBox = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 6,
-          });
-          const fromlabelBox = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 6,
-          });
-          const fromBox = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 6,
-          });
-          const smtplabelBox = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 6,
-          });
-          const smtpBox = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 6,
-          });
-          const userlabelBox = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 6,
-          });
-          const userBox = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 6,
-          });
-          const passlabelBox = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 6,
-          });
-          const passBox = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 6,
-          });
-          const delaylabelBox = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 6,
-          });
-          const delayBox = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 6,
-          });
-          const ipv4Box = new Gtk.Box(
-            { orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 },
-          );
-          const headerslabelBox = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 6,
-          });
-          const headersBox = new Gtk.Box(
-            { orientation: Gtk.Orientation.HORIZONTAL, spacing: 6 },
-          );
-
-          const namelabel = new Gtk.Label(
-            { halign: Gtk.Align.START, label: Gettext.gettext('Connection name') },
-          );
-          const fromlabel = new Gtk.Label(
-            { halign: Gtk.Align.START, label: Gettext.gettext('From e-mail') },
-          );
-          const smtplabel = new Gtk.Label(
-            { halign: Gtk.Align.START, label: Gettext.gettext('Smtp host') },
-          );
-          const userlabel = new Gtk.Label(
-            { halign: Gtk.Align.START, label: Gettext.gettext('Smtp user') },
-          );
-          const passlabel = new Gtk.Label(
-            // eslint-disable-next-line max-len
-            { halign: Gtk.Align.START, label: Gettext.gettext('Smtp password') },
-          );
-          const delaylabel = new Gtk.Label(
-            // eslint-disable-next-line max-len
-            { halign: Gtk.Align.START, label: Gettext.gettext('Delay between sending emails (in millisaconds)') },
-          );
-          const headerslabel = new Gtk.Label(
-            // eslint-disable-next-line max-len
-            { halign: Gtk.Align.START, label: Gettext.gettext('Extra headers to send with requests') },
-          );
-
-          this.nameField = new Gtk.Entry(
-            // eslint-disable-next-line max-len
-            { placeholder_text: Gettext.gettext('My Connection'), width_chars: 32 },
-          );
-          this.fromField = new Gtk.Entry(
-            // eslint-disable-next-line max-len
-            { placeholder_text: Gettext.gettext('me@domain.ext'), width_chars: 32 },
-          );
-          this.smtpField = new Gtk.Entry(
-            { placeholder_text: Gettext.gettext('smtp(s)://sub.domain.ext:123'), width_chars: 32 },
-          );
-          this.userField = new Gtk.Entry(
-            { placeholder_text: Gettext.gettext('Username'), width_chars: 32 },
-          );
-          
-          const mask = new Gtk.EventControllerMotion();
-          const passButton = Gtk.Button.new_from_icon_name('dialog-password-symbolic');
-          passButton.add_controller(mask);
-          
-          mask.connect('enter', () => {
-            this.passField.set_visibility(true);
-          });
-          mask.connect('leave', () => {
-            this.passField.set_visibility(false);
-          });
-          this.passField = new Gtk.Entry({
-            placeholder_text: Gettext.gettext('Password'),
-            visibility: false,
-            input_purpose: 'password',
-            width_chars: 32,
-          });
-          this.delayField = new Gtk.Entry(
-            // eslint-disable-next-line max-len
-            { placeholder_text: '1000', width_chars: 32, text: Config.getDelay().toString() },
-          );
-          this.ipv4Field = new Gtk.CheckButton(
-            { label: Gettext.gettext('Force ipv4') },
-          );
-          this.headersField = new Gtk.Entry(
-            { placeholder_text: '[]', width_chars: 32 },
-          );
-
-          if (ipv4) {
-            this.ipv4Field.set_active(true);
-          }
-
-          console.log('myConn : ', myConn);
-
-          /*
-          if (myConn) {
-            this.nameField.set_text(myConn.NAME);
-            this.fromField.set_text(myConn.FROM);
-            this.smtpField.set_text(myConn.HOST);
-            this.userField.set_text(myConn.USER);
-            this.delayField.set_text(myConn.DELAY);
-            this.headersField.set_text(myConn.HEADERS);
-          }
-          */
-
-          chooseBox.append(buttonNew);
-          // chooseBox.append(chooselabel);
-
-          namelabelBox.append(namelabel);
-          nameBox.append(this.nameField);
-          fromlabelBox.append(fromlabel);
-          fromBox.append(this.fromField);
-          smtplabelBox.append(smtplabel);
-          smtpBox.append(this.smtpField);
-          userlabelBox.append(userlabel);
-          userBox.append(this.userField);
-          passlabelBox.append(passlabel);
-          passBox.append(this.passField);
-          passBox.append(passButton);
-          delaylabelBox.append(delaylabel);
-          delayBox.append(this.delayField);
-          ipv4Box.append(this.ipv4Field);
-          headerslabelBox.append(headerslabel);
-          headersBox.append(this.headersField);
-
-          if (!connId) {
-            formBox.append(chooseBox);
-          }
-          formBox.append(namelabelBox);
-          formBox.append(nameBox);
-          formBox.append(fromlabelBox);
-          formBox.append(fromBox);
-          formBox.append(smtplabelBox);
-          formBox.append(smtpBox);
-          formBox.append(userlabelBox);
-          formBox.append(userBox);
-          formBox.append(passlabelBox);
-          formBox.append(passBox);
-          formBox.append(delaylabelBox);
-          formBox.append(delayBox);
-          formBox.append(ipv4Box);
-          formBox.append(headerslabelBox);
-          formBox.append(headersBox);
-
-          hBox.append(formBox);
-          vBox.append(hBox);
+          this.cImportButton = this.settingsConx._cImportButton;
+          this.conxNameEntry = this.settingsConx._conxNameEntry;
+          this.conxFromEntry = this.settingsConx._conxFromEntry;
+          this.conxHostEntry = this.settingsConx._conxHostEntry;
+          this.conxUserEntry = this.settingsConx._conxUserEntry;
+          this.conxPassEntry = this.settingsConx._conxPassEntry;
+          this.conxDelayEntry = this.settingsConx._conxDelayEntry;
+          this.conxHeadersEntry = this.settingsConx._conxHeadersEntry;
+          this.conxIPv4Entry = this.settingsConx._conxIPv4Entry;
 
           if (myConn) {
+            this.conxNameEntry.set_text(myConn.NAME);
+            this.conxFromEntry.set_text(myConn.FROM);
+            this.conxHostEntry.set_text(myConn.HOST);
+            this.conxUserEntry.set_text(myConn.USER);
+            this.conxDelayEntry.set_text(myConn.DELAY);
+            this.conxHeadersEntry.set_text(myConn.HEADERS);
             this._updateUI(myConn);
           }
+          if (ipv4) {
+            this.conxIPv4Entry.set_active(true);
+          }
           
-          return vBox;
+
+          this.cImportButton.connect('clicked', () => {
+            const props = {
+              title: 'Select A Connection'
+            }
+            try {
+          
+              myFile.fileOpen(props, (res) => {
+                appData.set('FILENAME', res.get_basename());
+                // appData.set('FILENAME', 'test');
+                const td = new TextDecoder();
+                const [, contents] = res.load_contents(null);
+                const myConn = JSON.parse(td.decode(contents));
+                this.conxNameEntry.set_text(myConn.NAME);
+                this.conxFromEntry.set_text(myConn.FROM);
+                this.conxHostEntry.set_text(myConn.HOST);
+                this.conxUserEntry.set_text(myConn.USER);
+                this.conxDelayEntry.set_text(myConn.DELAY);
+                this.conxHeadersEntry.set_text(myConn.HEADERS);
+                this.App.emit('update_ui', true);
+                // eslint-disable-next-line max-len
+                this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);
+              });
+              
+              
+              
+              
+            } catch (error) {
+              log(error);
+              throw(error);
+            }
+
+          });
+
+          return this.settingsConx;
         } catch (error) {
-          logError(error);
+          log(error);
           throw(error);
         }
         
       }
 
-
-
-
-
-
-
-
-
       
-      resetConSelect() {
+      resetConSelect(combo) {
+        // const fields = [this.mainSelectCombo, this.sselectCombo];
+        const availableCns = JSON.parse(Config.getConnections());
         try {
-          const availableCns = JSON.parse(Config.getConnections());
-          this.sselectCombo.remove_all();
+            
+          combo.remove_all();
           if(availableCns.length >= 1) {
             availableCns.forEach((v, k) => {
-              this.sselectCombo.insert(k, v.ID, v.NAME);
+              combo.insert(k, v.ID, v.NAME);
             });
           } else {
-            this.sselectCombo.insert(0, "0", "No Connections Available");
+            combo.insert(0, "0", "No Connections Available");
           }
+          // this.A.emit('update_ui', true);
         } catch (error) {
-          log(error);
+          log(`[settings] ${error}`);
+          throw(error);
         }
-        
-      }
+       }
 
       reallyDelete () {
-        if (this.sselectCombo.get_active_id()) {
-          Config.deleteConnection(this.sselectCombo.get_active_id());
-          this.resetConSelect();
+        if (this.mainSelectCombo.get_active_id()) {
+          Config.deleteConnection(this.mainSelectCombo.get_active_id());
+          // this.resetConSelect();
+          this.App.emit('update_ui', true);
         }
       }
 
@@ -482,13 +298,13 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
 
         // const cExportButton = this.settingsForm.get_template_child(Gtk.Box, 'cExportButton');
 
-        this.sselectCombo = this.settingsForm._cSelectField;
+        this.mainSelectCombo = this.settingsForm._cSelectField;
         const ipv4Field = this.settingsForm._defIpv4Field;
         const cExportPasswords = this.settingsForm._cExportPasswords;
         const delayField = this.settingsForm._delayField;
         // log(cExportButton);
 
-        this.resetConSelect();
+        this.resetConSelect(this.mainSelectCombo);
 
         if (ipv4) {
           ipv4Field.set_active(true);
@@ -514,7 +330,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         });
 
         this.settingsForm._cExportSelButton.connect('clicked', () => {
-          const conn = Config.getConnection(this.sselectCombo.get_active_id());
+          const conn = Config.getConnection(this.mainSelectCombo.get_active_id());
           const savePW = cExportPasswords.get_active();
           const data = myFile.rollConn(conn, savePW);
           const props = {

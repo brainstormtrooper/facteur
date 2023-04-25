@@ -10,15 +10,20 @@
     <property name="hexpand">true</property>
     <child>
       <object class="GtkBox" id="form_area">
-        <property name="css-classes">form_area_box</property>
+        <property name="css-classes">form_area_box
+        main_form_area</property>
         <property name="orientation">vertical</property>
         <property name="vexpand">true</property>
         <property name="halign">center</property>
         <child>
-          <object class="GtkFrame">
+          <object class="GtkFrame" id="connframe">
             <property name="label">Connections</property>
+            <property name="css-classes">formelement
+            frame</property>
             <child>
               <object class="GtkLabel" id="sselectLabel">
+                <property name="css-classes">formelement
+                formlabel</property>
                 <property name="label">Select a connection</property>
               </object>
             </child>
@@ -27,11 +32,20 @@
                 <property name="css-classes">form_row_box</property>
                 <property name="orientation">horizontal</property>
                 <child>
-                  <object class="GtkComboBoxText" id="sselectCombo" />
+                  <object class="GtkComboBoxText" id="sselectCombo">
+                    <property name="css-classes">formelement
+                    forminput
+                    combobox
+                    comboboxtext</property>
+                  </object>
                 </child>
                 <child>
                   <object class="GtkButton" id="snewButton">
                     <property name="label">New</property>
+                    <property name="css-classes">formelement
+                    forminput
+                    button
+                    new</property>
                   </object>
                 </child>
               </object>
@@ -40,15 +54,25 @@
         </child>
         <child>
           <object class="GtkLabel" id="subjectLabel">
+            <property name="css-classes">formelement
+            formlabel</property>
             <property name="label">Mailing Subject</property>
           </object>
         </child>
         <child>
-          <object class="GtkEntry" id="subjectField" />
+          <object class="GtkEntry" id="subjectField">
+            <property name="css-classes">formelement
+            forminput
+            entry</property>
+          </object>
         </child>
         <child>
           <object class="GtkButton" id="saveButton">
             <property name="label">Save</property>
+            <property name="css-classes">formelement
+            forminput
+            button
+            save</property>
           </object>
         </child>
       </object>

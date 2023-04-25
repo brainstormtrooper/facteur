@@ -29,7 +29,7 @@
           <object class="GtkBox" id="dialog_action_area">
             <property name="css-classes">dialog_action_area</property>
             <property name="orientation">horizontal</property>
-            <property name="vexpand">true</property>
+            
             <property name="hexpand">true</property>
           </object>
         </child>

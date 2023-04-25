@@ -47,23 +47,24 @@ var Settings = class Settings { // eslint-disable-line
     const ID = (id ? id : uuid.uuid());
 
     let IPv4 = 0;
-    if (obj.ipv4Field.get_active()) {
+    if (obj.conxIPv4Entry.get_active()) {
       IPv4 = 1;
     }
 
+
     const connection = {
         ID,
-        NAME: obj.nameField.get_text(),
-        FROM: obj.fromField.get_text(),
-        USER: obj.userField.get_text(),
-        HOST: obj.smtpField.get_text(),
-        DELAY: obj.delayField.get_text(),
+        NAME: obj.conxNameEntry.get_text(),
+        FROM: obj.conxFromEntry.get_text(),
+        USER: obj.conxUserEntry.get_text(),
+        HOST: obj.conxHostEntry.get_text(),
+        DELAY: obj.conxDelayEntry.get_text(),
         IPv4,
-        HEADERS: obj.headersField.get_text()
+        HEADERS: obj.conxHeadersEntry.get_text()
     }
 
-    if (obj.passField.get_text() != '') {
-      secret.connPasswordSet(ID, obj.passField.get_text());
+    if (obj.conxPassEntry.get_text() != '') {
+      secret.connPasswordSet(ID, obj.conxPassEntry.get_text());
     }
 
     if (id) {
