@@ -65,7 +65,7 @@ var Facteur = GObject.registerClass( // eslint-disable-line
             if (path.length > 32) {
               path = '...' + path.slice(-32);
             }
-            const widget = this._window.get_titlebar().get_title_widget().get_first_child().get_next_sibling();// set_subtitle(path);
+            const widget = this._window.get_titlebar().get_title_widget().get_first_child().get_next_sibling();
             widget.set_label(path);
           } catch (e) {
             logError(e);

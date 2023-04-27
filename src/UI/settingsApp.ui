@@ -10,7 +10,10 @@
     <property name="hexpand">true</property>
     <child>
       <object class="GtkBox" id="form_area">
-        <property name="css-classes">form_area_box app_form_area</property>
+        <style>
+          <class name="form_area_box" />
+          <class name="app_form_area" />
+        </style>
         <property name="orientation">vertical</property>
         <property name="vexpand">true</property>
         <property name="hexpand">true</property>
@@ -19,8 +22,12 @@
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkCheckButton" id="defIpv4Field">
-                <property name="css-classes">formelement forminput checkbutton</property>
-                <property name="label">Force IPv4</property>
+                <style>
+                  <class name="formelement" />
+                  <class name="forminput" />
+                  <class name="checkbutton" />
+                </style>
+                <property name="label" translatable="yes">Force IPv4</property>
               </object>
             </child>
           </object>
@@ -31,37 +38,52 @@
             <child>
               <object class="GtkLabel" id="delaylabel">
                 <property name="justify">left</property>
-                <property name="css-classes">formelement formlabel</property>
-                <property name="label">Delay (Milliseconds)</property>
+                <style>
+                  <class name="formelement" />
+                  <class name="formlabel" />
+                </style>
+                <property name="label" translatable="yes">Delay (Milliseconds)</property>
               </object>
             </child>
             <child>
               <object class="GtkSpinButton" id="delayField">
-                <property name="css-classes">formelement forminput spinbutton</property>
                 <property name="numeric">true</property>
                 <property name="digits">0</property>
                 <property name="climb_rate">1</property>
+                <style>
+                  <class name="formelement" />
+                  <class name="forminput" />
+                  <class name="spinbutton" />
+                </style>
               </object>
             </child>
           </object>
         </child>
         <child>
           <object class="GtkFrame">
-            <property name="label">Connections</property>
+            <property name="label" translatable="yes">Connections</property>
 
             <child>
               <object class="GtkBox" id="cSelectBox">
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="cSelectLabel">
-                  <property name="css-classes">formelement formlabel</property>
+                    <style>
+                      <class name="formelement" />
+                      <class name="formlabel" />
+                    </style>
                     <property name="justify">left</property>
-                    <property name="label">Select a connection</property>
+                    <property name="label" translatable="yes">Select a connection</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="cSelectField">
-                    <property name="css-classes">formelement forminput combobox comboboxtext</property>
+                    <style>
+                      <class name="formelement" />
+                      <class name="forminput" />
+                      <class name="combobox" />
+                      <class name="comboboxtext" />
+                    </style>
                   </object>
                 </child>
                 <child>
@@ -70,56 +92,90 @@
                     <property name="css-classes">buttonbox</property>
                     <child>
                       <object class="GtkButton" id="cNewButton">
-                        <property name="css-classes">formelement forminput button</property>
-                        <property name="label">New</property>
+                        <style>
+                          <class name="formelement" />
+                          <class name="forminput" />
+                          <class name="button" />
+                          <class name="new" />
+                        </style>
+                        <property name="label" translatable="yes">New</property>
                         <property name="hexpand">true</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="cExportButton">
-                        <property name="css-classes">formelement forminput button</property>
-                        <property name="label">Export</property>
+                        <style>
+                          <class name="formelement" />
+                          <class name="forminput" />
+                          <class name="button" />
+                        </style>
+                        <property name="label" translatable="yes">Export</property>
                         <property name="hexpand">true</property>
                         <property name="popover">cPopExport</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkButton" id="cEditButton">
-                        <property name="css-classes">formelement forminput button</property>
-                        <property name="label">Edit</property>
+                        <style>
+                          <class name="formelement" />
+                          <class name="forminput" />
+                          <class name="button" />
+                          <class name="new" />
+                        </style>
+                        <property name="label" translatable="yes">Edit</property>
                         <property name="hexpand">true</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="cDeleteButton">
-                        <property name="css-classes">formelement forminput button</property>
-                        <property name="label">Delete</property>
+                        <style>
+                          <class name="formelement" />
+                          <class name="forminput" />
+                          <class name="button" />
+                          <class name="danger" />
+                        </style>
+                        <property name="label" translatable="yes">Delete</property>
                         <property name="hexpand">true</property>
                         <property name="popover">cPopDelete</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkPopover" id="cPopExport">
-                        <property name="css-classes">menu popover</property>
+                        <style>
+                          <class name="menu" />
+                          <class name="popover" />
+                        </style>
                         <child>
                           <object class="GtkBox" id="cPopExportBtnBox">
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkCheckButton" id="cExportPasswords">
-                                <property name="label">Export Passwords</property>
-                                <property name="css-classes">menuelement menuinput checkbutton</property>
+                                <property name="label" translatable="yes">Export Passwords</property>
+                                <style>
+                                  <class name="menuelement" />
+                                  <class name="menuinput" />
+                                  <class name="checkbutton" />
+                                </style>
                               </object>
                             </child>
                             <child>
                               <object class="GtkButton" id="cExportAllButton">
-                                <property name="label">Export All</property>
-                                <property name="css-classes">menuelement menuinput button</property>
+                                <property name="label" translatable="yes">Export All</property>
+                                <style>
+                                  <class name="menuelement" />
+                                  <class name="menuinput" />
+                                  <class name="button" />
+                                </style>
                               </object>
                             </child>
                             <child>
                               <object class="GtkButton" id="cExportSelButton">
-                                <property name="label">Export Selected</property>
-                                <property name="css-classes">menuelement menuinput button</property>
+                                <property name="label" translatable="yes">Export Selected</property>
+                                <style>
+                                  <class name="menuelement" />
+                                  <class name="menuinput" />
+                                  <class name="button" />
+                                </style>
                               </object>
                             </child>
                           </object>
@@ -128,14 +184,21 @@
                     </child>
                     <child>
                       <object class="GtkPopover" id="cPopDelete">
-                        <property name="css-classes">menu popover</property>
+                        <style>
+                          <class name="menu" />
+                          <class name="popover" />
+                        </style>
                         <child>
                           <object class="GtkBox" id="cPopDeleteBtnBox">
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkButton" id="cDeleteConfirmButton">
-                              <property name="css-classes">menuelement menuinput button danger</property>
-                                <property name="label">Really Delete Connection</property>
+                                <style>
+                                  <class name="menuelement" />
+                                  <class name="menuinput" />
+                                  <class name="button" />
+                                </style>
+                                <property name="label" translatable="yes">Really Delete Connection</property>
                               </object>
                             </child>
                           </object>

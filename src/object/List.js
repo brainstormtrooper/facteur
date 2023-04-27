@@ -67,27 +67,21 @@ var List = GObject.registerClass( // eslint-disable-line
        * Imports a new CSV file
        * @param {string} path
        */
-      import (filePromise) {
-        // const strp = myFile.fopen(path);
-        filePromise.then((str) => {
-          this.csva = this.csvToArray(str);
-          if (!this.verify(this.csva)) {
-            this.emit('Import_error_sig', true);
-          } else {
-            try {
-              this.dataHeadings();
-              this.trimData();
-              appData.set('CSVA', this.csva);
-              appData.set('TO', this.csva.map((x) => x[0]));
-              this.emit('Updated_sig', true);
-            } catch (error) {
-              logError(error);
-            }
-          }
-        }).catch((error) => {
-          logError(error);
+      import (str) {
+        this.csva = this.csvToArray(str);
+        if (!this.verify(this.csva)) {
           this.emit('Import_error_sig', true);
-        });
+        } else {
+          try {
+            this.dataHeadings();
+            this.trimData();
+            appData.set('CSVA', this.csva);
+            appData.set('TO', this.csva.map((x) => x[0]));
+            this.emit('Updated_sig', true);
+          } catch (error) {
+            logError(error);
+          }
+        }
       }
 
       /**

@@ -10,7 +10,27 @@ const Lang = imports.lang;
 const myList = imports.object.List;
 const Modal = imports.UI.Modal;
 const Data = imports.object.Data;
+const myFile = imports.lib.file;
 const appData = new Data.Data();
+
+
+const mailingfile = Gio.File.new_for_path('src/UI/mailingMain.ui');
+const [, mailingemplate] = mailingfile.load_contents(null);
+
+var mailingMain = GObject.registerClass( // eslint-disable-line
+{
+  GTypeName: 'mailingMain',
+  Template: mailingemplate,
+  // Children: [],
+  InternalChildren: ['mnewButton', 'mScrolledWindow', 'mTreeView']
+},
+class mailingMain extends Gtk.Box {
+  _init () {
+    super._init();
+    
+  }
+});
+
 
 var UImailing = GObject.registerClass( // eslint-disable-line
     {
@@ -32,39 +52,48 @@ var UImailing = GObject.registerClass( // eslint-disable-line
       // Build the application's UI
       _buildUI () {
         this.App = Gio.Application.get_default();
-        this.vBox = new Gtk.Box({
-          orientation: Gtk.Orientation.VERTICAL,
-          spacing: 6,
-        });
-        this.hBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
-        this.scrollView = new Gtk.ScrolledWindow();
 
-        //
-        // choose the csv file for recipients and variables
-        //
+
+        this.mailingMain = new mailingMain();
+
+        const mnewButton = this.mailingMain._mnewButton;
+        const mScrolledWindow = this.mailingMain._mScrolledWindow;
+
+        this.mTreeView = this.mailingMain._mTreeView;
 
         /* eslint-disable no-invalid-this */
         this.list = new myList.List();
-        const fileChooser = new Gtk.FileDialog();
-        this.choosebutton = new Gtk.Button({
-          label: Gettext.gettext('Select a file'),
+
+
+        mnewButton.connect('clicked', () => {
+          const props = {
+            title: 'Select A Mailing List'
+          }
+          try {
+        
+            myFile.fileOpen(props, (res) => {
+              appData.set('FILENAME', res.get_basename());
+              // appData.set('FILENAME', 'test');
+              const td = new TextDecoder();
+              const [, contents] = res.load_contents(null);
+              const myList = td.decode(contents);
+              try { 
+                this.list.import(myList);
+              } catch (error) {
+                logError(error);
+              }
+              this.App.emit('Logger', 'CSV File is : ' + res.get_basename());
+              this.App.emit('update_ui', true);
+              // eslint-disable-next-line max-len
+              this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);
+            });
+            
+          } catch (error) {
+            log(error);
+            throw(error);
+          }
         });
 
-        this.choosebutton.connect('clicked', async () => {
-          fileChooser.open(this.App._window, null , async (res) => this.list.import(await fileChooser.open_finish(res)))
-        });
-        /*
-        this.choosebutton.connect('file-set', Lang.bind(this, function () {
-          const path = this.choosebutton.get_file().get_path();
-          // do something with path
-          try {
-            this.list.import(path);
-          } catch (error) {
-            logError(error);
-          }
-          this.App.emit('Logger', 'CSV File path is : ' + path);
-        }));
-        */
         this.list.connect('Import_error_sig', Lang.bind(this, function () {
           const myModal = new Modal.UImodal();
           myModal.showOpenModal(
@@ -83,71 +112,31 @@ var UImailing = GObject.registerClass( // eslint-disable-line
           this.updateTable();
         }));
 
-        this.chooselabel = new Gtk.Label({
-          halign: Gtk.Align.START,
-          label: Gettext.gettext('Open a file'),
-        });
-
-        // Create the underlying liststore for the table
-
         this._listStore = new Gtk.ListStore();
 
         const coltypes = [GObject.TYPE_STRING];
-        this._listStore.set_column_types(coltypes);
-
-        // Create the treeview
-        this._treeView = new Gtk.TreeView();
-
-        this._treeView.set_model(this._listStore);
-        // Create a cell renderer for when bold text is needed
         const bold = new Gtk.CellRendererText({
           weight: Pango.Weight.BOLD,
         });
 
-        // Create a cell renderer for normal text
-        // let normal = new Gtk.CellRendererText();
+        this._listStore.set_column_types(coltypes);
 
-        // Create the columns for the address book
+        this.mTreeView.set_model(this._listStore);
+
         const defCol = new Gtk.TreeViewColumn({
           title: Gettext.gettext('No data'),
         });
-
-        // Pack the cell renderers into the columns
         defCol.pack_start(bold, true);
-
-        // Set each column to pull text from the TreeView's model
         defCol.add_attribute(bold, 'text', 0);
 
-        // Insert the columns into the treeview
-        this._treeView.insert_column(defCol, 0);
-
-        // Create the label that shows details for the name you select
-        this._label = new Gtk.Label({
-          label: '',
-        });
-
-        // Get which item is selected
-        this.selection = this._treeView.get_selection();
-
-        // Create a grid to organize everything in
-        this._grid = new Gtk.Grid();
-
-        // Attach the treeview and label to the grid
-        this._grid.attach(this._treeView, 0, 0, 1, 1);
-        this._grid.attach(this._label, 0, 1, 1, 1);
-        this.scrollView.set_child(this._grid);
-        this.hBox.prepend(this.chooselabel);
-        this.hBox.prepend(this.choosebutton);
-        this.vBox.prepend(this.hBox);
-        this.vBox.prepend(this.scrollView);
-
-        if (this.choosebutton.selection_changed) {
-          log('You selected : ' + this.choosebutton.selection_changed);
-        }
+        this.mTreeView.insert_column(defCol, 0);
 
 
-        return this.vBox;
+
+        return this.mailingMain;
       }
+
+      
       _updateUI () {
         this.list.csva = appData.get('CSVA');
         this.list.headers = appData.get('VARS');
@@ -168,10 +157,10 @@ var UImailing = GObject.registerClass( // eslint-disable-line
         this._listStore.set_column_types(coltypes);
 
         // Replace the treeview
-        this._treeView.get_columns().forEach((col) => {
-          this._treeView.remove_column(col);
+        this.mTreeView.get_columns().forEach((col) => {
+          this.mTreeView.remove_column(col);
         });
-        this._treeView.set_model(this._listStore);
+        this.mTreeView.set_model(this._listStore);
         // Create cell renderers
         const normal = new Gtk.CellRendererText();
 
@@ -188,7 +177,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
             this[`col_${k}`].add_attribute(normal, 'text', k);
           }
           try {
-            this._treeView.insert_column(this[`col_${k}`], k);
+            this.mTreeView.insert_column(this[`col_${k}`], k);
           } catch (err) {
             log(err);
           }

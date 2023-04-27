@@ -42,7 +42,7 @@
                   <class name="formlabel" />
                 </style>
                 <property name="justify">left</property>
-                <property name="label">Import a connection (optional)</property>
+                <property name="label" translatable="yes">Import a connection (optional)</property>
               </object>
             </child>
             
@@ -61,7 +61,7 @@
                   <class name="formelement" />
                   <class name="formlabel" />
                 </style>
-                <property name="label">Connection Name</property>
+                <property name="label" translatable="yes">Connection Name</property>
               </object>
             </child>
             <child>
@@ -88,7 +88,7 @@
                   <class name="formelement" />
                   <class name="formlabel" />
                 </style>
-                <property name="label">Connection From</property>
+                <property name="label" translatable="yes">Connection From</property>
               </object>
             </child>
             <child>
@@ -115,7 +115,7 @@
                   <class name="formelement" />
                   <class name="formlabel" />
                 </style>
-                <property name="label">Connection Host Server</property>
+                <property name="label" translatable="yes">Connection Host Server</property>
               </object>
             </child>
             <child>
@@ -142,7 +142,7 @@
                   <class name="formelement" />
                   <class name="formlabel" />
                 </style>
-                <property name="label">Connection User</property>
+                <property name="label" translatable="yes">Connection User</property>
               </object>
             </child>
             <child>
@@ -169,7 +169,7 @@
                   <class name="formelement" />
                   <class name="formlabel" />
                 </style>
-                <property name="label">Connection Password</property>
+                <property name="label" translatable="yes">Connection Password</property>
               </object>
             </child>
             <child>
@@ -218,7 +218,7 @@
                   <class name="formelement" />
                   <class name="formlabel" />
                 </style>
-                <property name="label">Connection Delay (milliseconds)</property>
+                <property name="label" translatable="yes">Connection Delay (milliseconds)</property>
               </object>
             </child>
             <child>
@@ -248,7 +248,7 @@
                   <class name="formelement" />
                   <class name="formlabel" />
                 </style>
-                <property name="label">Connection Headers</property>
+                <property name="label" translatable="yes">Connection Headers</property>
               </object>
             </child>
             <child>
@@ -276,7 +276,7 @@
                   <class name="forminput" />
                   <class name="checkbutton" />
                 </style>
-                <property name="label">Force IPv4</property>
+                <property name="label" translatable="yes">Force IPv4</property>
               </object>
             </child>
           </object>

@@ -15,7 +15,7 @@
         <child>
           <object class="GtkLabel" id="dialog_label">
             <property name="justify">center</property>
-            <property name="label">Test</property>
+            <property name="label" translatable="yes">Test</property>
           </object>
         </child>
         <child>

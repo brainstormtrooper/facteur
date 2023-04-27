@@ -10,21 +10,27 @@
     <property name="hexpand">true</property>
     <child>
       <object class="GtkBox" id="form_area">
-        <property name="css-classes">form_area_box
-        main_form_area</property>
+        <style>
+          <class name="form_area_box" />
+          <class name="main_form_area" />
+        </style>
         <property name="orientation">vertical</property>
         <property name="vexpand">true</property>
         <property name="halign">center</property>
         <child>
           <object class="GtkFrame" id="connframe">
-            <property name="label">Connections</property>
-            <property name="css-classes">formelement
-            frame</property>
+            <property name="label" translatable="yes">Connections</property>
+            <style>
+              <class name="formelement" />
+              <class name="frame" />
+            </style>
             <child>
               <object class="GtkLabel" id="sselectLabel">
-                <property name="css-classes">formelement
-                formlabel</property>
-                <property name="label">Select a connection</property>
+                <style>
+                  <class name="formelement" />
+                  <class name="formlabel" />
+                </style>
+                <property name="label" translatable="yes">Select a connection</property>
               </object>
             </child>
             <child>
@@ -33,19 +39,23 @@
                 <property name="orientation">horizontal</property>
                 <child>
                   <object class="GtkComboBoxText" id="sselectCombo">
-                    <property name="css-classes">formelement
-                    forminput
-                    combobox
-                    comboboxtext</property>
+                    <style>
+                      <class name="formelement" />
+                      <class name="forminput" />
+                      <class name="combobox" />
+                      <class name="comboboxtext" />
+                    </style>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton" id="snewButton">
-                    <property name="label">New</property>
-                    <property name="css-classes">formelement
-                    forminput
-                    button
-                    new</property>
+                    <property name="label" translatable="yes">New</property>
+                    <style>
+                      <class name="formelement" />
+                      <class name="forminput" />
+                      <class name="button" />
+                      <class name="new" />
+                    </style>
                   </object>
                 </child>
               </object>
@@ -54,25 +64,43 @@
         </child>
         <child>
           <object class="GtkLabel" id="subjectLabel">
-            <property name="css-classes">formelement
-            formlabel</property>
-            <property name="label">Mailing Subject</property>
+            <style>
+              <class name="formelement" />
+              <class name="formlabel" />
+            </style>
+            <property name="label" translatable="yes">Mailing Subject</property>
           </object>
         </child>
         <child>
           <object class="GtkEntry" id="subjectField">
-            <property name="css-classes">formelement
-            forminput
-            entry</property>
+            <style>
+              <class name="formelement" />
+              <class name="forminput" />
+              <class name="entry" />
+            </style>
           </object>
         </child>
+        
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="mainSaveRow">
+        <property name="orientation">horizontal</property>
+        <property name="halign">end</property>
+        <style>
+          <class name="formelementgroup" />
+          <class name="formbuttonrow" />
+        </style>
         <child>
           <object class="GtkButton" id="saveButton">
-            <property name="label">Save</property>
-            <property name="css-classes">formelement
-            forminput
-            button
-            save</property>
+            
+            <property name="label" translatable="yes">Save</property>
+            <style>
+              <class name="formelement" />
+              <class name="forminput" />
+              <class name="button" />
+              <class name="save" />
+            </style>
           </object>
         </child>
       </object>

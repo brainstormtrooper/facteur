@@ -1,12 +1,32 @@
 /**
 UI for displaying html message interface
 */
-const { Gtk, Gio, GtkSource, WebKit: Webkit, GObject } = imports.gi;
+const { Gtk, Gio, GtkSource, WebKit, GObject } = imports.gi;
 const Gettext = imports.gettext;
 const myTemplate = imports.object.Template;
 const Template = new myTemplate.Template();
 const Data = imports.object.Data;
 const appData = new Data.Data();
+
+
+const contentsfile = Gio.File.new_for_path('src/UI/contentMain.ui');
+const [, contentTemplate] = contentsfile.load_contents(null);
+
+var contentMain = GObject.registerClass( // eslint-disable-line
+{
+  GTypeName: 'contentMain',
+  Template: contentTemplate,
+  // Children: [],
+  InternalChildren: ['textView', 'htmlSourceView', 'htmlPreview', 'saveButton', 'cImportButton']
+},
+class contentMain extends Gtk.Box {
+  _init () {
+    super._init();
+    // Gtksource.init();
+    
+  }
+});
+
 
 var UIcontents = GObject.registerClass( // eslint-disable-line
     {
@@ -20,6 +40,10 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
     class UIcontents extends GObject.Object {
       _init () {
         super._init();
+        GObject.type_ensure(GtkSource.View);
+        GObject.type_ensure(WebKit.WebView);
+        
+
       }
 
       _updateUI () {
@@ -30,6 +54,39 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
       }
 
       _buildUI () {
+        
+        this.contentMain = new contentMain();
+
+        this.textView = this.contentMain._textView;
+        this.htmlSourceView = this.contentMain._htmlSourceView;
+        this.htmlPreview = this.contentMain._htmlPreview;
+        this.saveButton = this.contentMain._saveButton;
+        this.cImportButton = this.contentMain._cImportButton;
+
+        this.textBuffer = new Gtk.TextBuffer();
+        const langManager = new GtkSource.LanguageManager();
+        this.htmlBuffer = new GtkSource.Buffer(
+          { language: langManager.get_language('html') },
+        );
+
+        this.textView.set_buffer(this.textBuffer);
+        this.htmlSourceView.set_buffer(this.htmlBuffer);
+
+        this.htmlBuffer.connect('changed', () => {
+          this.htmlPreview.load_html(this.htmlBuffer.text, null);
+        });
+
+        const defhtmlstr = '<h1>Hi!</h1><p>this is text</p>';
+        const len = encodeURI(defhtmlstr).split(/%..|./).length - 1;
+        this.htmlBuffer.set_text(defhtmlstr, len);
+        this.htmlPreview.load_html(this.htmlBuffer.text, null);
+
+        this.saveButton.connect('clicked', () => {
+          appData.set('HTML', this.htmlBuffer.text);
+          appData.set('TEXT', this.textBuffer.text);
+        });
+
+        /*
         const vBox = new Gtk.Box(
             { orientation: Gtk.Orientation.VERTICAL, spacing: 6 },
         );
@@ -118,8 +175,8 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           appData.set('HTML', this.htmlBuffer.text);
           appData.set('TEXT', this.textBuffer.text);
         });
-
-        return vBox;
+        */
+        return this.contentMain;
       }
     },
 );
