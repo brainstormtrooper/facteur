@@ -17,6 +17,7 @@
     <file>UI/Modal.js</file>
     <file>UI/Results.js</file>
     <file>UI/Settings.js</file>
+    <file>object/Settings.js</file>
     <file>object/Data.js</file>
     <file>object/List.js</file>
     <file>object/Message.js</file>
@@ -24,6 +25,7 @@
     <file>lib/secret.js</file>
     <file>lib/uuid.js</file>
     <file>lib/file.js</file>
+    <file>lib/base64.js</file>
     <file>lib/settings.js</file>
     <file>lib/template.js</file>
     <file>lib/time.js</file>
