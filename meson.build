@@ -1,6 +1,6 @@
 project('facteur', 'c',
   version: '0.9.0',
-  meson_version: '>= 0.59.0'
+  meson_version: '>= 1.0.0'
 )
 
 
@@ -10,35 +10,37 @@ prefix = '/usr'
 
 app_command = 'facteur'
 app_id = 'com.github.brainstormtrooper.facteur'
-
+app_configuration = configuration_data()
+app_configuration.set('GJS', find_program('gjs').path())
+# app_configuration.set('PACKAGE_NAME', meson.project_name())
+app_configuration.set('PACKAGE_NAME', app_id)
+app_configuration.set('PACKAGE_VERSION', meson.project_version())
+app_configuration.set('prefix', prefix)
+pkgdatadir = join_paths(datadir, meson.project_name())
+# app_configuration.set('libdir', prefix, get_option('libdir')))
+app_configuration.set('libdir', datadir)
+app_configuration.set('pkgdatadir', pkgdatadir)
 gnome = import('gnome')
 intl = import('i18n')
 
-config_h = configuration_data()
+# config_h = configuration_data()
 GETTEXT_PACKAGE = app_id
-config_h.set_quoted('GETTEXT_PACKAGE', GETTEXT_PACKAGE)
-config_h.set_quoted('LOCALEDIR', join_paths(prefix, get_option('localedir')))
+app_configuration.set_quoted('GETTEXT_PACKAGE', GETTEXT_PACKAGE)
+app_configuration.set_quoted('LOCALEDIR', join_paths(prefix, get_option('localedir')))
 configure_file(
   output: 'config.h',
-  configuration: config_h,
+  configuration: app_configuration,
 )
 add_global_arguments([
   '-DHAVE_CONFIG_H',
   '-I' + meson.build_root(),
 ], language: 'c')
 
-app_configuration = configuration_data()
 
-app_configuration.set('GJS', find_program('gjs').path())
-# app_configuration.set('PACKAGE_NAME', meson.project_name())
-app_configuration.set('PACKAGE_NAME', app_id)
-app_configuration.set('PACKAGE_VERSION', meson.project_version())
-app_configuration.set('prefix', prefix)
 
-pkgdatadir = join_paths(datadir, meson.project_name())
-# app_configuration.set('libdir', prefix, get_option('libdir')))
-app_configuration.set('libdir', datadir)
-app_configuration.set('pkgdatadir', pkgdatadir)
+
+
+
 
 subdir('src')
 # subdir('src/lib')
