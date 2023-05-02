@@ -4,6 +4,13 @@
     <file>main.js</file>
     <file>Emailer.js</file>
     <file>UI/simpleModal.ui</file>
+    <file>UI/contentMain.ui</file>
+    <file>UI/facteur.css</file>
+    <file>UI/mailingMain.ui</file>
+    <file>UI/resultsMain.ui</file>
+    <file>UI/settingsApp.ui</file>
+    <file>UI/settingsConx.ui</file>
+    <file>UI/settingsMain.ui</file>
     <file>UI/Contents.js</file>
     <file>UI/Mailing.js</file>
     <file>UI/Menubar.js</file>
