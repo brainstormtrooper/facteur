@@ -5,6 +5,9 @@
 .formlabel {
     margin-top: 2px;
 }
+.formrow .formelement {
+    margin-right: 5px;
+}
 .form_area_box {
     margin: 10px;
 }

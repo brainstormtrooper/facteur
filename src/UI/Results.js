@@ -6,6 +6,23 @@ const GObject = imports.gi.GObject;
 
 const Message = new myMessage.Message();
 
+const resultsfile = Gio.File.new_for_path('src/UI/resultsMain.ui');
+const [, resultstemplate] = resultsfile.load_contents(null);
+
+var resultsMain = GObject.registerClass( // eslint-disable-line
+{
+  GTypeName: 'resultsMain',
+  Template: resultstemplate,
+  // Children: [],
+  InternalChildren: ['textView', 'sentLabel', 'sendButton']
+},
+class resultsMain extends Gtk.Box {
+  _init () {
+    super._init();
+    
+  }
+});
+
 var UIresults = GObject.registerClass( // eslint-disable-line
     {
       GTypeName: 'UIresults',
@@ -18,30 +35,15 @@ var UIresults = GObject.registerClass( // eslint-disable-line
       }
 
       _buildUI () {
-        const vBox = new Gtk.Box({
-          orientation: Gtk.Orientation.VERTICAL, spacing: 6,
-        });
-        const checkboxRow = new Gtk.Box({
-          orientation: Gtk.Orientation.HORIZONTAL,
-        });
-        const SendbuttonRow = new Gtk.Box({
-          orientation: Gtk.Orientation.HORIZONTAL,
-        });
-        const logWindow = new Gtk.ScrolledWindow({ vexpand: true });
-        const logText = new Gtk.TextView({
-          buffer: this.textBuffer, editable: false,
-        });
-        this.sentLabel = new Gtk.Label(
-            { halign: Gtk.Align.END, label: this.defSentStr },
-        );
-        this.sendButton = new Gtk.Button({ label: Gettext.gettext('Send') });
 
-        logWindow.set_child(logText);
-        SendbuttonRow.append(this.sendButton);
-        SendbuttonRow.append(this.sentLabel);
-        vBox.prepend(checkboxRow);
-        vBox.prepend(logWindow);
-        vBox.append(SendbuttonRow);
+        this.resultsMain = new resultsMain();
+
+        // this.textBuffer = '';
+        this.textView = this.resultsMain._textView;
+        this.sentLabel = this.resultsMain._sentLabel;
+        this.sendButton = this.resultsMain._sendButton;
+
+        this.textView.set_buffer(this.textBuffer);
 
 
         this.sendButton.connect('clicked', async () => {
@@ -51,15 +53,17 @@ var UIresults = GObject.registerClass( // eslint-disable-line
               Message.sendAll();
             } else {
               const e = new Error('Failed to compile template');
-              logError(e);
+              log(e);
             }
           } catch (error) {
-            logError(error);
+            log(error);
           }
           
         });
 
-        return vBox;
+
+
+        return this.resultsMain;
       }
 
       _LOG (string, level = 'INFO') {
