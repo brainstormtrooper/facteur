@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.10.3 -->
+<interface>
+  <!-- interface-name gtk4uis.ui -->
+  <requires lib="gtk" version="4.6"/>
+  <template class="settingsMain" parent="GtkBox">
+    <property name="css-classes">form_content_box</property>
+    <property name="orientation">vertical</property>
+    <property name="vexpand">true</property>
+    <property name="hexpand">true</property>
+    <child>
+      <object class="GtkBox" id="form_area">
+        <style>
+          <class name="form_area_box" />
+          <class name="main_form_area" />
+        </style>
+        <property name="orientation">vertical</property>
+        <property name="vexpand">true</property>
+        <property name="halign">center</property>
+        <child>
+          <object class="GtkFrame" id="connframe">
+            <property name="label" translatable="yes">Connections</property>
+            <style>
+              <class name="formelement" />
+              <class name="frame" />
+            </style>
+            <child>
+              <object class="GtkLabel" id="sselectLabel">
+                <style>
+                  <class name="formelement" />
+                  <class name="formlabel" />
+                </style>
+                <property name="label" translatable="yes">Select a connection</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="sseletEntry">
+                <property name="css-classes">form_row_box</property>
+                <property name="orientation">horizontal</property>
+                <child>
+                  <object class="GtkComboBoxText" id="sselectCombo">
+                    <style>
+                      <class name="formelement" />
+                      <class name="forminput" />
+                      <class name="combobox" />
+                      <class name="comboboxtext" />
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="snewButton">
+                    <property name="label" translatable="yes">New</property>
+                    <style>
+                      <class name="formelement" />
+                      <class name="forminput" />
+                      <class name="button" />
+                      <class name="new" />
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="subjectLabel">
+            <style>
+              <class name="formelement" />
+              <class name="formlabel" />
+            </style>
+            <property name="label" translatable="yes">Mailing Subject</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="subjectField">
+            <style>
+              <class name="formelement" />
+              <class name="forminput" />
+              <class name="entry" />
+            </style>
+          </object>
+        </child>
+        
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="mainSaveRow">
+        <property name="orientation">horizontal</property>
+        <property name="halign">end</property>
+        <style>
+          <class name="formelementgroup" />
+          <class name="formbuttonrow" />
+        </style>
+        <child>
+          <object class="GtkButton" id="saveButton">
+            
+            <property name="label" translatable="yes">Save</property>
+            <style>
+              <class name="formelement" />
+              <class name="forminput" />
+              <class name="button" />
+              <class name="save" />
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -1,0 +1,18 @@
+.formrow {
+    margin-top: 2px;
+    margin-bottom: 6px;
+}
+.formlabel {
+    margin-top: 2px;
+}
+.formrow .formelement {
+    margin-right: 5px;
+}
+.form_area_box {
+    margin: 10px;
+}
+.dialog_content_box {
+    margin-bottom: 10px;
+    margin-left: 6px;
+    margin-right: 6px;
+}
