@@ -15,11 +15,20 @@ desktop = intl.merge_file(
   install_dir: appsdir
 )
 
-gsettingsdir = join_paths(datadir, 'glib-2.0', 'schemas')
-install_data(app_id + '.gschema.xml', install_dir : gsettingsdir)
+gsettingsdir = join_paths(get_option('datadir'), 'glib-2.0', 'schemas')
+gsettings_schema = app_id + '.gschema.xml'
+install_data(gsettings_schema, install_dir : gsettingsdir)
 meson.add_install_script('../meson/meson_post_install.py')
 
-appdatadir = join_paths(datadir, 'appdata')
+local_schemas = configure_file(copy: true,
+  input: gsettings_schema,
+  output: gsettings_schema)
+compile_local_schemas = custom_target('compile_local_schemas',
+  input: local_schemas,
+  output: 'gschemas.compiled',
+  command: ['glib-compile-schemas', meson.current_build_dir()])
+
+appdatadir = join_paths(get_option('datadir'), 'appdata')
 appdata = intl.merge_file(
   input : app_id + '.appdata.xml.in',
   output : app_id + '.appdata.xml',
@@ -29,7 +38,7 @@ appdata = intl.merge_file(
   install_dir: appdatadir
 )
 
-dbusservicedir = join_paths(datadir, 'dbus-1', 'services')
+dbusservicedir = join_paths(get_option('datadir'), 'dbus-1', 'services')
 dbus_service = configure_file(
   configuration : app_configuration,
   input : app_id + '.service.in',
@@ -37,4 +46,3 @@ dbus_service = configure_file(
   install : true,
   install_dir : dbusservicedir
 )
-subdir('icons')

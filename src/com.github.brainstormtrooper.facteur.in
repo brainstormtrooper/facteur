@@ -1,16 +1,8 @@
 #!@GJS@
-imports.package.init({ name: "facteur",
+imports.package.init({ name: "com.github.brainstormtrooper.facteur",
                        version: "@PACKAGE_VERSION@",
                        prefix: "@prefix@",
                        libdir: "@libdir@" });
 
-// imports.package.run(imports.js.main);
-const Gettext = imports.gettext;
+imports.package.run(imports.js.main);
 
-const Emailer = imports.Emailer;
-
-Gettext.bindtextdomain('facteur-0.5', '/usr/share/locale');
-Gettext.textdomain('facteur-0.5');
-
-// eslint-disable-next-line max-len
-(new Emailer.Facteur()).run([imports.system.programInvocationName].concat(ARGV));

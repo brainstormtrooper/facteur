@@ -14,7 +14,7 @@ const myFile = imports.lib.file;
 const appData = new Data.Data();
 
 
-const mailingfile = Gio.File.new_for_path('src/UI/mailingMain.ui');
+const mailingfile = Gio.File.new_for_path('data/mailingMain.ui');
 const [, mailingemplate] = mailingfile.load_contents(null);
 
 var mailingMain = GObject.registerClass( // eslint-disable-line

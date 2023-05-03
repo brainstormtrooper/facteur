@@ -133,7 +133,7 @@ var Facteur = GObject.registerClass( // eslint-disable-line
 
         try {
           const css_provider = Gtk.CssProvider.new();
-          css_provider.load_from_path('src/UI/facteur.css');
+          css_provider.load_from_path('data/facteur.css');
           // const context = new Gtk.StyleContext();
           const display = Gdk.Display.get_default();
           // const screen = Gtk.StyleContext.get_screen();

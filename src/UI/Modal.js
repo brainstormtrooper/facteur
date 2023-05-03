@@ -7,7 +7,7 @@ const Gettext = imports.gettext;
 const GObject = imports.gi.GObject;
 const Config = new imports.object.Settings.Settings();
 
-const file = Gio.File.new_for_path('src/UI/simpleModal.ui');
+const file = Gio.File.new_for_path('data/simpleModal.ui');
 const [, template] = file.load_contents(null);
 
 var SimpleModal = GObject.registerClass( // eslint-disable-line

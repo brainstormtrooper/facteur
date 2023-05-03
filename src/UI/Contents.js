@@ -10,7 +10,7 @@ const appData = new Data.Data();
 const myFile = imports.lib.file;
 
 
-const contentsfile = Gio.File.new_for_path('src/UI/contentMain.ui');
+const contentsfile = Gio.File.new_for_path('data/contentMain.ui');
 const [, contentTemplate] = contentsfile.load_contents(null);
 
 var contentMain = GObject.registerClass( // eslint-disable-line

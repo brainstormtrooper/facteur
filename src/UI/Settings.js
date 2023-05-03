@@ -14,7 +14,8 @@ const appData = new Data.Data();
 const Modal = imports.UI.Modal;
 const myFile = imports.lib.file;
 
-const conxfile = Gio.File.new_for_path('src/UI/settingsConx.ui');
+
+const conxfile = Gio.File.new_for_path('data/settingsConx.ui');
 const [, conxtemplate] = conxfile.load_contents(null);
 
 var settingsConx = GObject.registerClass( // eslint-disable-line
@@ -36,7 +37,7 @@ class settingsConx extends Gtk.Box {
   }
 });
 
-const mainfile = Gio.File.new_for_path('src/UI/settingsMain.ui');
+const mainfile = Gio.File.new_for_path('data/settingsMain.ui');
 const [, maintemplate] = mainfile.load_contents(null);
 
 var settingsMain = GObject.registerClass( // eslint-disable-line
@@ -56,7 +57,7 @@ class settingsMain extends Gtk.Box {
   }
 });
 
-const appfile = Gio.File.new_for_path('src/UI/settingsApp.ui');
+const appfile = Gio.File.new_for_path('data/settingsApp.ui');
 const [, apptemplate] = appfile.load_contents(null);
 
 var settingsApp = GObject.registerClass( // eslint-disable-line
