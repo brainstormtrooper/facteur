@@ -11,7 +11,7 @@ app_launcher = configure_file(
   configuration: app_configuration)
   
 install_data(app_launcher,
-  install_dir: get_option('bindir'),
+  install_dir: bindir,
   install_mode: 'rwxr-xr-x'
 )
 
