@@ -14,13 +14,13 @@ const myFile = imports.lib.file;
 const appData = new Data.Data();
 
 
-const mailingfile = Gio.File.new_for_path('data/mailingMain.ui');
-const [, mailingemplate] = mailingfile.load_contents(null);
+// const mailingfile = Gio.File.new_for_path('data/mailingMain.ui');
+// const [, mailingemplate] = mailingfile.load_contents(null);
 
 var mailingMain = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'mailingMain',
-  Template: mailingemplate,
+  Template: 'resource:///com/github/brainstormtrooper/facteur/mailingMain.ui',
   // Children: [],
   InternalChildren: ['mnewButton', 'mScrolledWindow', 'mTreeView']
 },

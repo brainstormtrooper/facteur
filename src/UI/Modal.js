@@ -7,13 +7,13 @@ const Gettext = imports.gettext;
 const GObject = imports.gi.GObject;
 const Config = new imports.object.Settings.Settings();
 
-const file = Gio.File.new_for_path('data/simpleModal.ui');
-const [, template] = file.load_contents(null);
+// const file = Gio.File.new_for_path('data/simpleModal.ui');
+// const [, template] = file.load_contents(null);
 
 var SimpleModal = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'SimpleModal',
-  Template: template,
+  Template: 'resource:///com/github/brainstormtrooper/facteur/simpleModal.ui',
   // Children: [],
   InternalChildren: ['dialog_content_area', 'dialog_action_area']
 },

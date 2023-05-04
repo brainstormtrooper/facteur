@@ -15,13 +15,13 @@ const Modal = imports.UI.Modal;
 const myFile = imports.lib.file;
 
 
-const conxfile = Gio.File.new_for_path('data/settingsConx.ui');
-const [, conxtemplate] = conxfile.load_contents(null);
+// const conxfile = Gio.File.new_for_path('data/settingsConx.ui');
+// const [, conxtemplate] = conxfile.load_contents(null);
 
 var settingsConx = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'settingsConx',
-  Template: conxtemplate,
+  Template: 'resource:///com/github/brainstormtrooper/facteur/settingsConx.ui',
   // Children: [],
   InternalChildren: [
     'form_area', 'cImportButton', 'conxNameEntry', 
@@ -37,13 +37,13 @@ class settingsConx extends Gtk.Box {
   }
 });
 
-const mainfile = Gio.File.new_for_path('data/settingsMain.ui');
-const [, maintemplate] = mainfile.load_contents(null);
+// const mainfile = Gio.File.new_for_path('data/settingsMain.ui');
+// const [, maintemplate] = mainfile.load_contents(null);
 
 var settingsMain = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'settingsMain',
-  Template: maintemplate,
+  Template: 'resource:///com/github/brainstormtrooper/facteur/settingsMain.ui',
   // Children: [],
   InternalChildren: [
     'form_area', 'sselectCombo', 'snewButton', 
@@ -57,13 +57,13 @@ class settingsMain extends Gtk.Box {
   }
 });
 
-const appfile = Gio.File.new_for_path('data/settingsApp.ui');
-const [, apptemplate] = appfile.load_contents(null);
+// const appfile = Gio.File.new_for_path('data/settingsApp.ui');
+// const [, apptemplate] = appfile.load_contents(null);
 
 var settingsApp = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'settingsApp',
-  Template: apptemplate,
+  Template: 'resource:///com/github/brainstormtrooper/facteur/settingsApp.ui',
   // Children: [],
   InternalChildren: [
     'form_area', 'defIpv4Field', 'delayField', 

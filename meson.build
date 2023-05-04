@@ -4,8 +4,8 @@ project('facteur', 'c',
 )
 
 
-datadir = '/usr/share'
-prefix = '/usr'
+# datadir = '/share'
+# prefix = '/usr'
 
 app_id = 'com.github.brainstormtrooper.facteur'
 
