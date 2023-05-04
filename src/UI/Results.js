@@ -6,13 +6,13 @@ const GObject = imports.gi.GObject;
 
 const Message = new myMessage.Message();
 
-const resultsfile = Gio.File.new_for_path('src/UI/resultsMain.ui');
-const [, resultstemplate] = resultsfile.load_contents(null);
+// const resultsfile = Gio.File.new_for_path('data/resultsMain.ui');
+// const [, resultstemplate] = resultsfile.load_contents(null);
 
 var resultsMain = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'resultsMain',
-  Template: resultstemplate,
+  Template: 'resource:///com/github/brainstormtrooper/facteur/resultsMain.ui',
   // Children: [],
   InternalChildren: ['textView', 'sentLabel', 'sendButton']
 },

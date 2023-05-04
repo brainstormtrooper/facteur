@@ -10,13 +10,13 @@ const appData = new Data.Data();
 const myFile = imports.lib.file;
 
 
-const contentsfile = Gio.File.new_for_path('src/UI/contentMain.ui');
-const [, contentTemplate] = contentsfile.load_contents(null);
+// const contentsfile = Gio.File.new_for_path('data/contentMain.ui');
+// const [, contentTemplate] = contentsfile.load_contents(null);
 
 var contentMain = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'contentMain',
-  Template: contentTemplate,
+  Template: 'resource:///com/github/brainstormtrooper/facteur/contentMain.ui',
   // Children: [],
   InternalChildren: ['textView', 'htmlSourceView', 'htmlPreview', 'saveButton', 'cImportButton']
 },

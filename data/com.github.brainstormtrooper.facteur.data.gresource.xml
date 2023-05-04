@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/com/github/brainstormtrooper/facteur">
+    <file>contentMain.ui</file>
+    <file>facteur.css</file>
+    <file>mailingMain.ui</file>
+    <file>resultsMain.ui</file>
+    <file>settingsApp.ui</file>
+    <file>settingsConx.ui</file>
+    <file>settingsMain.ui</file>
+    <file>simpleModal.ui</file>
   </gresource>
 </gresources>

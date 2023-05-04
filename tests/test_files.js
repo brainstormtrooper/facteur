@@ -16,10 +16,10 @@ function testUnrollFile(path) {
     libdir: 'lib',
   });
 
-  const data = JSON.parse(strings.fileWithConn);
+  // const data = JSON.parse(strings.fileWithConn);
   const legacydata = JSON.parse(strings.fileStr);
   // const HASH = settings.getHash().toString();
-  myFile.unRoll(data);
+  myFile.unRoll(strings.fileWithConn);
 
  
   JsUnit.assertEquals('SUBJECT is test', 'Test Mailing', appData.get('SUBJECT'));
