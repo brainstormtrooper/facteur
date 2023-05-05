@@ -18,15 +18,16 @@ desktop = intl.merge_file(
 gsettingsdir = join_paths(get_option('datadir'), 'glib-2.0', 'schemas')
 gsettings_schema = app_id + '.gschema.xml'
 install_data(gsettings_schema, install_dir : gsettingsdir)
-meson.add_install_script('../meson/meson_post_install.py')
+# meson.add_install_script('../meson/meson_post_install.py')
 
 local_schemas = configure_file(copy: true,
   input: gsettings_schema,
   output: gsettings_schema)
-compile_local_schemas = custom_target('compile_local_schemas',
-  input: local_schemas,
-  output: 'gschemas.compiled',
-  command: ['glib-compile-schemas', meson.current_build_dir()])
+
+gnome.compile_schemas(
+  build_by_default: true,
+  depend_files: local_schemas
+)
 
 appdatadir = join_paths(get_option('datadir'), 'appdata')
 appdata = intl.merge_file(
@@ -37,7 +38,7 @@ appdata = intl.merge_file(
   install: true,
   install_dir: appdatadir
 )
-
+app_configuration.set('bindir', bindir)
 dbusservicedir = join_paths(get_option('datadir'), 'dbus-1', 'services')
 dbus_service = configure_file(
   configuration : app_configuration,
