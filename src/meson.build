@@ -14,6 +14,3 @@ install_data(app_launcher,
   install_dir: bindir,
   install_mode: 'rwxr-xr-x'
 )
-
-run_target('devel', command: [gjs, app_launcher],
-  depends: [app_resource, data_resource, compile_local_schemas])

@@ -1,12 +1,5 @@
 #!/usr/bin/gjs
-/*
-imports.package.init({
-  name: 'com.github.brainstormtrooper.facteur',
-  version: '0.9.0',
-  prefix: '/usr',
-  libdir: '/share',
-});
-*/
+
 
 const Gettext = imports.gettext;
 

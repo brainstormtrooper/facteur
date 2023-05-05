@@ -1,5 +1,5 @@
 project('facteur', 'c',
-  version: '0.9.0',
+  version: '0.9.3',
   meson_version: '>= 1.0.0'
 )
 
@@ -21,13 +21,21 @@ app_configuration.set('GJS', gjs.path())
 app_configuration.set('PACKAGE_NAME', app_id)
 app_configuration.set('PACKAGE_VERSION', meson.project_version())
 app_configuration.set('prefix', get_option('prefix'))
-bindir = get_option('bindir')
-app_configuration.set('bindir', bindir)
+
 pkgdatadir = join_paths(get_option('datadir'), app_id)
 app_configuration.set('libdir', join_paths(get_option('prefix'), get_option('libdir')))
 app_configuration.set('pkgdatadir', pkgdatadir)
 
+bindir = get_option('bindir')
+
+
 subdir('data')
 subdir('src')
 subdir('po')
-meson.add_install_script('meson/meson_post_install.py')
+# meson.add_install_script('meson/meson_post_install.py')
+gnome.post_install(
+  glib_compile_schemas: true,
+  gtk_update_icon_cache: true,
+  update_desktop_database: false,
+  update_mime_database: false
+)
