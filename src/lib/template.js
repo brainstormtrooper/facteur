@@ -49,3 +49,43 @@ function _positions (template) {
 
   return res;
 }
+
+var payload = `Subject: {{subject}}
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="{{mixedBoundary}}"
+
+
+--{{mixedBoundary}}
+MIME-Version: 1.0
+Content-Type: multipart/related; boundary="{{relatedBoundary}}"
+
+
+--{{relatedBoundary}}
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="{{alternativeBoundary}}"
+
+
+{{partText}}
+
+
+{{partHtml}}
+
+--{{alternativeBoundary}}--
+
+{{partsInline}}
+
+--{{relatedBoundary}}--
+
+{{partsAttachment}}
+
+--{{mixedBoundary}}--`; 
+
+var partBlock = `--{{boundary}}
+Content-Type: {{contentType}}; {{contentExtra}}
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+{{dispositionHeader}}
+
+
+{{content}}
+`;

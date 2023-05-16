@@ -1,5 +1,5 @@
 project('facteur', 'c',
-  version: '0.9.4',
+  version: '0.10.0',
   meson_version: '>= 1.0.0'
 )
 
