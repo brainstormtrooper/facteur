@@ -13,6 +13,7 @@ const Config = new Settings.Settings();
 const appData = new Data.Data();
 const Modal = imports.UI.Modal;
 const myFile = imports.lib.file;
+const secret = imports.lib.secret;
 
 
 // const conxfile = Gio.File.new_for_path('data/settingsConx.ui');
@@ -106,12 +107,13 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           const connId = (obj.CONN ? obj.CONN : appData.get('CONN'));
 
           if (connId || obj.ID) {
-            const conn = (obj.ID ? obj : Config.getConnection(connId));
+            const conn = (obj.ID ? obj.ID : Config.getConnection(connId));
             const name = (obj.NAME ? obj.NAME : conn.NAME);
             const from = (obj.FROM ? obj.FROM : conn.FROM);
             const host = (obj.HOST ? obj.HOST : conn.HOST);
             const user = (obj.USER ? obj.USER : conn.USER);
-            const pass = (obj.PASS ? obj.PASS : false);
+
+            const pass = (obj.PASS ? obj.PASS : secret.connPasswordGet(connId));
             const delay = (obj.DELAY ? obj.DELAY : conn.DELAY);
             const ipv4 = (obj.IPv4 ? obj.IPv4 : conn.IPv4);
             const headers = (obj.HEADERS ? obj.HEADERS : conn.HEADERS);
@@ -133,7 +135,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             
           }
           if (this.sselectCombo) {
-            this.resetConSelect(this.sselectCombo);
+            this.resetConSelect(this.sselectCombo, connId);
           }
           
           
@@ -212,7 +214,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             this.conxUserEntry.set_text(myConn.USER);
             this.conxDelayEntry.set_text(myConn.DELAY);
             this.conxHeadersEntry.set_text(myConn.HEADERS);
-            this._updateUI(myConn);
+            // this._updateUI(myConn);
           }
           if (ipv4) {
             this.conxIPv4Entry.set_active(true);
@@ -226,8 +228,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             try {
           
               myFile.fileOpen(props, (res) => {
-                appData.set('FILENAME', res.get_basename());
-                // appData.set('FILENAME', 'test');
+                // appData.set('FILENAME', res.get_basename());
                 const td = new TextDecoder();
                 const [, contents] = res.load_contents(null);
                 const myConn = JSON.parse(td.decode(contents));
@@ -242,7 +243,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
                 this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);
               });
               
-              
+              // TODO : Import connection (save to settings) here
               
               
             } catch (error) {
@@ -261,7 +262,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
       }
 
       
-      resetConSelect(combo) {
+      resetConSelect(combo, connId = null) {
         // const fields = [this.mainSelectCombo, this.sselectCombo];
         const availableCns = JSON.parse(Config.getConnections());
         try {
@@ -275,6 +276,10 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             combo.insert(0, "0", "No Connections Available");
           }
           // this.A.emit('update_ui', true);
+          if (connId) {
+            combo.set_active_id(connId);
+          }
+          
         } catch (error) {
           log(`[settings] ${error}`);
           throw(error);
@@ -291,7 +296,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
 
       appConfig () {
         this.App = Gio.Application.get_default();
-        
+        const myModal = new Modal.UImodal();
         const ipv4 = Config.getIpv4();
         
 
@@ -328,6 +333,11 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         this.settingsForm._cDeleteConfirmButton.connect('clicked', () => {
           this.reallyDelete();
           this.settingsForm._cPopDelete.hide();
+        });
+
+        this.settingsForm._cEditButton.connect('clicked', () => {
+          // const conn = Config.getConnection(this.mainSelectCombo.get_active_id());
+          myModal.editConnection(this, this.mainSelectCombo.get_active_id());
         });
 
         this.settingsForm._cExportSelButton.connect('clicked', () => {

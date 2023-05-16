@@ -104,7 +104,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         const props = {
           title: 'Edit Connection',
           label: 'Please configure your connectoin here.',
-          content: Settings._buildNewConnection(connId),
+          content: settings._buildNewConnection(connId),
           window: settings.App._window,
           saveHandler: _saveHandler
         };

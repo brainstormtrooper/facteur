@@ -9,6 +9,7 @@ const Settings = imports.object.Settings;
 const time = imports.lib.time;
 const Data = imports.object.Data;
 const myTemplate = imports.object.Template;
+const secret = imports.lib.secret;
 const Template = new myTemplate.Template();
 const GObject = imports.gi.GObject;
 const appData = new Data.Data();
@@ -57,7 +58,7 @@ var Message = GObject.registerClass( // eslint-disable-line
         const delay = this.curConn.DELAY;
         appData.get('MAILINGS').forEach((mailing) => {
           // eslint-disable-next-line max-len
-          const mobj = this.build(mailing.text, mailing.html.replace(/(\r\n|\n|\r)/gm, ''));
+          const mobj = this.build(mailing.text, mailing.html);
           try {
             this.send(mobj, mailing.to);
           } catch (error) {
@@ -72,9 +73,9 @@ var Message = GObject.registerClass( // eslint-disable-line
 
       build (t, h) {
         // eslint-disable-next-line max-len
-        const subBlock = `Subject: ${appData.get('SUBJECT')}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n`;
+        const subBlock = `Subject: ${appData.get('SUBJECT')}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n\n`;
         // eslint-disable-next-line max-len
-        const msgBlock = `--${this.boundary}\nContent-Type: text/plain; charset=utf-8\n${t}\n--${this.boundary}\nContent-Type: text/html; charset=utf-8\n${h}\n--${this.boundary}--`;
+        const msgBlock = `--${this.boundary}\nContent-Type: text/plain; charset=us-ascii\nMIME-Version: 1.0\nContent-Transfer-Encoding: 7bit\n\n\n${t}\n\n\n--${this.boundary}\nContent-Type: text/html; charset=utf-8\n\n\n${h}\n\n--${this.boundary}--`;
         const res = { subBlock, msgBlock };
 
         return res;
@@ -110,6 +111,7 @@ var Message = GObject.registerClass( // eslint-disable-line
       async send (msgObj, to, cancellable = null) {
         this.App = Gio.Application.get_default();
         const ipv4 = Config.getIpv4();
+        const pass = secret.connPasswordGet(this.curConn.ID);
         let flagStr = '-svk';
         if (ipv4) {
           flagStr = '-svk4';
@@ -122,7 +124,7 @@ var Message = GObject.registerClass( // eslint-disable-line
           '--url', this.curConn.HOST,
           '--mail-rcpt', to,
           '-T', '-',
-          '--user', `${this.curConn.USER}:${this.curConn.PASS}`,
+          '--user', `${this.curConn.USER}:${pass}`,
         ];
         if (this.curConn.HOST.toLowerCase().includes('https')) {
           argv.push('--ssl-reqd');

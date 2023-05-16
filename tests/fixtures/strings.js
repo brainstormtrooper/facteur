@@ -42,23 +42,42 @@ var connStr = `{
 }`;
 
 var fileWithConn = `{
-	"CONN": "75df39cb-6cf9-44ea-9dbe-2c5bbf320df6",
+	"CONN": "55f99a8b-a531-46f5-be51-e4bed128e673",
 	"SUBJECT": "Test Mailing",
-	"HTML": "<h1>Hi {{name}}!</h1><p>this is text about {{likes}}</p>",
-	"TEXT": "{{name}}, {{likes}}",
+	"HTML": "test html",
+	"TEXT": "test text",
 	"TO": [
-		"recipient1@email.com",
-		"recipient2@otheremail.com",
-		"recipient3@email.com",
+		"recipient1@email.com,
+		"rickopper@yahoo.com",
+		"rickopper@gmail.com",
 		""
 	],
-	"CSVA": "JTVCJTVCJTIycmVjaXBpZW50MUBlbWFpbC5jb20lMjIsJTIyQm9iJTIyLCUyMnJlZCUyMGNhcnMlMjIlNUQsJTVCJTIycmVjaXBpZW50MkBvdGhlcmVtYWlsLmNvbSUyMiwlMjJUb20lMjIsJTIyUG9yY2hlcywlMjBhbmQlMjBGZXJyYXJpcyUyMiU1RCwlNUIlMjJyZWNpcGllbnQzQGVtYWlsLmNvbSUyMiwlMjJTYW0lMjIsJTIyVHJ1Y2tzLCUyMGFuZCUyMFNVVnMlMjIlNUQsJTVCJTIyJTIyJTVEJTVE",
+	"CSVA": [
+		[
+			"recipient1@email.com",
+			"rick",
+			"red cars"
+		],
+		[
+			"rickopper@yahoo.com",
+			"Ricky",
+			"fast"
+		],
+		[
+			"rickopper@gmail.com",
+			"Bob",
+			"luxury"
+		],
+		[
+			""
+		]
+	],
 	"VARS": [
 		"address",
 		"name",
 		"likes"
 	],
-	"FILEID": "27c95efd-5ab3-4350-a4e8-3320fe0ccae4",
+	"FILEID": "b487c267-75fa-4394-a2be-0206aa62c5a7",
 	"SENT": ""
 }`;
 
