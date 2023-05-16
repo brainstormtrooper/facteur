@@ -189,7 +189,8 @@ var UImailing = GObject.registerClass( // eslint-disable-line
           const row = this.list.csva[i];
           const iter = this._listStore.append();
 
-
+          // log('row : ', typeof row);
+          // this._listStore.set(iter, this.list.headers, row);
           this._listStore.set(iter, Object.keys(this.list.headers), row);
         }
       }

@@ -30,7 +30,7 @@ function fileSave(props, ret) {
   
     try {
       const dest = await o.save_finish(r);
-      dest.replace_contents(data, null, false,
+      dest.replace_contents(JSON.stringify(data, null, '\t'), null, false,
         Gio.FileCreateFlags.REPLACE_DESTINATION, null);
       ret(dest.get_basename());
     } catch (e) {
@@ -47,7 +47,7 @@ function fileOpen(props, ret) {
   // const parent = props.parent ? props.parent : null;
   const title = props.title ? props.title : 'Select a file';
   const foldername = props.foldername ? props.foldername : '/home';
-
+  const decoder = new TextDecoder('utf-8');
   const opener = new Gtk.FileDialog({ title });
   opener.set_initial_folder(Gio.File.new_for_path(foldername));
 
@@ -107,7 +107,7 @@ function rollUp () {
     HTML: appData.get('HTML'),
     TEXT: appData.get('TEXT'),
     TO: appData.get('TO'),
-    CSVA: base64.encode64(JSON.stringify(appData.get('CSVA'))),
+    CSVA: appData.get('CSVA'),
     VARS: appData.get('VARS'),
     // DELAY: appData.get('DELAY'),
     FILEID: appData.get('FILEID'),
@@ -137,12 +137,12 @@ function verify (data) {
   });
 
   // fix legacy files
-
+/*
   if(typeof data.CSVA == 'object') {
 
     data.CSVA = base64.encode64(JSON.stringify(data.CSVA));
   }
-
+*/
   /*
   Object.keys(data).forEach((key) => {
     if (!required.includes(key)) {
@@ -170,7 +170,7 @@ function unRoll (str) {
   appData.set('HTML', data.HTML);
   appData.set('TEXT', data.TEXT);
   appData.set('TO', data.TO);
-  appData.set('CSVA', JSON.parse(base64.decode64(data.CSVA)));
+  appData.set('CSVA', data.CSVA);
   appData.set('VARS', data.VARS);
   appData.set('FILEID', data.FILEID);
   appData.set('SENT', data.SENT);

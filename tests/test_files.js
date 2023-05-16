@@ -25,6 +25,7 @@ function testUnrollFile(path) {
   JsUnit.assertEquals('SUBJECT is test', 'Test Mailing', appData.get('SUBJECT'));
   // eslint-disable-next-line max-len
   
+log(appData.get('CSVA'));
 
   JsUnit.assertEquals('CSVA is object', 'object', typeof appData.get('CSVA'));
 
