@@ -10,6 +10,7 @@ const time = imports.lib.time;
 const Data = imports.object.Data;
 const myTemplate = imports.object.Template;
 const secret = imports.lib.secret;
+const tpllib = imports.lib.template;
 const Template = new myTemplate.Template();
 const GObject = imports.gi.GObject;
 const appData = new Data.Data();
@@ -31,8 +32,9 @@ var Message = GObject.registerClass( // eslint-disable-line
       _init () {
         super._init();
         // eslint-disable-next-line max-len
-        this.boundary = [...Array(16)].map(() => Math.random().toString(36)[2]).join('');
-        
+        this.mixedBoundary = [...Array(16)].map(() => Math.random().toString(36)[2]).join('');
+        this.relatedBoundary = [...Array(16)].map(() => Math.random().toString(36)[2]).join('');
+        this.alternativeBoundary = [...Array(16)].map(() => Math.random().toString(36)[2]).join('');
       }
 
       // METHODS
@@ -72,13 +74,54 @@ var Message = GObject.registerClass( // eslint-disable-line
       }
 
       build (t, h) {
-        // eslint-disable-next-line max-len
-        const subBlock = `Subject: ${appData.get('SUBJECT')}\nMIME-Version: 1.0\nContent-Type: multipart/alternative; boundary=${this.boundary}\n\n\n`;
-        // eslint-disable-next-line max-len
-        const msgBlock = `--${this.boundary}\nContent-Type: text/plain; charset=us-ascii\nMIME-Version: 1.0\nContent-Transfer-Encoding: 7bit\n\n\n${t}\n\n\n--${this.boundary}\nContent-Type: text/html; charset=utf-8\n\n\n${h}\n\n--${this.boundary}--`;
-        const res = { subBlock, msgBlock };
+        const blocks = [
+          {
+            type: 'plain',
+            name: 'text',
+            content: t,
+            parent: 'message'
+          },
+          {
+            type: 'html',
+            name: 'html',
+            content: h,
+            parent: 'message'
+          }
+        ];
 
-        return res;
+        // const mObj = {};
+
+        let payload = tpllib.payload.replace('{{subject}}', appData.get('SUBJECT'));
+        payload = payload.replace(/{{mixedBoundary}}/g, this.mixedBoundary);
+        payload = payload.replace(/{{relatedBoundary}}/g, this.relatedBoundary);
+        payload = payload.replace(/{{alternativeBoundary}}/g, this.alternativeBoundary);
+
+        blocks.forEach(block => {
+          let str = tpllib.partBlock;
+          // {{boundary}}, {{contentType}}, {{contentExtra}}, {{content}}, {{dispositionHeader}}
+          str = str.replace('{{boundary}}', this.alternativeBoundary);
+          if (block.type == 'plain') {
+            str = str.replace('{{contentType}}', 'text/plain');
+            str = str.replace('{{contentExtra}}', 'charset="us-ascii"');
+            str = str.replace('{{content}}', block.content);
+            str = str.replace('{{dispositionHeader}}', '');
+            payload = payload.replace('{{partText}}', str);
+          }
+          if (block.type == 'html') {
+            str = str.replace('{{contentType}}', 'text/html');
+            str = str.replace('{{contentExtra}}', 'charset="us-ascii"');
+            str = str.replace('{{content}}', block.content);
+            str = str.replace('{{dispositionHeader}}', '');
+            payload = payload.replace('{{partHtml}}', str);
+          }
+
+        });
+        payload = payload.replace('{{partsInline}}', '');
+        payload = payload.replace('{{partsAttachment}}', '');
+
+        
+
+        return payload;
       }
 
       preview () {
@@ -148,11 +191,13 @@ var Message = GObject.registerClass( // eslint-disable-line
           // You could alternatively return this Promise instead of awaiting it
           // here, but that's up to you.
           const stdout = await new Promise((resolve, reject) => {
+
+
             // communicate_utf8() returns a string, communicate() returns a
             // a GLib.Bytes and there are "headless" functions available as well
             proc.communicate_utf8_async(
                 // This is your stdin, which can just be a JS string
-                `${msgObj.subBlock} ${msgObj.msgBlock}`,
+                msgObj,
                 // we've been passing this around from the function args; you
                 // can create a Gio.Cancellable and call `cancellable.cancel()`
                 // to stop the command or any other operation you've passed it
