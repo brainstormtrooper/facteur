@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.10.3 -->
+<interface>
+  <!-- interface-name gtk4uis.ui -->
+  <requires lib="gtk" version="4.6" />
+  <template class="widgetAttachment" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <property name="vexpand">false</property>
+    <property name="hexpand">true</property>
+
+    <child>
+      <object class="GtkBox">
+        <property name="css-classes">form_attachment_box</property>
+        <property name="orientation">vertical</property>
+        <property name="hexpand">true</property>
+        <style>
+          <class name="attachment_block" />
+        </style>
+        <child>
+          <object class="GtkBox">
+            <style>
+              <class name="attachment_row_1" />
+            </style>
+            <property name="orientation">horizontal</property>
+            <property name="hexpand">true</property>
+            <child>
+              <object class="GtkLabel" id="filename">
+                <property name="label">filename.ext</property>
+                <style>
+                  <class name="attachment_filename" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="deleteButton">
+                <property name="halign">end</property>
+                <property name="icon_name">edit-delete-symbolic</property>
+                <style>
+                  <class name="attachment_deletebutton" />
+                </style>
+              </object>
+            </child>
+
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <style>
+              <class name="attachment_row_2" />
+            </style>
+            <property name="orientation">horizontal</property>
+            <property name="hexpand">true</property>
+            <child>
+              <object class="GtkEntry" id="fileId">
+                <property name="editable">false</property>
+                <style>
+                  <class name="attachment_fileid" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="inlineButton">
+                <property name="label" translatable="yes">Is inline</property>
+                <style>
+                  <class name="attachment_inlinebutton" />
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+
+
+    </child>
+  </template>
+</interface>
