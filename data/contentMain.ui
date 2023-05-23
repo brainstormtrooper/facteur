@@ -3,7 +3,7 @@
 <interface>
   <!-- interface-name gtk4uis.ui -->
   <requires lib="gtk" version="4.6" />
-  
+
   <template class="contentMain" parent="GtkBox">
     <property name="css-classes">form_content_box</property>
     <property name="orientation">vertical</property>
@@ -19,104 +19,233 @@
         <property name="vexpand">true</property>
         <property name="hexpand">true</property>
         <child>
-          <object class="GtkNotebook" id="contentNotebook">
+          <object class="GtkBox" id="expanderBox">
+            <property name="orientation">horizontal</property>
+            <property name="vexpand">true</property>
+            <property name="hexpand">true</property>
+            <property name="halign">fill</property>
             <child>
-              <object class="GtkScrolledWindow" id="scrollText">
+              <object class="GtkNotebook" id="contentNotebook">
                 <property name="vexpand">true</property>
                 <property name="hexpand">true</property>
+                <property name="halign">fill</property>
+
                 <child>
-                  <object class="GtkTextView" id="textView">
-                    <property name="editable">true</property>
+                  <object class="GtkScrolledWindow" id="scrollText">
+                    <property name="vexpand">true</property>
+                    <property name="hexpand">true</property>
+                    <child>
+                      <object class="GtkTextView" id="textView">
+                        <property name="editable">true</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="textContenttab">
-                <property name="label" translatable="yes">Text Content</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkBox" id="htmlPageBox">
-                <property name="orientation">vertical</property>
-                <property name="vexpand">true</property>
-                <property name="hexpand">true</property>
-                <child>
-                  <object class="GtkBox" id="cImportBox">
-                    <property name="orientation">horizontal</property>
-                    <style>
-                      <class name="formelementgroup" />
-                      <class name="formrow" />
-                    </style>
-                    <child>
-                      <object class="GtkButton" id="cImportButton">
-                        <style>
-                          <class name="formelement" />
-                          <class name="forminput" />
-                          <class name="button" />
-                        </style>
-                        <property name="icon_name">document-open-symbolic</property>
-                        
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="cImportLabel">
-                        <style>
-                          <class name="formelement" />
-                          <class name="formlabel" />
-                        </style>
-                        <property name="justify">left</property>
-                        <property name="label" translatable="yes">Import a template (optional)</property>
-                      </object>
-                    </child>
-                    
+                <child type="tab">
+                  <object class="GtkLabel" id="textContenttab">
+                    <property name="label" translatable="yes">Text Content</property>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkNotebook" id="pageHtml">
+                  <object class="GtkBox" id="htmlPageBox">
+                    <property name="orientation">vertical</property>
+                    <property name="vexpand">true</property>
+                    <property name="hexpand">true</property>
                     <child>
-                      <object class="GtkScrolledWindow" id="scrollHtml">
-                        <property name="vexpand">true</property>
-                        <property name="hexpand">true</property>
+                      <object class="GtkBox" id="cImportBox">
+                        <property name="orientation">horizontal</property>
+                        <style>
+                          <class name="formelementgroup" />
+                          <class name="formrow" />
+                        </style>
                         <child>
-                          <object class="GtkSourceView" id="htmlSourceView">
-                            
+                          <object class="GtkButton" id="cImportButton">
+                            <style>
+                              <class name="formelement" />
+                              <class name="forminput" />
+                              <class name="button" />
+                            </style>
+                            <property name="icon_name">document-open-symbolic</property>
+
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="cImportLabel">
+                            <style>
+                              <class name="formelement" />
+                              <class name="formlabel" />
+                            </style>
+                            <property name="justify">left</property>
+                            <property name="label" translatable="yes">Import a template (optional)</property>
+                          </object>
+                        </child>
+
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkNotebook" id="pageHtml">
+                        <child>
+                          <object class="GtkScrolledWindow" id="scrollHtml">
+                            <property name="vexpand">true</property>
+                            <property name="hexpand">true</property>
+                            <child>
+                              <object class="GtkSourceView" id="htmlSourceView">
+
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="tab">
+                          <object class="GtkLabel" id="sourceTab">
+                            <property name="label" translatable="yes">Source</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkScrolledWindow" id="scrollPreview">
+                            <property name="vexpand">true</property>
+                            <property name="hexpand">true</property>
+                            <child>
+                              <object class="WebKitWebView" id="htmlPreview">
+                                <property name="editable">true</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="tab">
+                          <object class="GtkLabel" id="previewTab">
+                            <property name="label" translatable="yes">Preview</property>
                           </object>
                         </child>
                       </object>
                     </child>
-                    <child type="tab">
-                      <object class="GtkLabel" id="sourceTab">
-                        <property name="label" translatable="yes">Source</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkScrolledWindow" id="scrollPreview">
-                        <property name="vexpand">true</property>
-                        <property name="hexpand">true</property>
-                        <child>
-                          <object class="WebKitWebView" id="htmlPreview">
-                            <property name="editable">true</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child type="tab">
-                      <object class="GtkLabel" id="previewTab">
-                        <property name="label" translatable="yes">Preview</property>
-                      </object>
-                    </child>
+                  </object>
+                </child>
+                <child type="tab">
+                  <object class="GtkLabel" id="htmlContentTab">
+                    <property name="label" translatable="yes">Html Content</property>
                   </object>
                 </child>
               </object>
             </child>
-            <child type="tab">
-              <object class="GtkLabel" id="htmlContentTab">
-                <property name="label" translatable="yes">Html Content</property>
+
+            <child>
+              <object class="GtkExpander" id="attachmentListExpander">
+                <property name="label" translatable="yes">Attachments</property>
+                <property name="expanded">true</property>
+                <property name="hexpand">false</property>
+                <property name="resize_toplevel">true</property>
+                <property name="halign">end</property>
+                
+                <child>
+                  <object class="GtkBox" id="attachmentsBox">
+                    <property name="css-classes">attachments_box</property>
+
+                    <property name="width-request">250</property>
+                    <property name="orientation">vertical</property>
+                    <property name="vexpand">true</property>
+                    <property name="hexpand">true</property>
+                    <child>
+                      <object class="GtkBox" id="addAttachmentButtonRow">
+                        <property name="orientation">horizontal</property>
+                        <property name="hexpand">true</property>
+                        <property name="halign">end</property>
+                        <child>
+                          <object class="GtkButton" id="addAttachmentButton">
+                            <property name="label" translatable="yes">New Attachment</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="attachmentsScroll">
+                        <property name="vexpand">true</property>
+                        <property name="hexpand">true</property>
+                        <child>
+                          <object class="GtkBox" id="attachmentsListBox">
+                            <property name="orientation">vertical</property>
+                            <property name="vexpand">true</property>
+                            <property name="hexpand">true</property>
+
+                            <child>
+                              <object class="GtkBox">
+                                <property name="css-classes">form_attachment_box</property>
+                                <property name="orientation">vertical</property>
+                                <property name="hexpand">true</property>
+                                <style>
+                                  <class name="attachment_block" />
+                                </style>
+                                <child>
+                                  <object class="GtkBox">
+                                    <style>
+                                      <class name="attachment_row_1" />
+                                    </style>
+                                    <property name="orientation">horizontal</property>
+                                    <property name="hexpand">true</property>
+                                    <child>
+                                      <object class="GtkLabel" id="filename">
+                                        <property name="label">filename.ext</property>
+                                        <style>
+                                          <class name="attachment_filename" />
+                                        </style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="deleteButton">
+                                        <property name="icon_name">edit-delete-symbolic</property>
+                                        <property name="halign">end</property>
+                                        <style>
+                                          <class name="attachment_deletebutton" />
+                                        </style>
+                                      </object>
+                                    </child>
+                                    
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <style>
+                                      <class name="attachment_row_2" />
+                                    </style>
+                                    <property name="orientation">horizontal</property>
+                                    <property name="hexpand">true</property>
+                                    <child>
+                                      <object class="GtkEntry" id="fileId">
+                                        <style>
+                                          <class name="attachment_fileid" />
+                                        </style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="inlineButton">
+                                        <property name="label" translatable="yes">Is inline</property>
+                                        <style>
+                                          <class name="attachment_inlinebutton" />
+                                        </style>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+
+
+                            </child>
+
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+
+                  </object>
+                </child>
+
+
               </object>
             </child>
           </object>
+
         </child>
+
+
         <child>
           <object class="GtkBox" id="contentSaveRow">
             <property name="orientation">horizontal</property>
@@ -127,7 +256,7 @@
             </style>
             <child>
               <object class="GtkButton" id="saveButton">
-                
+
                 <property name="label" translatable="yes">Save</property>
                 <style>
                   <class name="formelement" />
@@ -138,9 +267,9 @@
               </object>
             </child>
           </object>
-        </child>     
+        </child>
       </object>
     </child>
-    
+
   </template>
 </interface>

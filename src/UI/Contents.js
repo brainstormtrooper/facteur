@@ -13,12 +13,27 @@ const myFile = imports.lib.file;
 // const contentsfile = Gio.File.new_for_path('data/contentMain.ui');
 // const [, contentTemplate] = contentsfile.load_contents(null);
 
+var widgetAttachment = GObject.registerClass( // eslint-disable-line
+{
+  GTypeName: 'widgetAttachment',
+  Template: 'resource:///com/github/brainstormtrooper/facteur/widgetAttachment.ui',
+  // Children: ['attachment', 'contentMain'],
+  InternalChildren: ['filename', 'deleteButton', 'fileId', 'inlineButton']
+},
+class widgetAttachment extends Gtk.Box {
+  _init () {
+    super._init();
+    // Gtksource.init();
+    
+  }
+});
+
 var contentMain = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'contentMain',
   Template: 'resource:///com/github/brainstormtrooper/facteur/contentMain.ui',
-  // Children: [],
-  InternalChildren: ['textView', 'htmlSourceView', 'htmlPreview', 'saveButton', 'cImportButton']
+  // Children: ['attachment', 'contentMain'],
+  InternalChildren: ['textView', 'htmlSourceView', 'htmlPreview', 'saveButton', 'cImportButton', 'addAttachmentButton', 'attachmentsListBox']
 },
 class contentMain extends Gtk.Box {
   _init () {
@@ -35,6 +50,9 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
       Signals: {
         'Logger': {
           param_types: [GObject.TYPE_STRING],
+        },
+        'update_attachments': {
+          param_types: [GObject.TYPE_BOOLEAN],
         },
       },
     },
@@ -54,8 +72,33 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.textBuffer.set_text(appData.get('TEXT'), len);
       }
 
+      updateAttachments () {
+        let widget = this.attachmentsListBox.get_first_child();
+        while (widget && widget == this.attachmentsListBox.get_first_child()) {
+          this.attachmentsListBox.remove(widget);
+          widget = this.attachmentsListBox.get_first_child();
+        }
+
+        const currAttachments = appData.get('ATTACHMENTS');
+        currAttachments.forEach(attachment => {
+          const aw = new widgetAttachment();
+          aw._filename.set_text(attachment.fileName);
+          aw._inlineButton.set_active(attachment.inline);
+          aw._fileId.set_text(attachment.id);
+          aw._deleteButton.connect('clicked', () => {
+            appData.deleteAttachment(attachment.fileName);
+            this.App.emit('update_attachments', true);
+          });
+          aw._inlineButton.connect('toggled', () => {
+            appData.setInlineAttachment(attachment.fileName, aw._inlineButton.get_active());
+            this.App.emit('update_attachments', true);
+          });
+          this.attachmentsListBox.append(aw);
+        });
+      }
+
       _buildUI () {
-        
+        this.App = Gio.Application.get_default();
         this.contentMain = new contentMain();
 
         this.textView = this.contentMain._textView;
@@ -63,6 +106,8 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.htmlPreview = this.contentMain._htmlPreview;
         this.saveButton = this.contentMain._saveButton;
         this.cImportButton = this.contentMain._cImportButton;
+        this.newAttachmentButton = this.contentMain._addAttachmentButton;
+        this.attachmentsListBox = this.contentMain._attachmentsListBox
 
         this.textBuffer = new Gtk.TextBuffer();
         const langManager = new GtkSource.LanguageManager();
@@ -81,6 +126,20 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         const len = encodeURI(defhtmlstr).split(/%..|./).length - 1;
         this.htmlBuffer.set_text(defhtmlstr, len);
         this.htmlPreview.load_html(this.htmlBuffer.text, null);
+
+        this.newAttachmentButton.connect('clicked', () => {
+          const props = {
+            title: 'Select An Attachment'
+          }
+          try {
+            myFile.fileOpen(props, (res) => {
+              Template.addAttachment(res);
+              this.App.emit('update_attachments', true);
+            });
+          } catch (error) {
+            
+          }
+        });
 
         this.cImportButton.connect('clicked', () => {
           const props = {

@@ -51,6 +51,9 @@ function _positions (template) {
 }
 
 var payload = `Subject: {{subject}}
+TO: {{to}}
+FROM: {{from}}
+DATE: {{date}}
 MIME-Version: 1.0
 Content-Type: multipart/mixed; boundary="{{mixedBoundary}}"
 
@@ -83,8 +86,9 @@ Content-Type: multipart/alternative; boundary="{{alternativeBoundary}}"
 var partBlock = `--{{boundary}}
 Content-Type: {{contentType}}; {{contentExtra}}
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: {{encoding}}
 {{dispositionHeader}}
+{{contentId}}
 
 
 {{content}}

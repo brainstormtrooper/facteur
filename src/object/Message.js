@@ -4,6 +4,7 @@ Message object.
 Create and send a compiled message.
 */
 const Gio = imports.gi.Gio;
+const GLib = imports.gi.GLib;
 const Soup = imports.gi.Soup;
 const Settings = imports.object.Settings;
 const time = imports.lib.time;
@@ -43,6 +44,11 @@ var Message = GObject.registerClass( // eslint-disable-line
         return await Template.compile();
       }
 
+      rule79 (str) {
+        return str.match(/.{1,72}/g).join("\n");
+
+      }
+
       sleep (milliseconds) {
         const timeStart = new Date().getTime();
         // eslint-disable-next-line
@@ -60,7 +66,7 @@ var Message = GObject.registerClass( // eslint-disable-line
         const delay = this.curConn.DELAY;
         appData.get('MAILINGS').forEach((mailing) => {
           // eslint-disable-next-line max-len
-          const mobj = this.build(mailing.text, mailing.html);
+          const mobj = this.build(mailing);
           try {
             this.send(mobj, mailing.to);
           } catch (error) {
@@ -73,18 +79,21 @@ var Message = GObject.registerClass( // eslint-disable-line
         this.App.emit('Sent', true);
       }
 
-      build (t, h) {
+      build (mailing) {
+        
+        const inline = [];
+        const attach = [];
         const blocks = [
           {
             type: 'plain',
             name: 'text',
-            content: t,
+            content: mailing.text,
             parent: 'message'
           },
           {
             type: 'html',
             name: 'html',
-            content: h,
+            content: mailing.html,
             parent: 'message'
           }
         ];
@@ -92,6 +101,10 @@ var Message = GObject.registerClass( // eslint-disable-line
         // const mObj = {};
 
         let payload = tpllib.payload.replace('{{subject}}', appData.get('SUBJECT'));
+
+        payload = payload.replace('{{to}}', mailing.to);
+        payload = payload.replace('{{from}}', mailing.from);
+        payload = payload.replace('{{date}}', GLib.DateTime.new_now_utc().format('%d %b %Y %H:%M:%S %:z'));
         payload = payload.replace(/{{mixedBoundary}}/g, this.mixedBoundary);
         payload = payload.replace(/{{relatedBoundary}}/g, this.relatedBoundary);
         payload = payload.replace(/{{alternativeBoundary}}/g, this.alternativeBoundary);
@@ -99,7 +112,11 @@ var Message = GObject.registerClass( // eslint-disable-line
         blocks.forEach(block => {
           let str = tpllib.partBlock;
           // {{boundary}}, {{contentType}}, {{contentExtra}}, {{content}}, {{dispositionHeader}}
+          // Content-Disposition: inline; filename="image001.png";
           str = str.replace('{{boundary}}', this.alternativeBoundary);
+          str = str.replace('{{encoding}}', '7bit');
+          str = str.replace('{{contentId}}', '');
+          
           if (block.type == 'plain') {
             str = str.replace('{{contentType}}', 'text/plain');
             str = str.replace('{{contentExtra}}', 'charset="us-ascii"');
@@ -116,8 +133,37 @@ var Message = GObject.registerClass( // eslint-disable-line
           }
 
         });
-        payload = payload.replace('{{partsInline}}', '');
-        payload = payload.replace('{{partsAttachment}}', '');
+
+        const attachments = appData.get('ATTACHMENTS');
+
+        attachments.forEach(attachment => {
+          let str = tpllib.partBlock;
+          // str = str.replace('{{contentType}}', attachment.type);
+          
+          str = str.replace('{{contentExtra}}', `name="${attachment.fileName}";`);
+          str = str.replace('{{encoding}}', 'base64');
+          if (attachment.inline) {
+            str = str.replace('{{contentType}}', attachment.type);
+            str = str.replace('{{boundary}}', this.relatedBoundary);
+            str = str.replace('{{content}}', this.rule79(attachment.contents));
+            str = str.replace('{{contentId}}', `Content-ID: <${attachment.id}>`);
+            str = str.replace('{{dispositionHeader}}', `Content-Disposition: inline; filename="${attachment.fileName}";`);
+            inline.push(str);
+          } else {
+            str = str.replace('{{contentType}}', 'application/octet-stream');
+            str = str.replace('{{boundary}}', this.mixedBoundary);
+            const rid = Math.random().toString(36).slice(2, 7);
+            str = str.replace('{{contentId}}', `Content-ID: "${rid}"`);
+            str = str.replace('{{content}}', this.rule79(attachment.contents));
+            str = str.replace('{{dispositionHeader}}', `Content-Disposition: attachment; filename="${attachment.fileName}";`);
+            attach.push(str);
+          }
+
+        });
+
+
+        payload = payload.replace('{{partsInline}}', inline.join("\n\n"));
+        payload = payload.replace('{{partsAttachment}}', attach.join("\n\n"));
 
         
 
@@ -133,7 +179,7 @@ var Message = GObject.registerClass( // eslint-disable-line
         this.App = Gio.Application.get_default();
         // const ipv4 = Config.getIpv4();
         let httpSession = new Soup.Session();
-        httpSession.user_agent = 'blah'
+        // httpSession.user_agent = 'blah'
         let authUri = new Soup.URI(url);
         authUri.set_user(this.handle);
         authUri.set_password(this.token);
@@ -169,7 +215,7 @@ var Message = GObject.registerClass( // eslint-disable-line
           '-T', '-',
           '--user', `${this.curConn.USER}:${pass}`,
         ];
-        if (this.curConn.HOST.toLowerCase().includes('https')) {
+        if (this.curConn.HOST.toLowerCase().includes('smtps')) {
           argv.push('--ssl-reqd');
         }
         try {

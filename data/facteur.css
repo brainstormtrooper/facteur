@@ -16,3 +16,13 @@
     margin-left: 6px;
     margin-right: 6px;
 }
+
+.form_attachment_box{
+	min-width:250px;
+    margin-top: 5px;
+    padding: 3px;
+}
+
+.attachment_filename {
+    line-height: 24px;
+}
