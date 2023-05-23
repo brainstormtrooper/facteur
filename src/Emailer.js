@@ -27,6 +27,9 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         'update_ui': {
           param_types: [GObject.TYPE_BOOLEAN],
         },
+        'update_attachments': {
+          param_types: [GObject.TYPE_BOOLEAN],
+        },
         'filename_changed': {
           param_types: [GObject.TYPE_BOOLEAN],
         },
@@ -58,6 +61,9 @@ var Facteur = GObject.registerClass( // eslint-disable-line
           } catch (e) {
             logError(e);
           }
+        });
+        this.connect('update_attachments', () => {
+          Contents.updateAttachments();
         });
         this.connect('filename_changed', () => {
           try {

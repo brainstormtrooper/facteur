@@ -109,6 +109,7 @@ function rollUp () {
     TO: appData.get('TO'),
     CSVA: appData.get('CSVA'),
     VARS: appData.get('VARS'),
+    ATTS: appData.get('ATTACHMENTS'),
     // DELAY: appData.get('DELAY'),
     FILEID: appData.get('FILEID'),
     SENT: appData.get('SENT'),
@@ -174,7 +175,9 @@ function unRoll (str) {
   appData.set('VARS', data.VARS);
   appData.set('FILEID', data.FILEID);
   appData.set('SENT', data.SENT);
-
+  if (data.ATTS) {
+    appData.set('ATTACHMENTS', data.ATTS);
+  }
   
 }
 

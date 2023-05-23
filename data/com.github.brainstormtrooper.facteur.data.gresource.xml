@@ -9,5 +9,6 @@
     <file>settingsConx.ui</file>
     <file>settingsMain.ui</file>
     <file>simpleModal.ui</file>
+    <file>widgetAttachment.ui</file>
   </gresource>
 </gresources>

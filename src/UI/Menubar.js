@@ -25,6 +25,9 @@ var Menubar = GObject.registerClass( // eslint-disable-line
       'update_ui': {
         param_types: [GObject.TYPE_BOOLEAN],
       },
+      'update_attachments': {
+        param_types: [GObject.TYPE_BOOLEAN],
+      },
       'filename_changed': {
         param_types: [GObject.TYPE_BOOLEAN],
       },
@@ -121,6 +124,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
             const td = new TextDecoder();
             myFile.unRoll(td.decode(contents));
             this.App.emit('update_ui', true);
+            this.App.emit('update_attachments', true);
             // eslint-disable-next-line max-len
             this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);
             this.App.emit('filename_changed', true);
