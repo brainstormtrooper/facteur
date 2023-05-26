@@ -118,7 +118,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
         try {
           
           myFile.fileOpen(props, (res) => {
-            appData.set('FILENAME', res.get_basename());
+            appData.set('FILENAME', res.get_path());
             // appData.set('FILENAME', 'test');
             const [, contents] = res.load_contents(null);
             const td = new TextDecoder();

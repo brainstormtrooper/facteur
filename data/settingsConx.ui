@@ -178,6 +178,7 @@
                 <child>
                   <object class="GtkEntry" id="conxPassEntry">
                     <property name="input_purpose">password</property>
+                    <property name="visibility">false</property>
                     <style>
                       <class name="formelement" />
                       <class name="forminput" />
