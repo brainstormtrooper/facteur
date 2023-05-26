@@ -27,7 +27,7 @@ var settingsConx = GObject.registerClass( // eslint-disable-line
   InternalChildren: [
     'form_area', 'cImportButton', 'conxNameEntry', 
     'conxFromEntry', 'conxHostEntry', 'conxUserEntry',
-    'conxPassEntry', 'conxDelayEntry', 'conxHeadersEntry',
+    'conxPassEntry', 'cShowPassButton', 'conxDelayEntry', 'conxHeadersEntry',
     'conxIPv4Entry'
   ]
 },
@@ -203,6 +203,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           this.conxHostEntry = this.settingsConx._conxHostEntry;
           this.conxUserEntry = this.settingsConx._conxUserEntry;
           this.conxPassEntry = this.settingsConx._conxPassEntry;
+          this.cShowPassButton = this.settingsConx._cShowPassButton;
           this.conxDelayEntry = this.settingsConx._conxDelayEntry;
           this.conxHeadersEntry = this.settingsConx._conxHeadersEntry;
           this.conxIPv4Entry = this.settingsConx._conxIPv4Entry;
@@ -214,12 +215,17 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             this.conxUserEntry.set_text(myConn.USER);
             this.conxDelayEntry.set_text(myConn.DELAY);
             this.conxHeadersEntry.set_text(myConn.HEADERS);
+            this.conxPassEntry.set_text(secret.connPasswordGet(connId))
             // this._updateUI(myConn);
           }
           if (ipv4) {
             this.conxIPv4Entry.set_active(true);
           }
-          
+
+          const ctl = new Gtk.EventControllerMotion();
+          this.cShowPassButton.add_controller(ctl);
+          ctl.connect('enter', () => { this.conxPassEntry.set_visibility(true) });
+          ctl.connect('leave', () => { this.conxPassEntry.set_visibility(false) });
 
           this.cImportButton.connect('clicked', () => {
             const props = {

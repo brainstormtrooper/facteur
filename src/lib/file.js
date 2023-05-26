@@ -124,11 +124,6 @@ function verify (data) {
     'FILEID', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS',
   ];
   let valid = true;
-/*
-  const legacy = ['HOST', 'USER', 'FROM', 'SUBJECT',
-  'FILEID', 'HTML', 'TEXT', 'TO', 'CSVA', 'VARS',];
-*/
-  
 
   required.forEach((key) => {
     // eslint-disable-next-line no-prototype-builtins
@@ -136,21 +131,6 @@ function verify (data) {
       valid = false;
     }
   });
-
-  // fix legacy files
-/*
-  if(typeof data.CSVA == 'object') {
-
-    data.CSVA = base64.encode64(JSON.stringify(data.CSVA));
-  }
-*/
-  /*
-  Object.keys(data).forEach((key) => {
-    if (!required.includes(key)) {
-      valid = false;
-    }
-  });
-  */
 
   return valid;
 }
