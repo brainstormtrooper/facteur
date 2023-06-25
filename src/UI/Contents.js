@@ -97,6 +97,20 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         });
       }
 
+      previewAttachments (html) {
+        let myStr = html
+        appData._data.ATTACHMENTS.forEach(ao => {
+          if (ao.inline) {
+            const slug = `cid:${ao.id}`;
+            const [type, uncertain] = Gio.content_type_guess(ao.fileName, null)
+            const inline = `data:${type};base64,${ao.contents}`;
+            myStr = myStr.replace(slug, inline);
+          }
+        });
+
+        return myStr;
+      }
+
       _buildUI () {
         this.App = Gio.Application.get_default();
         this.contentMain = new contentMain();
@@ -119,7 +133,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.htmlSourceView.set_buffer(this.htmlBuffer);
 
         this.htmlBuffer.connect('changed', () => {
-          this.htmlPreview.load_html(this.htmlBuffer.text, null);
+          this.htmlPreview.load_html(this.previewAttachments(this.htmlBuffer.text), null);
         });
 
         const defhtmlstr = '<h1>Hi!</h1><p>this is text</p>';
