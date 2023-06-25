@@ -47,7 +47,7 @@ var Template = GObject.registerClass( // eslint-disable-line
         aObj.contents = GLib.base64_encode(contents);
         aObj.fileName = file.get_basename();
         const fExt = aObj.fileName.split('.')[1];
-        const [type, uncetain] = Gio.content_type_guess(aObj.fileName, null);
+        const [type, uncertain] = Gio.content_type_guess(aObj.fileName, null);
         
         aObj.type = type;
         aObj.inline = false;
