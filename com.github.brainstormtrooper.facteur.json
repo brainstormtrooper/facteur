@@ -30,6 +30,8 @@
     "modules" : [
         {
             "name" : "facteur",
+            "builddir" : true,
+            "buildsystem" : "meson",
             "sources" : [
                 {
                     "type" : "git",
