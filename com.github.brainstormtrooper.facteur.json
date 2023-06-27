@@ -1,18 +1,22 @@
 {
     "app-id" : "com.github.brainstormtrooper.facteur",
     "runtime" : "org.gnome.Platform",
-    "runtime-version" : "3.24",
+    "runtime-version" : "44",
     "branch" : "stable",
     "sdk" : "org.gnome.Sdk",
-    "command" : "facteur",
+    "command" : "com.github.brainstormtrooper.facteur",
     "finish-args" : [
         "--share=ipc",
         "--socket=x11",
         "--socket=wayland",
+        "--socket=session-bus",
         "--share=network",
+        "--filesystem=host",
+        "--filesystem=xdg-run/gvfsd",
         "--filesystem=xdg-run/dconf",
-        "--filesystem=~/.config/dconf:ro",
+        "--filesystem=~/.config/dconf",
         "--talk-name=ca.desrt.dconf",
+        "--talk-name=org.freedesktop.secrets",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
     ],
     "cleanup" : [
@@ -30,6 +34,8 @@
     "modules" : [
         {
             "name" : "facteur",
+            "builddir" : true,
+            "buildsystem" : "meson",
             "sources" : [
                 {
                     "type" : "git",

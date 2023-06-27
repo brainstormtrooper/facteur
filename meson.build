@@ -1,6 +1,6 @@
 project('facteur', 'c',
   version: '0.12.0',
-  meson_version: '>= 1.0.0'
+  meson_version: '>= 0.63.0'
 )
 
 
@@ -36,6 +36,5 @@ subdir('po')
 gnome.post_install(
   glib_compile_schemas: true,
   gtk_update_icon_cache: true,
-  update_desktop_database: false,
-  update_mime_database: false
+  update_desktop_database: false
 )
