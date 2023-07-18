@@ -33,6 +33,18 @@
     ],
     "modules" : [
         {
+            "name": "curl",
+            "config-opts": [ "--with-openssl" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/curl/curl/releases/download/curl-8_1_2/curl-8.1.2.tar.gz",
+                    "archive-type": "tar-gzip",
+                    "sha256": "2e5a9b8fcdc095bdd2f079561f369de71c5eb3b80f00a702fbe9a8b8d9897891"
+                }
+            ]
+        },
+        {
             "name" : "facteur",
             "builddir" : true,
             "buildsystem" : "meson",
