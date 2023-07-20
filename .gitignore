@@ -1,4 +1,6 @@
 launch.json
 .vscode
+.flatpak
 compile
 builddir
+_build

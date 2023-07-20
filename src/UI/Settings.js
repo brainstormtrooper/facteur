@@ -108,15 +108,18 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
 
           if (connId || obj.ID) {
             const conn = (obj.ID ? obj.ID : Config.getConnection(connId));
-            const name = (obj.NAME ? obj.NAME : conn.NAME);
-            const from = (obj.FROM ? obj.FROM : conn.FROM);
-            const host = (obj.HOST ? obj.HOST : conn.HOST);
-            const user = (obj.USER ? obj.USER : conn.USER);
+            if (conn) {
+              const name = (obj.NAME ? obj.NAME : conn.NAME);
+              const from = (obj.FROM ? obj.FROM : conn.FROM);
+              const host = (obj.HOST ? obj.HOST : conn.HOST);
+              const user = (obj.USER ? obj.USER : conn.USER);
 
-            const pass = (obj.PASS ? obj.PASS : secret.connPasswordGet(connId));
-            const delay = (obj.DELAY ? obj.DELAY : conn.DELAY);
-            const ipv4 = (obj.IPv4 ? obj.IPv4 : conn.IPv4);
-            const headers = (obj.HEADERS ? obj.HEADERS : conn.HEADERS);
+              const pass = (obj.PASS ? obj.PASS : secret.connPasswordGet(connId));
+              const delay = (obj.DELAY ? obj.DELAY : conn.DELAY);
+              const ipv4 = (obj.IPv4 ? obj.IPv4 : conn.IPv4);
+              const headers = (obj.HEADERS ? obj.HEADERS : conn.HEADERS);
+            }
+            
             if (this.nameField) {
               this.nameField.set_text(name);
               this.fromField.set_text(from);
@@ -215,7 +218,8 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             this.conxUserEntry.set_text(myConn.USER);
             this.conxDelayEntry.set_text(myConn.DELAY);
             this.conxHeadersEntry.set_text(myConn.HEADERS);
-            this.conxPassEntry.set_text(secret.connPasswordGet(connId))
+            const pass = (secret.connPasswordGet(connId) ? secret.connPasswordGet(connId): '');
+            this.conxPassEntry.set_text(pass);
             // this._updateUI(myConn);
           }
           if (ipv4) {
@@ -352,7 +356,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           const data = myFile.rollConn(conn, savePW);
           const props = {
             title: 'Export A Connection',
-            data: JSON.stringify(data)
+            data
           };
           myFile.fileSave(props, (res) => {
             log(res);
