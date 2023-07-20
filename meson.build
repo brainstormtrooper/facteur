@@ -1,5 +1,5 @@
 project('facteur', 'c',
-  version: '0.13.1',
+  version: '0.13.2',
   meson_version: '>= 0.63.0'
 )
 
@@ -7,7 +7,7 @@ project('facteur', 'c',
 # datadir = '/share'
 # prefix = '/usr'
 
-app_id = 'com.github.brainstormtrooper.facteur'
+app_id = 'io.github.brainstormtrooper.facteur'
 
 gnome = import('gnome')
 intl = import('i18n')

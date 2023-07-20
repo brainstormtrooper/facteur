@@ -24,7 +24,7 @@ var Data = class Data { // eslint-disable-line
 
       FILEID: uuid.uuid(),
       FILENAME: 'untitled',
-      APP: 'com.github.brainstormtrooper.facteur',
+      APP: 'io.github.brainstormtrooper.facteur',
       ID: '',
       SENT: '',
     };

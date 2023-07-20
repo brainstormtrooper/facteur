@@ -13,7 +13,7 @@ const Config = new imports.object.Settings.Settings();
 var SimpleModal = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'SimpleModal',
-  Template: 'resource:///com/github/brainstormtrooper/facteur/simpleModal.ui',
+  Template: 'resource:///io/github/brainstormtrooper/facteur/simpleModal.ui',
   // Children: [],
   InternalChildren: ['dialog_content_area', 'dialog_action_area']
 },
@@ -247,7 +247,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
               ),
               copyright: 'Copyright 2015 Rick Opper',
               license_type: Gtk.License.GPL_2_0,
-              logo_icon_name: 'com.github.brainstormtrooper.facteur',
+              logo_icon_name: 'io.github.brainstormtrooper.facteur',
               version: pkg.version,
               website: 'https://github.com/brainstormtrooper/facteur/wiki',
               wrap_license: true,

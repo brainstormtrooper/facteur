@@ -1,5 +1,5 @@
 #!@GJS@
-imports.package.init({ name: "com.github.brainstormtrooper.facteur",
+imports.package.init({ name: "io.github.brainstormtrooper.facteur",
                        version: "@PACKAGE_VERSION@",
                        prefix: "@prefix@",
                        libdir: "@libdir@" });

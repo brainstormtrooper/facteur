@@ -22,7 +22,7 @@ const secret = imports.lib.secret;
 var settingsConx = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'settingsConx',
-  Template: 'resource:///com/github/brainstormtrooper/facteur/settingsConx.ui',
+  Template: 'resource:///io/github/brainstormtrooper/facteur/settingsConx.ui',
   // Children: [],
   InternalChildren: [
     'form_area', 'cImportButton', 'conxNameEntry', 
@@ -44,7 +44,7 @@ class settingsConx extends Gtk.Box {
 var settingsMain = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'settingsMain',
-  Template: 'resource:///com/github/brainstormtrooper/facteur/settingsMain.ui',
+  Template: 'resource:///io/github/brainstormtrooper/facteur/settingsMain.ui',
   // Children: [],
   InternalChildren: [
     'form_area', 'sselectCombo', 'snewButton', 
@@ -64,7 +64,7 @@ class settingsMain extends Gtk.Box {
 var settingsApp = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'settingsApp',
-  Template: 'resource:///com/github/brainstormtrooper/facteur/settingsApp.ui',
+  Template: 'resource:///io/github/brainstormtrooper/facteur/settingsApp.ui',
   // Children: [],
   InternalChildren: [
     'form_area', 'defIpv4Field', 'delayField', 
