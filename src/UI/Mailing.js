@@ -20,7 +20,7 @@ const appData = new Data.Data();
 var mailingMain = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'mailingMain',
-  Template: 'resource:///com/github/brainstormtrooper/facteur/mailingMain.ui',
+  Template: 'resource:///io/github/brainstormtrooper/facteur/mailingMain.ui',
   // Children: [],
   InternalChildren: ['mnewButton', 'mScrolledWindow', 'mTreeView']
 },

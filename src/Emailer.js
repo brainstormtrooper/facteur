@@ -43,7 +43,7 @@ var Facteur = GObject.registerClass( // eslint-disable-line
     },
     class Facteur extends Gtk.Application {
       _init () {
-        this.ID = 'com.github.brainstormtrooper.facteur';
+        this.ID = 'io.github.brainstormtrooper.facteur';
         super._init({
           application_id: this.ID,
           flags: Gio.ApplicationFlags.HANDLES_OPEN,
@@ -139,7 +139,7 @@ var Facteur = GObject.registerClass( // eslint-disable-line
 
         try {
           const css_provider = Gtk.CssProvider.new();
-          css_provider.load_from_resource('/com/github/brainstormtrooper/facteur/facteur.css');
+          css_provider.load_from_resource('/io/github/brainstormtrooper/facteur/facteur.css');
           // const context = new Gtk.StyleContext();
           const display = Gdk.Display.get_default();
           // const screen = Gtk.StyleContext.get_screen();

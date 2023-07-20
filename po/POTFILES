@@ -1,4 +1,4 @@
-data/com.github.brainstormtrooper.facteur.desktop.in
-data/com.github.brainstormtrooper.facteur.appdata.xml.in
-data/com.github.brainstormtrooper.facteur.gschema.xml
+data/io.github.brainstormtrooper.facteur.desktop.in
+data/io.github.brainstormtrooper.facteur.appdata.xml.in
+data/io.github.brainstormtrooper.facteur.gschema.xml
 src/main.js

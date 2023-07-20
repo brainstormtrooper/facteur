@@ -16,7 +16,7 @@ const myFile = imports.lib.file;
 var widgetAttachment = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'widgetAttachment',
-  Template: 'resource:///com/github/brainstormtrooper/facteur/widgetAttachment.ui',
+  Template: 'resource:///io/github/brainstormtrooper/facteur/widgetAttachment.ui',
   // Children: ['attachment', 'contentMain'],
   InternalChildren: ['filename', 'deleteButton', 'fileId', 'inlineButton']
 },
@@ -31,7 +31,7 @@ class widgetAttachment extends Gtk.Box {
 var contentMain = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'contentMain',
-  Template: 'resource:///com/github/brainstormtrooper/facteur/contentMain.ui',
+  Template: 'resource:///io/github/brainstormtrooper/facteur/contentMain.ui',
   // Children: ['attachment', 'contentMain'],
   InternalChildren: ['textView', 'htmlSourceView', 'htmlPreview', 'saveButton', 'cImportButton', 'addAttachmentButton', 'attachmentsListBox']
 },

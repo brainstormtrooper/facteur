@@ -8,9 +8,9 @@ const appData = new imports.object.Data.Data();
 /* eslint-disable no-unused-vars */
 
 function testUnrollFile(path) {
-  appData.ID = 'com.github.brainstormtrooper.facteur';
+  appData.ID = 'io.github.brainstormtrooper.facteur';
   imports.package.init({
-    name: 'com.github.brainstormtrooper.facteur',
+    name: 'io.github.brainstormtrooper.facteur',
     version: '0.3.0',
     prefix: `${path}/fixtures`,
     libdir: 'lib',

@@ -12,7 +12,7 @@ const Message = new myMessage.Message();
 var resultsMain = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'resultsMain',
-  Template: 'resource:///com/github/brainstormtrooper/facteur/resultsMain.ui',
+  Template: 'resource:///io/github/brainstormtrooper/facteur/resultsMain.ui',
   // Children: [],
   InternalChildren: ['textView', 'sentLabel', 'sendButton']
 },

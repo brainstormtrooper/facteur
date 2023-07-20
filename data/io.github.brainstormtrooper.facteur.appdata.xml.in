@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-  <id>com.github.brainstormtrooper.facteur.desktop</id>
+  <id>io.github.brainstormtrooper.facteur.desktop</id>
   <licence>CC0</licence>
   <description>
     <_p>

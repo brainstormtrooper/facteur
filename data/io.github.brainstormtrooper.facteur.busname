@@ -1,0 +1,11 @@
+[Unit]
+# Optional
+Description=io.github.brainstormtrooper.facteur
+# Optional (obviously)
+Documentation=http://www.github.com/brainstormtrooper/facteur
+
+[BusName]
+# Optional
+Name=io.github.brainstormtrooper.facteur
+# Optional
+# Service=io.github.brainstormtrooper.facteur.service

@@ -2,8 +2,8 @@
 Type=Application
 Name=Facteur
 Comment=template based emailing app
-Icon=com.github.brainstormtrooper.facteur
-Exec=gapplication launch com.github.brainstormtrooper.facteur
+Icon=io.github.brainstormtrooper.facteur
+Exec=gapplication launch io.github.brainstormtrooper.facteur
 DBusActivatable=true
 StartupNotify=true
 Keywords=business;office;productivity;

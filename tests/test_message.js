@@ -34,7 +34,7 @@ const Facteur = GObject.registerClass( // eslint-disable-line
     },
     class Facteur extends Gtk.Application {
       _init () {
-        this.ID = 'com.github.brainstormtrooper.facteur';
+        this.ID = 'io.github.brainstormtrooper.facteur';
         super._init({
           application_id: this.ID,
           flags: Gio.ApplicationFlags.HANDLES_OPEN,
@@ -48,9 +48,9 @@ const Facteur = GObject.registerClass( // eslint-disable-line
 /* eslint-disable no-unused-vars */
 
 function testMessage(path) {
-  myData.set('ID', 'com.github.brainstormtrooper.facteur');
+  myData.set('ID', 'io.github.brainstormtrooper.facteur');
   imports.package.init({
-    name: 'com.github.brainstormtrooper.facteur',
+    name: 'io.github.brainstormtrooper.facteur',
     version: '0.3.0',
     prefix: `${path}/fixtures`,
     libdir: 'lib',
