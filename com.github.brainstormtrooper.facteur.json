@@ -12,6 +12,7 @@
         "--socket=system-bus",
         "--socket=session-bus",
         "--socket=ssh-auth",
+        "--device=dri",
         "--share=network",
         "--filesystem=home:create",
         "--filesystem=xdg-run/gvfsd",
@@ -40,7 +41,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://github.com/brainstormtrooper/facteur"
+                    "url" : "https://github.com/brainstormtrooper/facteur/releases/latest"
                 }
             ]
         }
