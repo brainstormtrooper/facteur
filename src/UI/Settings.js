@@ -218,7 +218,8 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             this.conxUserEntry.set_text(myConn.USER);
             this.conxDelayEntry.set_text(myConn.DELAY);
             this.conxHeadersEntry.set_text(myConn.HEADERS);
-            this.conxPassEntry.set_text(secret.connPasswordGet(connId))
+            const pass = (secret.connPasswordGet(connId) ? secret.connPasswordGet(connId): '');
+            this.conxPassEntry.set_text(pass);
             // this._updateUI(myConn);
           }
           if (ipv4) {

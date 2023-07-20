@@ -230,7 +230,6 @@ var Message = GObject.registerClass( // eslint-disable-line
           // but you could use Gio.Subprocess.new(argv, flags)
           // which will call this for you
           proc.init(cancellable);
-
           // We're going to wrap a GLib async function in a Promise so we can
           // use it like a native JavaScript async function.
           //
