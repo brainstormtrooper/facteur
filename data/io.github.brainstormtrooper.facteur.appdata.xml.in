@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
   <id>io.github.brainstormtrooper.facteur.desktop</id>
-  <licence>CC0</licence>
+  <licence>LGPL-3.0-or-later</licence>
   <description>
-    <_p>
+    <p>
       A template-based emailing app for small business offering:
-    </_p>
+    </p>
     <ul>
-      <_li>Email personalization</_li>
-      <_li>HTML and text emails</_li>
-      <_li>CSV data import</_li>
+      <li>Email personalization</li>
+      <li>HTML and text emails</li>
+      <li>CSV data import</li>
     </ul>
   </description>
+  <categories>
+    <category>Office</category>
+    <category>Email</category>
+  </categories>
   <screenshots>
-    <screenshot type="default" width="1024" height="768">https://www.example.com/gtk-js-app/screenshots/large.png</screenshot>
+    <screenshot type="default" width="1024" height="768">https://github.com/brainstormtrooper/facteur/assets/393030/c3f9a55e-2639-400b-aebe-fd7eabfc118c</screenshot>
   </screenshots>
   <url type="homepage">https://www.github.com/brainstormtrooper/facteur</url>
-  <updatecontact>brainstormtrooper_at_free.fr</updatecontact>
+  <updatecontact>brainstormtrooper_AT_free.fr</updatecontact>
 </component>
