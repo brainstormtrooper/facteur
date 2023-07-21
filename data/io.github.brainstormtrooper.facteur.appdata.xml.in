@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-  <id>io.github.brainstormtrooper.facteur.desktop</id>
-  <licence>LGPL-3.0-or-later</licence>
+  <id>io.github.brainstormtrooper.facteur</id>
+  <name>Facteur</name>
+  <summary>Sends template-based emails to a list of recipients</summary>
+  <licence>FSFAP</licence>
   <description>
     <p>
       A template-based emailing app for small business offering:
@@ -21,4 +23,8 @@
   </screenshots>
   <url type="homepage">https://www.github.com/brainstormtrooper/facteur</url>
   <updatecontact>brainstormtrooper_AT_free.fr</updatecontact>
+  <releases>
+    <release version="@PACKAGE_VERSION@" type="stable" />
+  </releases>
+  <content_rating type="oars-1.0" />
 </component>
