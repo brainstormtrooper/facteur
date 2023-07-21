@@ -3,7 +3,6 @@ project('facteur', 'c',
   meson_version: '>= 0.63.0'
 )
 
-VERSION_DATE = '2023-07-21'
 
 # datadir = '/share'
 # prefix = '/usr'
