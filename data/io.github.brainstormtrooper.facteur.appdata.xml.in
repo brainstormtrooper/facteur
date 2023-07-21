@@ -24,7 +24,7 @@
   <url type="homepage">https://www.github.com/brainstormtrooper/facteur</url>
   <updatecontact>brainstormtrooper_AT_free.fr</updatecontact>
   <releases>
-    <release version="@PACKAGE_VERSION@" type="stable" />
+    <release version="@PACKAGE_VERSION@" type="stable" date="@VERSION_DATE@"/>
   </releases>
   <content_rating type="oars-1.0" />
 </component>
