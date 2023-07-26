@@ -122,7 +122,8 @@ var Menubar = GObject.registerClass( // eslint-disable-line
             // appData.set('FILENAME', 'test');
             const [, contents] = res.load_contents(null);
             const td = new TextDecoder();
-            myFile.unRoll(td.decode(contents));
+            // myFile.unRoll(td.decode(contents));
+            myFile.unRoll(myFile.decompress(contents));
             this.App.emit('update_ui', true);
             this.App.emit('update_attachments', true);
             // eslint-disable-next-line max-len
@@ -187,9 +188,9 @@ var Menubar = GObject.registerClass( // eslint-disable-line
     }
 
     saveAs() {
-      const data = myFile.rollUp();
+      const data = myFile.compress(myFile.rollUp());
       const WP = appData.get('FILENAME').split('/');
-      const filename = WP.pop();
+      const filename = `${WP.pop()}.fctm`;
       const foldername = `/${WP.join('/')}`;
       const props = { 
         title: 'Save a mailing',
