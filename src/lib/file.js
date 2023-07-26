@@ -9,6 +9,44 @@ const appData = new Data.Data();
 
 /* eslint-disable no-unused-vars */
 
+function decompress(data) {
+  const td = new TextDecoder('utf-8');
+  let decompressed = Gio.MemoryOutputStream.new_resizable();
+  let output = new Gio.ConverterOutputStream({
+    base_stream: decompressed,
+    converter: new Gio.ZlibDecompressor({
+      format: Gio.ZlibCompressorFormat.GZIP,
+    }), 
+  });
+  output.splice(Gio.MemoryInputStream.new_from_bytes(data),
+                  Gio.OutputStreamSpliceFlags.CLOSE_SOURCE,
+                  null);
+  output.flush(null);
+  output.close(null);
+
+  
+  return td.decode(decompressed.steal_as_bytes().get_data());
+
+}
+
+function compress(data) {
+  const te = new TextEncoder('utf-8');
+  let compressed = Gio.MemoryOutputStream.new_resizable();
+  let output = new Gio.ConverterOutputStream({
+    base_stream: compressed,
+    converter: new Gio.ZlibCompressor({
+      format: Gio.ZlibCompressorFormat.GZIP,
+    }), 
+  });
+  output.splice(Gio.MemoryInputStream.new_from_bytes(te.encode(data)),
+                  Gio.OutputStreamSpliceFlags.CLOSE_SOURCE,
+                  null);
+  output.flush(null);
+  output.close(null);
+
+  
+  return compressed.steal_as_bytes().get_data();
+}
 
 function fileSave(props, ret) {
   // const parent = props.parent ? props.parent : null;
@@ -30,7 +68,7 @@ function fileSave(props, ret) {
   
     try {
       const dest = await o.save_finish(r);
-      dest.replace_contents(JSON.stringify(data, null, '\t'), null, false,
+      dest.replace_contents(data, null, false,
         Gio.FileCreateFlags.REPLACE_DESTINATION, null);
       ret(dest.get_basename());
     } catch (e) {
@@ -84,7 +122,7 @@ function fopen (path) {
 }
 
 function save (path, data) {
-  const dataStr = JSON.stringify(data, null, '\t');
+  const dataStr = data;
   GLib.file_set_contents(path, dataStr);
 }
 
@@ -114,8 +152,8 @@ function rollUp () {
     FILEID: appData.get('FILEID'),
     SENT: appData.get('SENT'),
   };
-
-  return roll;
+  
+  return JSON.stringify(roll, null, '\t');
 }
 
 function verify (data) {
