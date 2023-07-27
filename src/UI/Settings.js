@@ -140,12 +140,11 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           if (this.sselectCombo) {
             this.resetConSelect(this.sselectCombo, connId);
           }
-          
-          
 
           if (sub) {
             this.subjectField.set_text(sub);
           }
+          this.saveButton.remove_css_class('suggested-action');
         } catch (err) {
           logError(err);
           throw(err);
@@ -167,7 +166,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         this.subjectField = this.settingsMain._subjectField
         this.snewButton = this.settingsMain._snewButton;
         this.sselectCombo = this.settingsMain._sselectCombo;
-        const saveButton = this.settingsMain._saveButton;
+        this.saveButton = this.settingsMain._saveButton;
 
         this.resetConSelect(this.sselectCombo);
 
@@ -175,11 +174,20 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           myModal.newConnection(this);
         });
 
-        saveButton.connect('clicked', () => {
+        this.subjectField.connect('changed', () => {
+          this.saveButton.add_css_class('suggested-action');
+        });
+
+        this.sselectCombo.connect('changed', () => {
+          this.saveButton.add_css_class('suggested-action');
+        });
+
+        this.saveButton.connect('clicked', () => {
           appData.set('SUBJECT', this.subjectField.get_text());
           appData.set('CONN', this.sselectCombo.get_active_id());
           // eslint-disable-next-line max-len
           const str = ` >>> Started Mailing "${this.subjectField.get_text()}"...`;
+          this.saveButton.remove_css_class('suggested-action');
           this.App.emit('Logger', str);
         });
         

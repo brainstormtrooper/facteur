@@ -5,6 +5,7 @@ Categories=Office,Email
 Comment=template based emailing app
 Icon=io.github.brainstormtrooper.facteur
 Exec=gapplication launch io.github.brainstormtrooper.facteur
+MimeType=application/x-fctm;
 DBusActivatable=true
 StartupNotify=true
 Keywords=business;office;productivity;
