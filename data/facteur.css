@@ -26,3 +26,8 @@
 .attachment_filename {
     line-height: 24px;
 }
+
+.to_save {
+    background-color: success_color;
+    background-image: none;
+}

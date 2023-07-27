@@ -70,6 +70,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.htmlBuffer.set_text(appData.get('HTML'), len);
         len = encodeURI(appData.get('TEXT')).split(/%..|./).length - 1;
         this.textBuffer.set_text(appData.get('TEXT'), len);
+        this.saveButton.remove_css_class('suggested-action');
       }
 
       updateAttachments () {
@@ -132,7 +133,12 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.textView.set_buffer(this.textBuffer);
         this.htmlSourceView.set_buffer(this.htmlBuffer);
 
+        this.textBuffer.connect('changed', () => {
+          this.saveButton.add_css_class('suggested-action');
+        });
+
         this.htmlBuffer.connect('changed', () => {
+          this.saveButton.add_css_class('suggested-action');
           this.htmlPreview.load_html(this.previewAttachments(this.htmlBuffer.text), null);
         });
 
@@ -140,6 +146,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         const len = encodeURI(defhtmlstr).split(/%..|./).length - 1;
         this.htmlBuffer.set_text(defhtmlstr, len);
         this.htmlPreview.load_html(this.htmlBuffer.text, null);
+        this.saveButton.remove_css_class('suggested-action');
 
         this.newAttachmentButton.connect('clicked', () => {
           const props = {
@@ -173,6 +180,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         });
 
         this.saveButton.connect('clicked', () => {
+          this.saveButton.remove_css_class('suggested-action');
           appData.set('HTML', this.htmlBuffer.text);
           appData.set('TEXT', this.textBuffer.text);
         });
