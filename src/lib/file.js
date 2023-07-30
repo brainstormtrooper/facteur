@@ -208,3 +208,12 @@ async function open (path) {
 function nameFromPath (path) {
   return path.split('/')[-1];
 }
+
+function csvFromArray (rows = []) {
+  let work = [];
+  rows.forEach((row) => {
+    work.push(row.map((cell) => `"${cell.replace('"', '\"')}"`).join(','));
+  });
+  const res = work.join('\n');
+  return res;
+}

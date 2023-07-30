@@ -19,23 +19,80 @@
         <property name="vexpand">true</property>
         <property name="hexpand">true</property>
         <child>
-          <object class="GtkBox" id="consoleBox">
+
+
+          <object class="GtkBox" id="rportSaveBox">
+            <property name="orientation">horizontal</property>
+            <property name="vexpand">false</property>
+            <property name="hexpand">true</property>
+            <property name="halign">end</property>
+            <style>
+              <class name="formelementgroup" />
+              <class name="formrow" />
+            </style>
+            <child>
+              <object class="GtkLabel" id="saveLabel">
+                <style>
+                  <class name="formelement" />
+                  <class name="formlabel" />
+                </style>
+                <property name="label" translatable="yes">Save send report</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="saveButton">
+                <property name="label" translatable="yes">Save</property>
+                <style>
+                  <class name="formelement" />
+                  <class name="forminput" />
+                  <class name="button" />
+                  <class name="new" />
+                </style>
+              </object>
+            </child>
+            
+          </object>
+        </child>
+        <child>
+          <object class="GtkPaned" id="panedBox">
             <property name="vexpand">true</property>
             <property name="hexpand">true</property>
+            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkScrolledWindow" id="scrollText">
+              <object class="GtkScrolledWindow" id="scrollText2">
                 <property name="vexpand">true</property>
                 <property name="hexpand">true</property>
                 <child>
-                  <object class="GtkTextView" id="textView">
-                    <property name="editable">false</property>
+                  <object class="GtkTreeView" id="mTreeView">
+                    
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="consoleBox">
+                <property name="vexpand">true</property>
+                <property name="hexpand">true</property>
+                <child>
+                  <object class="GtkScrolledWindow" id="scrollText">
+                    <property name="vexpand">true</property>
+                    <property name="hexpand">true</property>
+                    <child>
+                      <object class="GtkTextView" id="textView">
+                        <property name="editable">false</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
             </child>
           </object>
         </child>
+
+        
         <child>
+
+
           <object class="GtkBox" id="mailingImportBox">
             <property name="orientation">horizontal</property>
             <property name="vexpand">false</property>
