@@ -49,6 +49,20 @@ var Message = GObject.registerClass( // eslint-disable-line
 
       }
 
+      success (str) {
+        let res = 'ok';
+        const lines = str.split("\n");
+        lines.forEach(line => {
+          if (line[0] == '<' && line.substring(2,5) > 400) {
+            // < 250 2.0.0 Ok: queued
+            res = line;
+
+          }
+        });
+
+        return res;
+      }
+
       sleep (milliseconds) {
         const timeStart = new Date().getTime();
         // eslint-disable-next-line
@@ -61,6 +75,8 @@ var Message = GObject.registerClass( // eslint-disable-line
       }
 
       sendAll () {
+        let res = [];
+        this.results = [];
         this.App = Gio.Application.get_default();
         this.curConn = Config.getConnection(appData.get('CONN'));
         const delay = this.curConn.DELAY;
@@ -68,7 +84,7 @@ var Message = GObject.registerClass( // eslint-disable-line
           // eslint-disable-next-line max-len
           const mobj = this.build(mailing);
           try {
-            this.send(mobj, mailing.to);
+            res.push(this.send(mobj, mailing.to));
           } catch (error) {
             logError(error);
           }
@@ -77,6 +93,7 @@ var Message = GObject.registerClass( // eslint-disable-line
         });
         appData.set('SENT', time.now());
         this.App.emit('Sent', true);
+        return res;
       }
 
       build (mailing) {
@@ -274,8 +291,9 @@ var Message = GObject.registerClass( // eslint-disable-line
             );
           });
           // log(`>>> RES >>> : ${stdout}`);
+          this.results.push([to, this.success(stdout)]);
           this.App.emit('Logger', `>>> RES >>> : ${stdout}`);
-          // return stdout;
+          return Date.now().toLocaleString();
         } catch (e) {
           // This could be any number of errors, but probably it will be a
           // GError in which case it will have `code` property carrying a
