@@ -24,7 +24,7 @@
   <url type="homepage">https://www.github.com/brainstormtrooper/facteur</url>
   <updatecontact>brainstormtrooper_AT_free.fr</updatecontact>
   <releases>
-    <release version="0.15.0" type="stable" date="2023-07-25"/>
+    <release version="0.16.0" type="stable" date="2023-08-01"/>
   </releases>
   <content_rating type="oars-1.0" />
 </component>

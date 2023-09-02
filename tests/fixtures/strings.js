@@ -47,9 +47,9 @@ var fileWithConn = `{
 	"HTML": "test html",
 	"TEXT": "test text",
 	"TO": [
-		"recipient1@email.com,
-		"rickopper@yahoo.com",
-		"rickopper@gmail.com",
+		"recipient1@email.com",
+		"recipient2@yahoo.com",
+		"recipient3@gmail.com",
 		""
 	],
 	"CSVA": [
@@ -59,12 +59,12 @@ var fileWithConn = `{
 			"red cars"
 		],
 		[
-			"rickopper@yahoo.com",
+			"recipient2@yahoo.com",
 			"Ricky",
 			"fast"
 		],
 		[
-			"rickopper@gmail.com",
+			"recipient3@gmail.com",
 			"Bob",
 			"luxury"
 		],
