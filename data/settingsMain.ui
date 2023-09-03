@@ -73,6 +73,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="subjectField">
+            <property name="max_length">256</property>
             <style>
               <class name="formelement" />
               <class name="forminput" />

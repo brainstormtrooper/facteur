@@ -14,6 +14,7 @@ const appData = new Data.Data();
 const Modal = imports.UI.Modal;
 const myFile = imports.lib.file;
 const secret = imports.lib.secret;
+const valid = imports.lib.valid;
 
 
 // const conxfile = Gio.File.new_for_path('data/settingsConx.ui');
@@ -238,6 +239,18 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           this.cShowPassButton.add_controller(ctl);
           ctl.connect('enter', () => { this.conxPassEntry.set_visibility(true) });
           ctl.connect('leave', () => { this.conxPassEntry.set_visibility(false) });
+
+          let ve;
+          this.conxFromEntry.connect('changed', () => {
+            ve = valid.validateEmail(this.conxFromEntry.get_text());
+            if (ve != null) {
+              this.conxFromEntry.remove_css_class('error');
+              this.conxFromEntry.add_css_class('success');
+            } else {
+              this.conxFromEntry.remove_css_class('success');
+              this.conxFromEntry.add_css_class('error');
+            }
+          });
 
           this.cImportButton.connect('clicked', () => {
             const props = {
