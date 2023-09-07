@@ -27,7 +27,17 @@ var msgBlock = `--BOUNDARY\nContent-Type: text/plain; charset=utf-8\nBob, red ca
 var password = 'password';
 
 // var hash = 'facteur';
-
+var connsStr = `[{
+	"ID": "abc123",
+	"NAME": "test connection 1",
+	"USER": "bob",
+	"HOST": "proto.domain.ext:1234",
+	"DELAY": "500",
+	"IPv4": "1",
+	"HEADERS": [
+		"x-api-key: 123abc"
+	]
+}]`;
 
 var connStr = `{
 	"ID": "abc123",

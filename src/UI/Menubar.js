@@ -190,7 +190,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
     saveAs() {
       const data = myFile.compress(myFile.rollUp());
       const WP = appData.get('FILENAME').split('/');
-      const filename = `${WP.pop()}.fctm`;
+      const filename = `${WP.pop().split('.')[0]}.fctm`;
       const foldername = `/${WP.join('/')}`;
       const props = { 
         title: 'Save a mailing',

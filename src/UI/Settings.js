@@ -15,6 +15,7 @@ const Modal = imports.UI.Modal;
 const myFile = imports.lib.file;
 const secret = imports.lib.secret;
 const valid = imports.lib.valid;
+const uuid = imports.lib.uuid;
 
 
 // const conxfile = Gio.File.new_for_path('data/settingsConx.ui');
@@ -172,7 +173,39 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         this.resetConSelect(this.sselectCombo);
 
         this.snewButton.connect('clicked', () => {
-          myModal.newConnection(this);
+          const _saveHandler = () => {
+            
+            let IPv4 = 0;
+            if (this.conxIPv4Entry.get_active()) {
+              IPv4 = 1;
+            }
+
+            const connection = {
+              ID: uuid.uuid(),
+              NAME: this.conxNameEntry.get_text(),
+              FROM: this.conxFromEntry.get_text(),
+              USER: this.conxUserEntry.get_text(),
+              PASS: this.conxPassEntry.get_text(),
+              HOST: this.conxHostEntry.get_text(),
+              DELAY: this.conxDelayEntry.get_text(),
+              IPv4,
+              HEADERS: this.conxHeadersEntry.get_text()
+            }
+            
+            const CONN = Config.saveConnection(connection);
+            
+            this.App.emit('update_ui', true);
+          };
+
+          
+
+          const props = {
+            title: 'New Connection',
+            label: 'Please configure your connectoin here.',
+            content: this._buildNewConnection(),
+            saveHandler: _saveHandler
+          };
+          myModal.doModal(props);
         });
 
         this.subjectField.connect('changed', () => {
@@ -239,6 +272,18 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           this.cShowPassButton.add_controller(ctl);
           ctl.connect('enter', () => { this.conxPassEntry.set_visibility(true) });
           ctl.connect('leave', () => { this.conxPassEntry.set_visibility(false) });
+
+          let vs;
+          this.conxHostEntry.connect('changed', () => {
+            vs = valid.validateServer(this.conxHostEntry.get_text());
+            if (vs != null) {
+              this.conxHostEntry.remove_css_class('error');
+              this.conxHostEntry.add_css_class('success');
+            } else {
+              this.conxHostEntry.remove_css_class('success');
+              this.conxHostEntry.add_css_class('error');
+            }
+          });
 
           let ve;
           this.conxFromEntry.connect('changed', () => {
@@ -367,8 +412,40 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         });
 
         this.settingsForm._cEditButton.connect('clicked', () => {
-          // const conn = Config.getConnection(this.mainSelectCombo.get_active_id());
-          myModal.editConnection(this, this.mainSelectCombo.get_active_id());
+
+          const _saveHandler = () => {
+            let IPv4 = 0;
+            if (this.conxIPv4Entry.get_active()) {
+              IPv4 = 1;
+            }
+
+            const connection = {
+              ID: this.mainSelectCombo.get_active_id(),
+              NAME: this.conxNameEntry.get_text(),
+              FROM: this.conxFromEntry.get_text(),
+              USER: this.conxUserEntry.get_text(),
+              PASS: this.conxPassEntry.get_text(),
+              HOST: this.conxHostEntry.get_text(),
+              DELAY: this.conxDelayEntry.get_text(),
+              IPv4,
+              HEADERS: this.conxHeadersEntry.get_text()
+            }
+            
+            const CONN = Config.saveConnection(connection, true);
+            this.resetConSelect(this.mainSelectCombo);
+            this.App.emit('update_ui', true);
+          };
+
+          
+
+          const props = {
+            title: 'New Connection',
+            label: 'Please configure your connectoin here.',
+            content: this._buildNewConnection(this.mainSelectCombo.get_active_id()),
+            saveHandler: _saveHandler
+          };
+          myModal.doModal(props);
+
         });
 
         this.settingsForm._cExportSelButton.connect('clicked', () => {

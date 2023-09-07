@@ -5,7 +5,7 @@ const Settings = imports.UI.Settings;
 const Connection = imports.object.Settings;
 const Gettext = imports.gettext;
 const GObject = imports.gi.GObject;
-const Config = new imports.object.Settings.Settings();
+const Config = new Connection.Settings();
 
 // const file = Gio.File.new_for_path('data/simpleModal.ui');
 // const [, template] = file.load_contents(null);
@@ -40,17 +40,19 @@ var UImodal = GObject.registerClass( // eslint-disable-line
     class UImodal extends GObject.Object {
       _init () {
         super._init();
+        this.App = Gio.Application.get_default();
         // this.settings = new Settings.UIsettings();
       }
 
       doModal(props) {
         try {
+          const myWindow = (props.window ? props.window : this.App._window);
           this._dialog = new SimpleModal({
-            transient_for: props.window,
+            transient_for: myWindow,
             modal: true,
             title: props.title,
           });
-          const _contentArea = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
+          // const _contentArea = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 });
           this._message = new Gtk.Label(
               // eslint-disable-next-line max-len
               { label: props.label },
@@ -62,11 +64,14 @@ var UImodal = GObject.registerClass( // eslint-disable-line
             this._dialog.destroy();
           };
   
-          this._saveHandler = props.saveHandler;
+          // this._saveHandler = props.saveHandler;
   
-          if (this._saveHandler) {
+          if (props.saveHandler) {
             this.saveButton = new Gtk.Button({ label: Gettext.gettext('Save'), hexpand: true });
-            this.saveButton.connect('clicked', this._saveHandler.bind(this));
+            this.saveButton.connect('clicked', () => {
+              props.saveHandler.bind(this)();
+              this._dialog.destroy();
+            });
             this._dialog._dialog_action_area.append(this.saveButton);
           }
   
@@ -105,7 +110,6 @@ var UImodal = GObject.registerClass( // eslint-disable-line
           title: 'Edit Connection',
           label: 'Please configure your connectoin here.',
           content: settings._buildNewConnection(connId),
-          window: settings.App._window,
           saveHandler: _saveHandler
         };
 
@@ -113,22 +117,23 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         
       }
 
-      newConnection (settings) {
+      newConnection () {
         try {
 
           const _saveHandler = () => {
-            const myConnection = new Connection.Settings();
-            const CONN = myConnection.saveConnection(settings);
+            // const myConnection = new Connection.Settings();
+            const CONN = Config.saveConnection(settings);
             
             settings.App.emit('update_ui', true);
             this._dialog.destroy()
           };
 
+          const settings = new Settings.UIsettings();
+
           const props = {
             title: 'New Connection',
             label: 'Please configure your connectoin here.',
             content: settings._buildNewConnection(),
-            window: settings.App._window,
             saveHandler: _saveHandler
           };
   

@@ -1,6 +1,7 @@
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
-// const JsUnit = imports.jsUnit;
+const Gtk = imports.gi.Gtk;
+const GObject = imports.gi.GObject;
 
 function getCurrentFile() {
   const stack = (new Error()).stack;
@@ -41,9 +42,45 @@ const testFiles = imports.test_files;
 
 const testConnections = imports.test_connections;
 
+
+const Facteur = GObject.registerClass( // eslint-disable-line
+{
+  GTypeName: 'Facteur',
+  Signals: {
+    'Logger': {
+      param_types: [GObject.TYPE_STRING],
+    },
+    'update_ui': {
+      param_types: [GObject.TYPE_BOOLEAN],
+    },
+    'filename_changed': {
+      param_types: [GObject.TYPE_BOOLEAN],
+    },
+    'Sent': {
+      param_types: [GObject.TYPE_BOOLEAN],
+    },
+    'dataChanged': {
+      param_types: [GObject.TYPE_BOOLEAN],
+    },
+  },
+},
+class Facteur extends Gtk.Application {
+  _init() {
+    this.ID = 'io.github.brainstormtrooper.facteur';
+    super._init({
+      application_id: this.ID,
+      flags: Gio.ApplicationFlags.HANDLES_OPEN,
+    });
+    GLib.set_prgname(this.application_id);
+    GLib.set_application_name('Facteur');
+  }
+});
+
+
 testRecipients.testConvert();
 testContents.testContent();
-testMessages.testMessage(fileInfo[1]);
+testConnections.tests(fileInfo[1], Facteur);
+testMessages.testMessage(fileInfo[1], Facteur);
 testFiles.testUnrollFile(fileInfo[1]);
 
 GLib.idle_add(GLib.PRIORITY_DEFAULT, function () {

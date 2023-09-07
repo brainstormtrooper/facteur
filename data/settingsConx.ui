@@ -95,6 +95,7 @@
             <child>
               <object class="GtkEntry" id="conxFromEntry">
                 <property name="max_length">64</property>
+                <property name="placeholder_text">sender@service.ext</property>
                 <style>
                   <class name="formelement" />
                   <class name="forminput" />
@@ -123,6 +124,7 @@
             <child>
               <object class="GtkEntry" id="conxHostEntry">
                 <property name="max_length">128</property>
+                <property name="placeholder_text">smtp(s)://sub.service.ext</property>
                 <style>
                   <class name="formelement" />
                   <class name="forminput" />
