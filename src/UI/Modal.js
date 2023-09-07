@@ -1,11 +1,9 @@
 const Gtk = imports.gi.Gtk;
 const Gio = imports.gi.Gio;
-const Settings = imports.UI.Settings;
-// const Config = imports.lib.settings;
+
 const Connection = imports.object.Settings;
 const Gettext = imports.gettext;
 const GObject = imports.gi.GObject;
-const Config = new Connection.Settings();
 
 // const file = Gio.File.new_for_path('data/simpleModal.ui');
 // const [, template] = file.load_contents(null);
@@ -94,59 +92,6 @@ var UImodal = GObject.registerClass( // eslint-disable-line
 
       }
 
-      editConnection(settings, connId) {
-
-
-        const _saveHandler = () => {
-          const myConnection = new Connection.Settings();
-          const CONN = myConnection.saveConnection(settings, connId);
-          
-          settings.App.emit('update_ui', true);
-          this._dialog.destroy()
-        };
-
-
-        const props = {
-          title: 'Edit Connection',
-          label: 'Please configure your connectoin here.',
-          content: settings._buildNewConnection(connId),
-          saveHandler: _saveHandler
-        };
-
-        this.doModal(props);
-        
-      }
-
-      newConnection () {
-        try {
-
-          const _saveHandler = () => {
-            // const myConnection = new Connection.Settings();
-            const CONN = Config.saveConnection(settings);
-            
-            settings.App.emit('update_ui', true);
-            this._dialog.destroy()
-          };
-
-          const settings = new Settings.UIsettings();
-
-          const props = {
-            title: 'New Connection',
-            label: 'Please configure your connectoin here.',
-            content: settings._buildNewConnection(),
-            saveHandler: _saveHandler
-          };
-  
-          this.doModal(props);
-          
-        } catch (error) {
-          logError(error);
-          throw(error);
-        }
-        
-      };
-
-
 
       showOpenModal (title, message, app = null) {
         const window = (app ? app._window : null);
@@ -183,60 +128,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         modal.show_all();
       }
 
-      /*
-      config (app) {
-        const window = (app ? app._window : null);
-        // Create the dialog
-        this._dialog = new Gtk.Dialog({
-          transient_for: window,
-          modal: true,
-          title: 'App settings',
-        });
-
-        // Create the dialog's content area, which contains a message
-        this._contentArea = this._dialog.get_content_area();
-        this._message = new Gtk.Label(
-            // eslint-disable-next-line max-len
-            { label: 'Please configure your preferences here.' },
-        );
-        this.settings = new Settings.UIsettings();
-
-        this.configFields = this.settings._buildModal();
-        
-        
-        this._contentArea.append(this._message);
-        this._contentArea.append(this.configFields);
-        // Handlers for button actions
-        const _OKHandler = () => {
-          app.emit('update_ui', true);
-          // Destroy the dialog
-          this._dialog.destroy();
-        };
-
-        const _saveHandler = () => {
-          let ipv4 = false;
-          ipv4 = this.settings.defIpv4Field.get_active();
-          Config.setIpv4(ipv4);
-          Config.setDelay(this.settings.defDelayField.get_text());
-          app.emit('update_ui', true);
-          // Destroy the dialog
-          this._dialog.destroy();
-        };
-
-        // Create the dialog's action area, which contains a stock OK button
-        // this._actionArea = this._dialog.action_area;
-        this.cancelButton = new Gtk.Button({ label: Gettext.gettext('Cancel') });
-        this._dialog.add_action_widget(this.cancelButton, 'GTK_RESPONSE_CANCEL_EVENT');
-        this.saveButton = new Gtk.Button({ label: Gettext.gettext('Save') });
-        // this._actionArea.add(this.saveButton);
-
-        // Connect the button to the function that handles what it does
-        // this.cancelButton.connect('clicked', _OKHandler.bind(this));
-        this.saveButton.connect('clicked', _saveHandler.bind(this));
-
-        this._dialog.present();
-      }
-      */
+      
       about (app) {
         const window = (app ? app._window : null);
         const aboutDialog = new Gtk.AboutDialog(
