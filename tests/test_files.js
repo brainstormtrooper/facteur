@@ -1,5 +1,3 @@
-const JsUnit = imports.jsUnit;
-
 const myFile = imports.lib.file;
 
 const strings = imports.fixtures.strings;
@@ -21,26 +19,19 @@ function testUnrollFile(path) {
   // const HASH = settings.getHash().toString();
   myFile.unRoll(strings.fileWithConn);
 
- 
-  JsUnit.assertEquals('SUBJECT is test', 'Test Mailing', appData.get('SUBJECT'));
-  // eslint-disable-next-line max-len
-  
-log(appData.get('CSVA'));
+  describe('Open a file', () => {
+    it('Should have correct subject.', () => {
+      expect(appData.get('SUBJECT')).toBe('Test Mailing');
+    });
 
-  JsUnit.assertEquals('CSVA is object', 'object', typeof appData.get('CSVA'));
+    it('Should create a CSV array.', () => {
+      expect(typeof appData.get('CSVA')).toBe('object');
+    });
 
-  // eslint-disable-next-line max-len
-  JsUnit.assertEquals('correct first element', 'recipient1@email.com', appData.get('CSVA')[0][0]);
-/*
-  myFile.unRoll(legacydata);
+    it('Should have correct first element.', () => {
+      expect(appData.get('CSVA')[0][0]).toBe('recipient1@email.com');
+    });
 
-  JsUnit.assertEquals('CSVA is object', 'object', typeof appData.get('CSVA'));
-
-  appData.set('PASS', 'abc123');
-
-  const testFile = myFile.rollUp();
-
-  JsUnit.assertEquals('Legacy file is updated properly', strings.fileStr64.replace(/(\s)/gm, ""), JSON.stringify(testFile).replace(/(\s)/gm, ""));
-*/
+  });
 
 }

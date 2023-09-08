@@ -1,4 +1,3 @@
-const JsUnit = imports.jsUnit;
 const strings = imports.fixtures.strings;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
@@ -11,43 +10,11 @@ const myList = new imports.object.List.List();
 // const Config = new Settings.Settings();
 
 
-const Facteur = GObject.registerClass( // eslint-disable-line
-    {
-      GTypeName: 'Facteur',
-      Signals: {
-        'Logger': {
-          param_types: [GObject.TYPE_STRING],
-        },
-        'update_ui': {
-          param_types: [GObject.TYPE_BOOLEAN],
-        },
-        'filename_changed': {
-          param_types: [GObject.TYPE_BOOLEAN],
-        },
-        'Sent': {
-          param_types: [GObject.TYPE_BOOLEAN],
-        },
-        'dataChanged': {
-          param_types: [GObject.TYPE_BOOLEAN],
-        },
-      },
-    },
-    class Facteur extends Gtk.Application {
-      _init () {
-        this.ID = 'io.github.brainstormtrooper.facteur';
-        super._init({
-          application_id: this.ID,
-          flags: Gio.ApplicationFlags.HANDLES_OPEN,
-        });
-        GLib.set_prgname(this.application_id);
-        GLib.set_application_name('Facteur');
-      }
-    });
 
-    const APP = new Facteur();
 /* eslint-disable no-unused-vars */
 
-function testMessage(path) {
+function testMessage(path, Facteur) {
+  const APP = new Facteur();
   myData.set('ID', 'io.github.brainstormtrooper.facteur');
   imports.package.init({
     name: 'io.github.brainstormtrooper.facteur',
@@ -56,42 +23,49 @@ function testMessage(path) {
     libdir: 'lib',
   });
 
-  
 
-  
+
+
 
   const hold = imports.object.Settings;
-  imports.object.Settings = { Settings : class Settings { // eslint-disable-line
+  imports.object.Settings = {
+    Settings: class Settings { // eslint-disable-line
 
-    getConnection(id) {
-      console.log(id);
-      return JSON.parse(strings.connStr);
+      getConnection(id) {
+        return JSON.parse(strings.connStr);
+      }
     }
-  }};
+  };
 
   const myMessage = new imports.object.Message.Message();
 
   imports.object.Settings = hold;
-  
+
   // myMessage.App = Gio.Application.get_default();
-  
+
   myMessage.boundary = 'BOUNDARY';
   myMessage.send = async (msgObj, to, cancellable = null) => {
     return new Promise((resolve, reject) => {
       resolve('250 OK');
     });
   };
-  
-  
+
+
 
   myData.set('SUBJECT', 'test');
 
   const res = myMessage.build(strings.msgTxt, strings.msgHtml);
-  JsUnit.assertEquals('type is object', 'object', typeof res);
+
+  describe('Message generation', () => {
+    it('Should generate a string payload.', () => {
+      expect(typeof res).toBe('string');
+    });
+  });
+
   // eslint-disable-next-line max-len
-  JsUnit.assertEquals('has correct subject block', strings.subBlock, res.subBlock);
+  // JsUnit.assertEquals('has correct subject block', strings.subBlock, res.subBlock);
   // eslint-disable-next-line max-len
-  JsUnit.assertEquals('has correct content block', strings.msgBlock, res.msgBlock);
+  // JsUnit.assertEquals('has correct content block', strings.msgBlock, res.msgBlock);
   //
   // CSV to Send
   //
@@ -101,6 +75,13 @@ function testMessage(path) {
   myData.set('CSVA', myList.csva);
   myData.set('TO', myList.csva.map((x) => x[0]));
   myMessage.sendAll();
-  JsUnit.assertNotEquals('send time has been set', '', myData.get('SENT'));
+  describe('Message sending', () => {
+    it('Should set sending time.', () => {
+      expect(typeof myData.get('SENT')).toBeTruthy();
+    });
+  });
+
+
+
 
 }

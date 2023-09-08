@@ -42,39 +42,22 @@ var Settings = class Settings { // eslint-disable-line
     this.setConnections(cnsstr);
   }
 
-  saveConnection (obj, id) {
+  saveConnection (conn, update = false) {
 
-    const ID = (id ? id : uuid.uuid());
+    
 
-    let IPv4 = 0;
-    if (obj.conxIPv4Entry.get_active()) {
-      IPv4 = 1;
+    if (conn.PASS != '') {
+      secret.connPasswordSet(conn.ID, conn.PASS);
     }
 
-
-    const connection = {
-        ID,
-        NAME: obj.conxNameEntry.get_text(),
-        FROM: obj.conxFromEntry.get_text(),
-        USER: obj.conxUserEntry.get_text(),
-        HOST: obj.conxHostEntry.get_text(),
-        DELAY: obj.conxDelayEntry.get_text(),
-        IPv4,
-        HEADERS: obj.conxHeadersEntry.get_text()
-    }
-
-    if (obj.conxPassEntry.get_text() != '') {
-      secret.connPasswordSet(ID, obj.conxPassEntry.get_text());
-    }
-
-    if (id) {
-      this.updateConnection(connection);
+    if (update) {
+      this.updateConnection(conn);
     } else {
-      this.addConnection(connection);
+      this.addConnection(conn);
     }
     
 
-    return ID;
+    return conn.ID;
   }
 
   getIpv4 () {

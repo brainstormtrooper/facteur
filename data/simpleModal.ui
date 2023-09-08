@@ -13,12 +13,6 @@
         <property name="vexpand">true</property>
         <property name="hexpand">true</property>
         <child>
-          <object class="GtkLabel" id="dialog_label">
-            <property name="justify">center</property>
-            <property name="label" translatable="yes">Test</property>
-          </object>
-        </child>
-        <child>
           <object class="GtkBox" id="dialog_content_area">
             <property name="orientation">vertical</property>
             <property name="vexpand">true</property>

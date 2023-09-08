@@ -6,11 +6,21 @@ const strings = imports.fixtures.strings;
 function testConvert() {
   const res = myList.csvToArray(strings.testCsv2);
 
-  JsUnit.assertEquals('type is object', 'object', typeof res);
-  JsUnit.assertEquals('Length is 4', 4, res.length);
+  describe('Convert CSV to array', () => {
+    it('Should create arrays.', () => {
+      expect(typeof res).toBe('object');
+    });
 
-  myList.csva = res;
-  myList.dataHeadings();
+    it('Should have correct length.', () => {
+      expect(res.length).toBe(4);
+    });
 
-  JsUnit.assertEquals('Col count is 3', 3, myList.colcount);
+    myList.csva = res;
+    myList.dataHeadings();
+
+    it('Should have correct column count.', () => {
+      expect(myList.colcount).toBe(3);
+    });
+  });
+
 }

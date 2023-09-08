@@ -22,5 +22,6 @@
     <file>lib/settings.js</file>
     <file>lib/template.js</file>
     <file>lib/time.js</file>
+    <file>lib/valid.js</file>
   </gresource>
 </gresources>

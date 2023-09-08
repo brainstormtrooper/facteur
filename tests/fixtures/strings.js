@@ -27,7 +27,17 @@ var msgBlock = `--BOUNDARY\nContent-Type: text/plain; charset=utf-8\nBob, red ca
 var password = 'password';
 
 // var hash = 'facteur';
-
+var connsStr = `[{
+	"ID": "abc123",
+	"NAME": "test connection 1",
+	"USER": "bob",
+	"HOST": "proto.domain.ext:1234",
+	"DELAY": "500",
+	"IPv4": "1",
+	"HEADERS": [
+		"x-api-key: 123abc"
+	]
+}]`;
 
 var connStr = `{
 	"ID": "abc123",
@@ -47,9 +57,9 @@ var fileWithConn = `{
 	"HTML": "test html",
 	"TEXT": "test text",
 	"TO": [
-		"recipient1@email.com,
-		"rickopper@yahoo.com",
-		"rickopper@gmail.com",
+		"recipient1@email.com",
+		"recipient2@yahoo.com",
+		"recipient3@gmail.com",
 		""
 	],
 	"CSVA": [
@@ -59,12 +69,12 @@ var fileWithConn = `{
 			"red cars"
 		],
 		[
-			"rickopper@yahoo.com",
+			"recipient2@yahoo.com",
 			"Ricky",
 			"fast"
 		],
 		[
-			"rickopper@gmail.com",
+			"recipient3@gmail.com",
 			"Bob",
 			"luxury"
 		],
