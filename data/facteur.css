@@ -8,10 +8,7 @@
 .formrow .formelement {
     margin-right: 5px;
 }
-.form_area_box {
-    margin: 10px;
-}
-.dialog_content_box {
+.dialog_content_area {
     margin-bottom: 10px;
     margin-left: 6px;
     margin-right: 6px;
@@ -20,14 +17,17 @@
 .form_attachment_box{
 	min-width:250px;
     margin-top: 5px;
-    padding: 3px;
 }
 
-.attachment_filename {
-    line-height: 24px;
+.attachment_block {
+    margin-top: 6px;
 }
 
-.to_save {
-    background-color: success_color;
-    background-image: none;
+.dialog_area {
+    margin-bottom: 0px;
 }
+
+.dialog_action_area {
+    margin-bottom: 0px;
+}
+

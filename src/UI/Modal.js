@@ -75,7 +75,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
           this.cancelButton = new Gtk.Button({ label: Gettext.gettext('cancel'), hexpand: true  });
           
           this._dialog._dialog_action_area.append(this.cancelButton);
-
+          this._dialog._dialog_action_area.add_css_class('linked');
           // log(this._dialog._dialog_contet_area.get_first_child());
 
           this.cancelButton.connect('clicked', _OKHandler.bind(this));
@@ -98,33 +98,29 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         const label = new Gtk.Label({
           label: message,
           vexpand: true,
+          wrap: true
         });
 
-        const modal = new Gtk.Dialog({
-          default_height: 150,
-          default_width: 200,
-          modal: true,
-          transient_for: window,
-          title,
-          use_header_bar: false,
+        const modal = new SimpleModal({
+          transient_for: window
         });
+        modal.set_title(title);
+        modal.set_default_size(260, 180);
+        modal._dialog_content_area.append(label);
+        // const contentArea = modal.get_content_area();
+        // modal.set_child(label);
 
-        modal.connect('response', function () {
-          modal.destroy();
+        const button = new Gtk.Button({
+          label: 'Ok',
+          hexpand: true
         });
-
-        const contentArea = modal.get_content_area();
-        contentArea.add(label);
-
-        const button = Gtk.Button.new_with_label('OK');
         button.connect('clicked', () => {
           modal.destroy();
         });
 
-        const actionArea = modal.get_action_area();
-        actionArea.add(button);
-
-        modal.show_all();
+        modal._dialog_action_area.append(button);
+        modal._dialog_action_area.add_css_class('linked');
+        modal.present();
       }
 
       

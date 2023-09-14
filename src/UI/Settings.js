@@ -314,9 +314,12 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
                 this.conxUserEntry.set_text(myConn.USER);
                 this.conxDelayEntry.set_text(myConn.DELAY);
                 this.conxHeadersEntry.set_text(myConn.HEADERS);
+                if (myConn.PASS) {
+                  this.conxPassEntry.set_text(myConn.PASS);
+                }
                 this.App.emit('update_ui', true);
                 // eslint-disable-next-line max-len
-                this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);
+                this.App.emit('Logger', `Opened file : ${res.get_parse_name()}.`);
               });
               
               // TODO : Import connection (save to settings) here
@@ -454,7 +457,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           const data = myFile.rollConn(conn, savePW);
           const props = {
             title: 'Export A Connection',
-            data
+            data: JSON.stringify(data)
           };
           myFile.fileSave(props, (res) => {
             log(res);

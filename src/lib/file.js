@@ -18,12 +18,15 @@ function decompress(data) {
       format: Gio.ZlibCompressorFormat.GZIP,
     }), 
   });
-  output.splice(Gio.MemoryInputStream.new_from_bytes(data),
+  try {
+    output.splice(Gio.MemoryInputStream.new_from_bytes(data),
                   Gio.OutputStreamSpliceFlags.CLOSE_SOURCE,
                   null);
-  output.flush(null);
-  output.close(null);
-
+    output.flush(null);
+    output.close(null);
+  } catch (error) {
+    throw error;
+  }
   
   return td.decode(decompressed.steal_as_bytes().get_data());
 
@@ -70,7 +73,7 @@ function fileSave(props, ret) {
       const dest = await o.save_finish(r);
       dest.replace_contents(data, null, false,
         Gio.FileCreateFlags.REPLACE_DESTINATION, null);
-      ret(dest.get_basename());
+      ret(dest.get_parse_name());
     } catch (e) {
       log(e)
       throw e;
@@ -81,14 +84,12 @@ function fileSave(props, ret) {
 }
 
 function fileOpen(props, ret) {
-  
   // const parent = props.parent ? props.parent : null;
   const title = props.title ? props.title : 'Select a file';
   const foldername = props.foldername ? props.foldername : '/home';
   const decoder = new TextDecoder('utf-8');
   const opener = new Gtk.FileDialog({ title });
   opener.set_initial_folder(Gio.File.new_for_path(foldername));
-
   try {
 
     opener.open(null, null, (o, r) => {

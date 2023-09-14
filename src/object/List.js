@@ -7,6 +7,7 @@ Handle CSV data for mailings.
 const myFile = imports.lib.file;
 const Data = imports.object.Data;
 const GObject = imports.gi.GObject;
+const Gettext = imports.gettext;
 const appData = new Data.Data();
 
 var List = GObject.registerClass( // eslint-disable-line
@@ -69,6 +70,10 @@ var List = GObject.registerClass( // eslint-disable-line
        */
       import (str) {
         this.csva = this.csvToArray(str);
+        if (this.csva.length > 501) {
+          const e = new Error(Gettext.gettext('Miling lists are limited to 500 recipients.'));
+          throw e;
+        }
         if (!this.verify(this.csva)) {
           this.emit('Import_error_sig', true);
         } else {
@@ -80,6 +85,7 @@ var List = GObject.registerClass( // eslint-disable-line
             this.emit('Updated_sig', true);
           } catch (error) {
             logError(error);
+            throw error;
           }
         }
       }

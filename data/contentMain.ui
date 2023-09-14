@@ -130,7 +130,6 @@
 
             <child>
               <object class="GtkExpander" id="attachmentListExpander">
-                <property name="label" translatable="yes">Attachments</property>
                 <property name="expanded">true</property>
                 <property name="hexpand">false</property>
                 <property name="resize_toplevel">true</property>
@@ -166,9 +165,6 @@
                             <property name="valign">start</property>
                             <property name="vexpand">true</property>
                             <property name="hexpand">true</property>
-
-                            
-
                           </object>
                         </child>
                       </object>

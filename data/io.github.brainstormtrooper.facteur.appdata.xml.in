@@ -3,7 +3,9 @@
   <id>io.github.brainstormtrooper.facteur</id>
   <name>Facteur</name>
   <summary>Sends template-based emails to a list of recipients</summary>
-  <licence>FSFAP</licence>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
   <description>
     <p>
       A template-based emailing app for small business offering:
@@ -24,6 +26,11 @@
   <url type="homepage">https://www.github.com/brainstormtrooper/facteur</url>
   <updatecontact>brainstormtrooper_AT_free.fr</updatecontact>
   <releases>
+    <release version="0.17.0" type="stable" date="2023-09-14">
+      <description>
+        <p>More UI and stability improvements.</p>
+      </description>
+    </release>
     <release version="0.16.0" type="stable" date="2023-09-07">
       <description>
         <p>UI Behavior improvements and minor fixes.</p>

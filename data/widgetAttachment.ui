@@ -8,14 +8,11 @@
     <property name="vexpand">false</property>
     <property name="hexpand">true</property>
 
-    <child>
-      <object class="GtkBox">
-        <property name="css-classes">form_attachment_box</property>
-        <property name="orientation">vertical</property>
-        <property name="hexpand">true</property>
-        <style>
-          <class name="attachment_block" />
-        </style>
+    <style>
+      <class name="attachment_block" />
+    </style>
+    
+        
         <child>
           <object class="GtkBox">
             <style>
@@ -44,7 +41,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="row2">
             <style>
               <class name="attachment_row_2" />
             </style>
@@ -68,9 +65,6 @@
             </child>
           </object>
         </child>
-      </object>
-
-
-    </child>
+      
   </template>
 </interface>
