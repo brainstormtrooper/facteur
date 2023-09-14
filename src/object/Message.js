@@ -9,10 +9,8 @@ const Soup = imports.gi.Soup;
 const Settings = imports.object.Settings;
 const time = imports.lib.time;
 const Data = imports.object.Data;
-const myTemplate = imports.object.Template;
 const secret = imports.lib.secret;
 const tpllib = imports.lib.template;
-const Template = new myTemplate.Template();
 const GObject = imports.gi.GObject;
 const appData = new Data.Data();
 const Config = new Settings.Settings();
@@ -40,8 +38,10 @@ var Message = GObject.registerClass( // eslint-disable-line
 
       // METHODS
 
-      async compile () {
-        return await Template.compile();
+      weight (text, html) {
+        const testmailing = {text, html, to: 'test@domain.ext'};
+        const payload = this.build(testmailing);
+        return encodeURI(payload).split(/%..|./).length - 1;
       }
 
       rule79 (str) {

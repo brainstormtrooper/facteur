@@ -91,9 +91,6 @@ var Menubar = GObject.registerClass( // eslint-disable-line
       const headerBar = new Gtk.HeaderBar();
       this.App = Gio.Application.get_default();
 
-      // headerBar.set_title('Facteur (Gnome Emailer)');
-      // https://tecnocode.co.uk/misc/platform-demos/tooltip.js.xhtml
-      // headerBar.set_subtitle('Untitled Mailing');
       headerBar.set_show_title_buttons(true)
 
       const ttlWidget = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL });
@@ -113,30 +110,32 @@ var Menubar = GObject.registerClass( // eslint-disable-line
       const buttonNew = Gtk.Button.new_from_icon_name('document-open-symbolic');
       buttonNew.connect('clicked', async () => {
         const props = {
-          title: 'Select A Mailing'
+          title: Gettext.gettext('Select A Mailing')
         }
         try {
           
           myFile.fileOpen(props, (res) => {
-            appData.set('FILENAME', res.get_path());
+            appData.set('FILENAME', res.get_parse_name());
             // appData.set('FILENAME', 'test');
             const [, contents] = res.load_contents(null);
             const td = new TextDecoder();
             // myFile.unRoll(td.decode(contents));
-            myFile.unRoll(myFile.decompress(contents));
-            this.App.emit('update_ui', true);
-            this.App.emit('update_attachments', true);
-            // eslint-disable-next-line max-len
-            this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);
-            this.App.emit('filename_changed', true);
+            try {
+              myFile.unRoll(myFile.decompress(contents));
+              this.App.emit('update_ui', true);
+              this.App.emit('update_attachments', true);
+              // eslint-disable-next-line max-len
+              this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);
+              this.App.emit('filename_changed', true);
+            } catch (error) {
+              myModal.showOpenModal('Error', error.message, this.App);
+            }          
+            
           });
-          
-          
-          
           
         } catch (error) {
           log(error);
-          throw(error);
+          myModal.showOpenModal('Error', error.message, this.App);
         }
       });
 
@@ -190,7 +189,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
     saveAs() {
       const data = myFile.compress(myFile.rollUp());
       const WP = appData.get('FILENAME').split('/');
-      const filename = `${WP.pop().split('.')[0]}.fctm`;
+      const filename = $WP.pop();
       const foldername = `/${WP.join('/')}`;
       const props = { 
         title: 'Save a mailing',

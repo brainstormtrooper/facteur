@@ -1,10 +1,13 @@
 /**
 UI for displaying html message interface
 */
-const { Gtk, Gio, GtkSource, WebKit, GObject } = imports.gi;
+const { GLib, Gtk, Gio, GtkSource, WebKit, GObject } = imports.gi;
 const Gettext = imports.gettext;
 const myTemplate = imports.object.Template;
 const Template = new myTemplate.Template();
+
+const myMessage = new imports.object.Message.Message();
+const myModal = new imports.UI.Modal.UImodal();
 const Data = imports.object.Data;
 const appData = new Data.Data();
 const myFile = imports.lib.file;
@@ -18,7 +21,7 @@ var widgetAttachment = GObject.registerClass( // eslint-disable-line
   GTypeName: 'widgetAttachment',
   Template: 'resource:///io/github/brainstormtrooper/facteur/widgetAttachment.ui',
   // Children: ['attachment', 'contentMain'],
-  InternalChildren: ['filename', 'deleteButton', 'fileId', 'inlineButton']
+  InternalChildren: ['filename', 'deleteButton', 'fileId', 'inlineButton', 'row2']
 },
 class widgetAttachment extends Gtk.Box {
   _init () {
@@ -79,7 +82,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           this.attachmentsListBox.remove(widget);
           widget = this.attachmentsListBox.get_first_child();
         }
-
+        const media = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'webm'];
         const currAttachments = appData.get('ATTACHMENTS');
         currAttachments.forEach(attachment => {
           const aw = new widgetAttachment();
@@ -94,6 +97,13 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
             appData.setInlineAttachment(attachment.fileName, aw._inlineButton.get_active());
             this.App.emit('update_attachments', true);
           });
+          const ext = attachment.fileName.split('.').pop();
+          if (!media.includes(ext)) {
+            
+            aw.remove(aw._row2);
+          }
+          
+          aw.add_css_class('card');
           this.attachmentsListBox.append(aw);
         });
       }
@@ -154,7 +164,14 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           }
           try {
             myFile.fileOpen(props, (res) => {
-              Template.addAttachment(res);
+              try {
+                Template.addAttachment(res);
+              } catch (error) {
+                myModal.showOpenModal('Error', error.message, this.App);
+              }
+              if (myMessage.weight(this.textBuffer.text, this.htmlBuffer.text) > 20971520) {
+                myModal.showOpenModal('Warning', Gettext.gettext('Your mailing exceeds 20MB and may not be received by all reipients.'), this.App);
+              }
               this.App.emit('update_attachments', true);
             });
           } catch (error) {
@@ -172,10 +189,15 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
               const [, contents] = res.load_contents(null);
               const myTemplate = td.decode(contents);
               const len = encodeURI(myTemplate).split(/%..|./).length - 1;
-              this.htmlBuffer.set_text(myTemplate, len);
+              if (GLib.utf8_validate(myTemplate).includes(true)) {
+                this.htmlBuffer.set_text(myTemplate, len);
+              } else {
+                myModal.showOpenModal('Error', Gettext.gettext('Template is not a valid utf8 text file.'), this.App);
+              }
+              
             });
           } catch (error) {
-            
+            myModal.showOpenModal('Error', error.message, this.App);
           }
         });
 
@@ -183,6 +205,9 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           this.saveButton.remove_css_class('suggested-action');
           appData.set('HTML', this.htmlBuffer.text);
           appData.set('TEXT', this.textBuffer.text);
+          if (myMessage.weight(this.textBuffer.text, this.htmlBuffer.text) > 20971520) {
+            myModal.showOpenModal('Warning', Gettext.gettext('Your mailing exceeds 20MB and may not be received by all reipients.'), this.App);
+          }
         });
 
         

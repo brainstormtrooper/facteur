@@ -8,7 +8,7 @@ const GObject = imports.gi.GObject;
 const Pango = imports.gi.Pango;
 const Lang = imports.lang;
 const myList = imports.object.List;
-const Modal = imports.UI.Modal;
+const myModal = new imports.UI.Modal.UImodal();
 const Data = imports.object.Data;
 const myFile = imports.lib.file;
 const appData = new Data.Data();
@@ -57,7 +57,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
         this.mailingMain = new mailingMain();
 
         const mnewButton = this.mailingMain._mnewButton;
-        const mScrolledWindow = this.mailingMain._mScrolledWindow;
+        // const mScrolledWindow = this.mailingMain._mScrolledWindow;
 
         this.mTreeView = this.mailingMain._mTreeView;
 
@@ -67,25 +67,24 @@ var UImailing = GObject.registerClass( // eslint-disable-line
 
         mnewButton.connect('clicked', () => {
           const props = {
-            title: 'Select A Mailing List'
+            title: Gettext.gettext('Select A Mailing List')
           }
           try {
         
             myFile.fileOpen(props, (res) => {
-              appData.set('FILENAME', res.get_basename());
-              // appData.set('FILENAME', 'test');
               const td = new TextDecoder();
               const [, contents] = res.load_contents(null);
               const myList = td.decode(contents);
               try { 
                 this.list.import(myList);
+                this.App.emit('Logger', 'CSV File is : ' + res.get_parse_name());
+                this.App.emit('update_ui', true);
+                // eslint-disable-next-line max-len
               } catch (error) {
                 logError(error);
+                myModal.showOpenModal('Error', error.message, this.App);
               }
-              this.App.emit('Logger', 'CSV File is : ' + res.get_basename());
-              this.App.emit('update_ui', true);
-              // eslint-disable-next-line max-len
-              this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);
+              
             });
             
           } catch (error) {
@@ -95,12 +94,13 @@ var UImailing = GObject.registerClass( // eslint-disable-line
         });
 
         this.list.connect('Import_error_sig', Lang.bind(this, function () {
-          const myModal = new Modal.UImodal();
+          
           myModal.showOpenModal(
               'Error',
               Gettext.gettext(
                   'Error importing file. Not a valid mailing list',
               ),
+              this.App
           );
         }));
 
