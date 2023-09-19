@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 imports.gi.versions.Gtk = '4.0';
+const Adw = imports.gi.Adw;
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
@@ -41,7 +42,7 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         },
       },
     },
-    class Facteur extends Gtk.Application {
+    class Facteur extends Adw.Application {
       _init () {
         this.ID = 'io.github.brainstormtrooper.facteur';
         super._init({
@@ -138,25 +139,12 @@ var Facteur = GObject.registerClass( // eslint-disable-line
         //
         try {
           
-          const GTKSCHEMA_KEY = "org.gnome.desktop.interface";
-          let gtk_settings = new Gio.Settings({ schema: GTKSCHEMA_KEY });
-          let cur_theme = gtk_settings.get_string("gtk-theme");
-          let shell_theme = gtk_settings.get_string("color-scheme");
-          let variant = null;
-          if (shell_theme.endsWith('-dark')) {
-            variant = 'dark';
-          }
-
-          let gtk_provider = Gtk.CssProvider.new();
-          gtk_provider.load_named(cur_theme, variant);
-          const display = Gdk.Display.get_default();
-          Gtk.StyleContext.add_provider_for_display(display, gtk_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
           let css_provider = Gtk.CssProvider.new();
           css_provider.load_from_resource('/io/github/brainstormtrooper/facteur/facteur.css');
           // const context = new Gtk.StyleContext();
-          // const display = Gdk.Display.get_default();
+          const display = Gdk.Display.get_default();
           Gtk.StyleContext.add_provider_for_display(display, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-  
+
         } catch (error) {
           log(error);
         }

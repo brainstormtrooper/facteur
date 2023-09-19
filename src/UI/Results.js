@@ -4,6 +4,8 @@ const Gettext = imports.gettext;
 const myMessage = imports.object.Message;
 const myFile = imports.lib.file;
 const GObject = imports.gi.GObject;
+const myTemplate = imports.object.Template;
+const Template = new myTemplate.Template();
 
 const Message = new myMessage.Message();
 
@@ -91,7 +93,7 @@ var UIresults = GObject.registerClass( // eslint-disable-line
 
         this.sendButton.connect('clicked', async () => {
           try {
-            const res = await Message.compile();
+            const res = await Template.compile();
             if (res) {
               const r = Message.sendAll();
               Promise.all(r).then(() => {

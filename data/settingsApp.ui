@@ -17,48 +17,9 @@
         <property name="orientation">vertical</property>
         <property name="vexpand">true</property>
         <property name="hexpand">true</property>
-        <child>
-          <object class="GtkBox" id="ipv4Box">
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkCheckButton" id="defIpv4Field">
-                <style>
-                  <class name="formelement" />
-                  <class name="forminput" />
-                  <class name="checkbutton" />
-                </style>
-                <property name="label" translatable="yes">Force IPv4</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox" id="delayBox">
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkLabel" id="delaylabel">
-                <property name="justify">left</property>
-                <style>
-                  <class name="formelement" />
-                  <class name="formlabel" />
-                </style>
-                <property name="label" translatable="yes">Delay (Milliseconds)</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSpinButton" id="delayField">
-                <property name="numeric">true</property>
-                <property name="digits">0</property>
-                <property name="climb_rate">1</property>
-                <style>
-                  <class name="formelement" />
-                  <class name="forminput" />
-                  <class name="spinbutton" />
-                </style>
-              </object>
-            </child>
-          </object>
-        </child>
+        <property name="spacing">6</property>
+        
+        
         <child>
           <object class="GtkFrame">
             <property name="label" translatable="yes">Connections</property>
@@ -66,6 +27,7 @@
             <child>
               <object class="GtkBox" id="cSelectBox">
                 <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="cSelectLabel">
                     <style>
@@ -89,7 +51,9 @@
                 <child>
                   <object class="GtkBox" id="cButtonBox">
                     <property name="orientation">horizontal</property>
-                    <property name="css-classes">buttonbox</property>
+                    <style>
+                      <class name="linked" />
+                    </style>
                     <child>
                       <object class="GtkButton" id="cNewButton">
                         <style>

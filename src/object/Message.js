@@ -8,6 +8,7 @@ const GLib = imports.gi.GLib;
 const Soup = imports.gi.Soup;
 const Settings = imports.object.Settings;
 const time = imports.lib.time;
+const filelib = imports.lib.file;
 const Data = imports.object.Data;
 const secret = imports.lib.secret;
 const tpllib = imports.lib.template;
@@ -74,6 +75,24 @@ var Message = GObject.registerClass( // eslint-disable-line
         }
       }
 
+      headers (mailing) {
+        let headers = [];
+        // from
+        const froma = (appData.get('FROM') != '' ? appData.get('FROM') : this.curConn.FROM);
+        const from = (appData.get('NAME') != '' ? `${appData.get('NAME')} <${froma}>` : froma);
+        headers.push(`FROM: ${(mailing.from ? mailing.from : from)}`);
+        headers.push(`TO: ${mailing.to}`);
+        headers.push(`DATE: ${GLib.DateTime.new_now_utc().format('%d %b %Y %H:%M:%S %:z')}`);
+        headers.push(`SUBJECT: ${mailing.subject}`);
+
+        if (appData.get('REPLY') != '') {  
+          headers.push(`REPLY-TO: ${appData.get('REPLY')}`);
+        }
+        
+        return headers.join("\r\n");
+
+      }
+
       sendAll () {
         let res = [];
         this.results = [];
@@ -85,9 +104,11 @@ var Message = GObject.registerClass( // eslint-disable-line
           const mobj = this.build(mailing);
           try {
             res.push(this.send(mobj, mailing.to));
+            // log('sending stub');
           } catch (error) {
             logError(error);
           }
+          
           
           this.sleep(delay);
         });
@@ -97,7 +118,7 @@ var Message = GObject.registerClass( // eslint-disable-line
       }
 
       build (mailing) {
-        
+
         const inline = [];
         const attach = [];
         const blocks = [
@@ -115,21 +136,16 @@ var Message = GObject.registerClass( // eslint-disable-line
           }
         ];
 
-        // const mObj = {};
 
-        let payload = tpllib.payload.replace('{{subject}}', appData.get('SUBJECT'));
+        let payload = tpllib.payload.replace('{{headers}}', this.headers(mailing));
 
-        payload = payload.replace('{{to}}', mailing.to);
-        payload = payload.replace('{{from}}', mailing.from);
-        payload = payload.replace('{{date}}', GLib.DateTime.new_now_utc().format('%d %b %Y %H:%M:%S %:z'));
         payload = payload.replace(/{{mixedBoundary}}/g, this.mixedBoundary);
         payload = payload.replace(/{{relatedBoundary}}/g, this.relatedBoundary);
         payload = payload.replace(/{{alternativeBoundary}}/g, this.alternativeBoundary);
+        
 
         blocks.forEach(block => {
           let str = tpllib.partBlock;
-          // {{boundary}}, {{contentType}}, {{contentExtra}}, {{content}}, {{dispositionHeader}}
-          // Content-Disposition: inline; filename="image001.png";
           str = str.replace('{{boundary}}', this.alternativeBoundary);
           str = str.replace('{{encoding}}', '7bit');
           str = str.replace('{{contentId}}', '');
@@ -155,7 +171,6 @@ var Message = GObject.registerClass( // eslint-disable-line
 
         attachments.forEach(attachment => {
           let str = tpllib.partBlock;
-          // str = str.replace('{{contentType}}', attachment.type);
           
           str = str.replace('{{contentExtra}}', `name="${attachment.fileName}";`);
           str = str.replace('{{encoding}}', 'base64');
@@ -178,6 +193,26 @@ var Message = GObject.registerClass( // eslint-disable-line
 
         });
 
+        mailing.links.forEach((link) => {
+          const file = Gio.File.new_for_path(link);
+          if (file.query_exists(null)) {
+            const [ok, f,] = file.load_contents(null);
+            if (ok) {
+              let str = tpllib.partBlock;
+              const fname = link.split('/').pop();
+              str = str.replace('{{contentExtra}}', `name="${fname}";`);
+              str = str.replace('{{encoding}}', 'base64');
+              str = str.replace('{{contentType}}', 'application/octet-stream');
+              str = str.replace('{{boundary}}', this.mixedBoundary);
+              const rid = Math.random().toString(36).slice(2, 7);
+              str = str.replace('{{contentId}}', `Content-ID: "${rid}"`);
+              str = str.replace('{{content}}', this.rule79(GLib.base64_encode(f)));
+              str = str.replace('{{dispositionHeader}}', `Content-Disposition: attachment; filename="${fname}";`);
+              attach.push(str);
+            }
+            
+          }
+        });
 
         payload = payload.replace('{{partsInline}}', inline.join("\n\n"));
         payload = payload.replace('{{partsAttachment}}', attach.join("\n\n"));
@@ -218,6 +253,8 @@ var Message = GObject.registerClass( // eslint-disable-line
         this.App = Gio.Application.get_default();
         const ipv4 = Config.getIpv4();
         const pass = secret.connPasswordGet(this.curConn.ID);
+        const from = (appData.get('FROM') != '' ? appData.get('FROM') : this.curConn.FROM);
+
         let flagStr = '-svk';
         if (ipv4) {
           flagStr = '-svk4';
@@ -226,15 +263,17 @@ var Message = GObject.registerClass( // eslint-disable-line
         const argv = ['curl',
           flagStr,
           // Option switches and values are separate args
-          '--mail-from', this.curConn.FROM,
+          '--mail-from', from,
           '--url', this.curConn.HOST,
           '--mail-rcpt', to,
           '-T', '-',
           '--user', `${this.curConn.USER}:${pass}`,
         ];
+        
         if (this.curConn.HOST.toLowerCase().includes('smtps')) {
           argv.push('--ssl-reqd');
         }
+
         try {
 
           const proc = new Gio.Subprocess({

@@ -54,6 +54,7 @@
                     <child>
                       <object class="GtkBox" id="cImportBox">
                         <property name="orientation">horizontal</property>
+                        <property name="margin-start">6</property>
                         <style>
                           <class name="formelementgroup" />
                           <class name="formrow" />
@@ -148,11 +149,69 @@
                         <property name="orientation">horizontal</property>
                         <property name="hexpand">true</property>
                         <property name="halign">end</property>
+                        <style>
+                          <class name="linked" />
+                        </style>
                         <child>
-                          <object class="GtkButton" id="addAttachmentButton">
-                            <property name="label" translatable="yes">New Attachment</property>
+                          <object class="GtkLabel" id="cAttachLabel">
+                            
+                            <property name="label" translatable="yes">New </property>
+                            
                           </object>
                         </child>
+                        <child>
+                          <object class="GtkButton" id="addAttachmentButton">
+                            
+                            <property name="label" translatable="yes">Insert</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkMenuButton" id="cAttachButton">
+                            <style>
+                              <class name="formelement" />
+                              <class name="forminput" />
+                              <class name="button" />
+                            </style>
+                            <property name="label" translatable="yes">Link</property>
+                            
+                            <property name="popover">cPopLink</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkPopover" id="cPopLink">
+                            <style>
+                              <class name="menu" />
+                              <class name="popover" />
+                            </style>
+                            <child>
+                              <object class="GtkBox" id="cPopLinkBtnBox">
+                                <property name="orientation">horizontal</property>
+                                <style>
+                                  <class name="linked" />
+                                </style>
+                                <child>
+                                  <object class="GtkEntry" id="addLinkEntry">
+                                    <property name="max_length">256</property>
+                                    <property name="width_chars">64</property>
+                                    <style>
+                                      <class name="formelement" />
+                                      <class name="forminput" />
+                                      <class name="entry" />
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="addLinkButton">
+                                    
+                                    <property name="label" translatable="yes">Add</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+
+                        
                       </object>
                     </child>
                     <child>
@@ -165,6 +224,7 @@
                             <property name="valign">start</property>
                             <property name="vexpand">true</property>
                             <property name="hexpand">true</property>
+                            <property name="spacing">6</property>
                           </object>
                         </child>
                       </object>
@@ -191,7 +251,7 @@
             </style>
             <child>
               <object class="GtkButton" id="saveButton">
-
+                <property name="margin-end">6</property>
                 <property name="label" translatable="yes">Save</property>
                 <style>
                   <class name="formelement" />

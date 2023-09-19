@@ -42,6 +42,27 @@ var Template = GObject.registerClass( // eslint-disable-line
         });
       }
 
+      addLink(path) {
+        let valid = false;
+        const file = Gio.File.new_for_path(path);
+        if (file.query_exists(null)) {
+          const info = file.query_info('standard::*', null, null);
+          const size = info.get_size();
+          if (size > 20971520) {
+            const se = new Error(Gettext.gettext('Cannot attach file greater than 20MB'));
+            throw se;
+          }
+          valid = true;
+        }
+        if (!file.query_exists(null) && path.includes('{{')) {
+          valid = true;
+        }
+        if (valid) {
+          appData.addLink(path);
+        }
+        
+      }
+
       addAttachment (file) {
         const aObj = {};
         const info = file.query_info('standard::*', null, null);
