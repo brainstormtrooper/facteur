@@ -29,6 +29,7 @@
                 <property name="orientation">horizontal</property>
                 <property name="vexpand">false</property>
                 <property name="hexpand">true</property>
+                <property name="spacing">6</property>
                 <style>
                   <class name="formelementgroup" />
                   <class name="formrow" />

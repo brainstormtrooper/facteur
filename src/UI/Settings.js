@@ -49,8 +49,8 @@ var settingsMain = GObject.registerClass( // eslint-disable-line
   Template: 'resource:///io/github/brainstormtrooper/facteur/settingsMain.ui',
   // Children: [],
   InternalChildren: [
-    'form_area', 'sselectCombo', 'snewButton', 
-    'subjectField', 'saveButton'
+    'form_area', 'sselectCombo', 'snewButton', 'mailingReplyEntry',
+    'subjectField', 'saveButton', 'mailingFromEntry', 'mailingNameEntry'
   ]
 },
 class settingsMain extends Gtk.Box {
@@ -69,7 +69,7 @@ var settingsApp = GObject.registerClass( // eslint-disable-line
   Template: 'resource:///io/github/brainstormtrooper/facteur/settingsApp.ui',
   // Children: [],
   InternalChildren: [
-    'form_area', 'defIpv4Field', 'delayField', 
+    'form_area',  
     'cSelectField', 'cNewButton', 'cEditButton', 
     'cExportButton', 'cDeleteButton', 'cExportAllButton', 
     'cPopDelete', 'cPopExport', 'cExportPasswords',
@@ -107,11 +107,14 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           }
           const sub = (obj.SUBJECT ? obj.SUBJECT : appData.get('SUBJECT'));
           const connId = (obj.CONN ? obj.CONN : appData.get('CONN'));
+          const sfrom = (obj.FROM ? obj.FROM : appData.get('FROM'));
+          const fname = (obj.NAME ? obj.NAME : appData.get('NAME'));
+          const reply = (obj.REPLY ? obj.REPLY : appData.get('REPLY'));
 
           if (connId || obj.ID) {
             const conn = (obj.ID ? obj.ID : Config.getConnection(connId));
             if (conn) {
-              const name = (obj.NAME ? obj.NAME : conn.NAME);
+              const cname = (obj.NAME ? obj.NAME : conn.NAME);
               const from = (obj.FROM ? obj.FROM : conn.FROM);
               const host = (obj.HOST ? obj.HOST : conn.HOST);
               const user = (obj.USER ? obj.USER : conn.USER);
@@ -123,7 +126,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
             }
             
             if (this.nameField) {
-              this.nameField.set_text(name);
+              this.nameField.set_text(cname);
               this.fromField.set_text(from);
               this.smtpField.set_text(host);
               this.userField.set_text(user);
@@ -145,6 +148,15 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
 
           if (sub) {
             this.subjectField.set_text(sub);
+          }
+          if (sfrom) {
+            this.mailingFromEntry.set_text(sfrom);
+          }
+          if (fname) {
+            this.mailingNameEntry.set_text(fname);
+          }
+          if (reply) {
+            this.mailingReplyEntry.set_text(reply);
           }
           this.saveButton.remove_css_class('suggested-action');
         } catch (err) {
@@ -169,6 +181,9 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         this.snewButton = this.settingsMain._snewButton;
         this.sselectCombo = this.settingsMain._sselectCombo;
         this.saveButton = this.settingsMain._saveButton;
+        this.mailingReplyEntry = this.settingsMain._mailingReplyEntry;
+        this.mailingFromEntry = this.settingsMain._mailingFromEntry;
+        this.mailingNameEntry = this.settingsMain._mailingNameEntry;
 
         this.resetConSelect(this.sselectCombo);
 
@@ -211,14 +226,27 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         this.subjectField.connect('changed', () => {
           this.saveButton.add_css_class('suggested-action');
         });
-
         this.sselectCombo.connect('changed', () => {
+          this.saveButton.add_css_class('suggested-action');
+        });
+
+        this.mailingReplyEntry.connect('changed', () => {
+          this.saveButton.add_css_class('suggested-action');
+        });
+        this.mailingFromEntry.connect('changed', () => {
+          this.saveButton.add_css_class('suggested-action');
+        });
+        this.mailingNameEntry.connect('changed', () => {
           this.saveButton.add_css_class('suggested-action');
         });
 
         this.saveButton.connect('clicked', () => {
           appData.set('SUBJECT', this.subjectField.get_text());
           appData.set('CONN', this.sselectCombo.get_active_id());
+
+          appData.set('FROM', this.mailingFromEntry.get_text());
+          appData.set('NAME', this.mailingNameEntry.get_text());
+          appData.set('REPLY', this.mailingReplyEntry.get_text());
           // eslint-disable-next-line max-len
           const str = ` >>> Started Mailing "${this.subjectField.get_text()}"...`;
           this.saveButton.remove_css_class('suggested-action');
@@ -376,7 +404,6 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
       appConfig () {
         this.App = Gio.Application.get_default();
         const myModal = new Modal.UImodal();
-        const ipv4 = Config.getIpv4();
         
 
         this.settingsForm = new settingsApp();
@@ -384,30 +411,12 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         // const cExportButton = this.settingsForm.get_template_child(Gtk.Box, 'cExportButton');
 
         this.mainSelectCombo = this.settingsForm._cSelectField;
-        const ipv4Field = this.settingsForm._defIpv4Field;
         const cExportPasswords = this.settingsForm._cExportPasswords;
-        const delayField = this.settingsForm._delayField;
         // log(cExportButton);
 
         this.resetConSelect(this.mainSelectCombo);
 
-        if (ipv4) {
-          ipv4Field.set_active(true);
-        }
-        // Config.getDelay().toString()
-        delayField.set_numeric(true);
-        delayField.set_range(0, 5000);
-        delayField.set_digits(0);
-        delayField.set_increments(1, 1);
-        delayField.set_snap_to_ticks(true);
-        delayField.set_value(Config.getDelay().toString());
-
-        delayField.connect('value-changed', ()=> {
-          Config.setDelay(delayField.get_value_as_int());
-        })
-        ipv4Field.connect('toggled', () => {
-          Config.setIpv4(ipv4Field.get_active());
-        });
+        
 
         this.settingsForm._cDeleteConfirmButton.connect('clicked', () => {
           this.reallyDelete();

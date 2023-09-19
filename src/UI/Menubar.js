@@ -205,7 +205,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
 
 
     getSettingsMenu(app) {
-      const menuBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL })
+      const menuBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 6 })
       const aboutBtn = new Gtk.Button({ label: 'About' });
       aboutBtn.connect('clicked', () => {
         // this.widgetOpen.pop.hide();

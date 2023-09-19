@@ -13,6 +13,9 @@ var Data = class Data { // eslint-disable-line
       CONN: '',
 
       SUBJECT: '',
+      FROM: '',
+      NAME: '',
+      REPLY: '',
       HTML: '',
       TEXT: '',
 
@@ -21,6 +24,7 @@ var Data = class Data { // eslint-disable-line
       VARS: [],
       MAILINGS: [],
       ATTACHMENTS: [],
+      LINKS: [],
 
       FILEID: uuid.uuid(),
       FILENAME: 'untitled',
@@ -43,6 +47,14 @@ var Data = class Data { // eslint-disable-line
 
   push (arrayKey, value) {
     this._data[arrayKey].push(value);
+  }
+
+  addLink (path) {
+    this._data.LINKS.push(path);
+  }
+
+  deleteLink (path) {
+    this._data.LINKS = this._data.LINKS.filter( el => el !== path );
   }
 
   addAttachment (obj) {

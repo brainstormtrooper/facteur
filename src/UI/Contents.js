@@ -36,7 +36,8 @@ var contentMain = GObject.registerClass( // eslint-disable-line
   GTypeName: 'contentMain',
   Template: 'resource:///io/github/brainstormtrooper/facteur/contentMain.ui',
   // Children: ['attachment', 'contentMain'],
-  InternalChildren: ['textView', 'htmlSourceView', 'htmlPreview', 'saveButton', 'cImportButton', 'addAttachmentButton', 'attachmentsListBox']
+  InternalChildren: ['textView', 'htmlSourceView', 'htmlPreview', 'saveButton', 'addLinkEntry',
+  'cImportButton', 'addAttachmentButton', 'addLinkButton', 'attachmentsListBox']
 },
 class contentMain extends Gtk.Box {
   _init () {
@@ -84,6 +85,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         }
         const media = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'webm'];
         const currAttachments = appData.get('ATTACHMENTS');
+        const currLinks = appData.get('LINKS');
         currAttachments.forEach(attachment => {
           const aw = new widgetAttachment();
           aw._filename.set_text(attachment.fileName);
@@ -106,6 +108,19 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           aw.add_css_class('card');
           this.attachmentsListBox.append(aw);
         });
+        currLinks.forEach(link => {
+          const linkRow = new Gtk.Box({orientation: 'horizontal', spacing: 6});
+          const linkText = new Gtk.Entry({text: link, editable: false});
+          const linkDel = new Gtk.Button({ icon_name: 'edit-delete-symbolic'});
+          linkDel.connect('clicked', () => {
+            appData.deleteLink(link);
+            this.App.emit('update_attachments', true);
+          });
+          linkRow.append(linkText);
+          linkRow.append(linkDel);
+          linkRow.add_css_class('card');
+          this.attachmentsListBox.append(linkRow);
+        });
       }
 
       previewAttachments (html) {
@@ -113,7 +128,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         appData._data.ATTACHMENTS.forEach(ao => {
           if (ao.inline) {
             const slug = `cid:${ao.id}`;
-            const [type, uncertain] = Gio.content_type_guess(ao.fileName, null)
+            const [type, uncertain] = Gio.content_type_guess(ao.fileName, null);
             const inline = `data:${type};base64,${ao.contents}`;
             myStr = myStr.replace(slug, inline);
           }
@@ -132,6 +147,8 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.saveButton = this.contentMain._saveButton;
         this.cImportButton = this.contentMain._cImportButton;
         this.newAttachmentButton = this.contentMain._addAttachmentButton;
+        this.newLinkButton = this.contentMain._addLinkButton;
+        this.addLinkEntry = this.contentMain._addLinkEntry;
         this.attachmentsListBox = this.contentMain._attachmentsListBox
 
         this.textBuffer = new Gtk.TextBuffer();
@@ -157,6 +174,11 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.htmlBuffer.set_text(defhtmlstr, len);
         this.htmlPreview.load_html(this.htmlBuffer.text, null);
         this.saveButton.remove_css_class('suggested-action');
+
+        this.newLinkButton.connect('clicked', () => {
+          Template.addLink(this.addLinkEntry.get_text());
+          this.App.emit('update_attachments', true);
+        });
 
         this.newAttachmentButton.connect('clicked', () => {
           const props = {

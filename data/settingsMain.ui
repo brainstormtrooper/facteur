@@ -17,6 +17,8 @@
         <property name="orientation">vertical</property>
         <property name="vexpand">true</property>
         <property name="halign">center</property>
+        <property name="spacing">6</property>
+        <property name="margin-top">6</property>
         <child>
           <object class="GtkFrame" id="connframe">
             <property name="label" translatable="yes">Connections</property>
@@ -37,6 +39,9 @@
               <object class="GtkBox" id="sseletEntry">
                 <property name="css-classes">form_row_box</property>
                 <property name="orientation">horizontal</property>
+                <style>
+                  <class name="linked" />
+                </style>
                 <child>
                   <object class="GtkComboBoxText" id="sselectCombo">
                     <style>
@@ -62,23 +67,122 @@
             </child>
           </object>
         </child>
+        
+        
+        
+
         <child>
-          <object class="GtkLabel" id="subjectLabel">
+          <object class="GtkBox" id="mailingSubjectRow">
+            <property name="orientation">vertical</property>
             <style>
-              <class name="formelement" />
-              <class name="formlabel" />
+              <class name="formelementgroup" />
+              <class name="formrow" />
             </style>
-            <property name="label" translatable="yes">Mailing Subject</property>
+            <child>
+              <object class="GtkLabel" id="subjectLabel">
+                <style>
+                  <class name="formelement" />
+                  <class name="formlabel" />
+                </style>
+                <property name="label" translatable="yes">Mailing Subject</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="subjectField">
+                <property name="max_length">256</property>
+                <style>
+                  <class name="formelement" />
+                  <class name="forminput" />
+                  <class name="entry" />
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkBox" id="mailingFromRow">
+            <property name="orientation">vertical</property>
+            <style>
+              <class name="formelementgroup" />
+              <class name="formrow" />
+            </style>
+            <child>
+              <object class="GtkLabel" id="mailingFromLabel">
+                <style>
+                  <class name="formelement" />
+                  <class name="formlabel" />
+                </style>
+                <property name="label" translatable="yes">From Address</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="mailingFromEntry">
+                <property name="max_length">64</property>
+                <property name="placeholder_text">sender@service.ext</property>
+                <style>
+                  <class name="formelement" />
+                  <class name="forminput" />
+                  <class name="entry" />
+                </style>
+              </object>
+            </child>
           </object>
         </child>
         <child>
-          <object class="GtkEntry" id="subjectField">
-            <property name="max_length">256</property>
+          <object class="GtkBox" id="mailingNameRow">
+            <property name="orientation">vertical</property>
             <style>
-              <class name="formelement" />
-              <class name="forminput" />
-              <class name="entry" />
+              <class name="formelementgroup" />
+              <class name="formrow" />
             </style>
+            <child>
+              <object class="GtkLabel" id="mailingNameLabel">
+                <style>
+                  <class name="formelement" />
+                  <class name="formlabel" />
+                </style>
+                <property name="label" translatable="yes">From Name</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="mailingNameEntry">
+                <property name="max_length">128</property>
+                <style>
+                  <class name="formelement" />
+                  <class name="forminput" />
+                  <class name="entry" />
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="mailingReplyRow">
+            <property name="orientation">vertical</property>
+            <style>
+              <class name="formelementgroup" />
+              <class name="formrow" />
+            </style>
+            <child>
+              <object class="GtkLabel" id="mailingReplyLabel">
+                <style>
+                  <class name="formelement" />
+                  <class name="formlabel" />
+                </style>
+                <property name="label" translatable="yes">Reply To</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="mailingReplyEntry">
+                <property name="max_length">64</property>
+                <style>
+                  <class name="formelement" />
+                  <class name="forminput" />
+                  <class name="entry" />
+                </style>
+              </object>
+            </child>
           </object>
         </child>
         
@@ -94,7 +198,7 @@
         </style>
         <child>
           <object class="GtkButton" id="saveButton">
-            
+            <property name="margin-end">6</property>
             <property name="label" translatable="yes">Save</property>
             <style>
               <class name="formelement" />

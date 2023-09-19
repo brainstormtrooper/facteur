@@ -13,6 +13,9 @@ function iterRows (data) {
     const to = data.get('TO')[i].replace(/"/g, '').trim();
     let cHTML = data.get('HTML');
     let cTEXT = data.get('TEXT');
+    let subject = data.get('SUBJECT');
+    let dlinks = data.get('LINKS');
+    let links = [];
 
     row.forEach((val, k) => {
       vals[data.get('VARS')[k]] = val;
@@ -30,12 +33,28 @@ function iterRows (data) {
           cTEXT = cTEXT.replace(pos, v);
         }
       });
+      _positions(subject).forEach((pos) => {
+        if (pos == iw) {
+          subject = subject.replace(pos, v);
+        }
+      });
+
+      links = dlinks.map(link => {
+        _positions(link).forEach((pos) => {
+          if (pos == iw) {
+            link = link.replace(pos, v);
+          }
+        });
+        return link;
+      });
     });
 
     data.push('MAILINGS', {
       html: cHTML,
       text: cTEXT,
       to,
+      subject,
+      links
     });
   }
 
@@ -52,10 +71,7 @@ function _positions (template) {
 
 
 
-var payload = `Subject: {{subject}}
-TO: {{to}}
-FROM: {{from}}
-DATE: {{date}}
+var payload = `{{headers}}
 MIME-Version: 1.0
 Content-Type: multipart/mixed; boundary="{{mixedBoundary}}"
 
