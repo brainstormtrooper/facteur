@@ -128,6 +128,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
               this.App.emit('Logger', `Opened file : ${appData.get('FILENAME')}.`);
               this.App.emit('filename_changed', true);
             } catch (error) {
+              console.error(error);
               myModal.showOpenModal('Error', error.message, this.App);
             }          
             
@@ -189,7 +190,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
     saveAs() {
       const data = myFile.compress(myFile.rollUp());
       const WP = appData.get('FILENAME').split('/');
-      const filename = $WP.pop();
+      const filename = WP.pop();
       const foldername = `/${WP.join('/')}`;
       const props = { 
         title: 'Save a mailing',
@@ -200,6 +201,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
 
       myFile.fileSave(props, (res) => {
         appData.set('FILENAME', res);
+        this.App.emit('filename_changed', true);
       });
     }
 
@@ -237,7 +239,7 @@ var Menubar = GObject.registerClass( // eslint-disable-line
       const actionSave = new Gio.SimpleAction({ name: 'save' });
       actionSave.connect('activate', () => {
         if (appData.get('FILENAME') != null && appData.get('FILENAME') != 'untitled') {
-          const data = myFile.rollUp();
+          const data = myFile.compress(myFile.rollUp());
           myFile.save(appData.get('FILENAME'), data);
         } else {
           this.saveAs();

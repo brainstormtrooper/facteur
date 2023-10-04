@@ -26,6 +26,12 @@
   <url type="homepage">https://www.github.com/brainstormtrooper/facteur</url>
   <updatecontact>brainstormtrooper_AT_free.fr</updatecontact>
   <releases>
+    <release version="0.18.2" type="stable" date="2023-10-04">
+      <description>
+        <p>fix file save bug</p>
+        <p>fix attachment bug</p>
+      </description>
+    </release>
     <release version="0.18.1" type="stable" date="2023-09-19">
       <description>
         <p>fix mail sending regression</p>

@@ -76,12 +76,12 @@ class Facteur extends Gtk.Application {
   }
 });
 
-
+testFiles.testUnrollFile(fileInfo[1]);
 testRecipients.testConvert();
-testContents.testContent();
+testContents.testContent(fileInfo[1]);
 testConnections.tests(fileInfo[1], Facteur);
 testMessages.testMessage(fileInfo[1], Facteur);
-testFiles.testUnrollFile(fileInfo[1]);
+
 
 GLib.idle_add(GLib.PRIORITY_DEFAULT, function () {
   try {
