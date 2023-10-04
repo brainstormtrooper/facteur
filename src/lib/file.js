@@ -143,12 +143,16 @@ function rollUp () {
     // HOST: appData.get('HOST'),
     CONN: appData.get('CONN'),
     SUBJECT: appData.get('SUBJECT'),
+    FROM: appData.get('FROM'),
+    NAME: appData.get('NAME'),
+    REPLY: appData.get('REPLY'),
     HTML: appData.get('HTML'),
     TEXT: appData.get('TEXT'),
     TO: appData.get('TO'),
     CSVA: appData.get('CSVA'),
     VARS: appData.get('VARS'),
     ATTS: appData.get('ATTACHMENTS'),
+    LINKS: appData.get('LINKS'),
     // DELAY: appData.get('DELAY'),
     FILEID: appData.get('FILEID'),
     SENT: appData.get('SENT'),
@@ -187,6 +191,9 @@ function unRoll (str) {
 
   appData.set('CONN', data.CONN);
   appData.set('SUBJECT', data.SUBJECT);
+  appData.set('FROM', data.FROM);
+  appData.set('NAME', data.NAME);
+  appData.set('REPLY', data.REPLY);
   appData.set('HTML', data.HTML);
   appData.set('TEXT', data.TEXT);
   appData.set('TO', data.TO);
@@ -197,7 +204,9 @@ function unRoll (str) {
   if (data.ATTS) {
     appData.set('ATTACHMENTS', data.ATTS);
   }
-  
+  if (data.LINKS) {
+    appData.set('LINKS', data.LINKS);
+  }
 }
 
 async function open (path) {

@@ -78,7 +78,7 @@ var Message = GObject.registerClass( // eslint-disable-line
       headers (mailing) {
         let headers = [];
         // from
-        const froma = (appData.get('FROM') != '' ? appData.get('FROM') : this.curConn.FROM);
+        const froma = (appData.get('FROM') != '' ? appData.get('FROM') : Config.getConnection(appData.get('CONN')).FROM);
         const from = (appData.get('NAME') != '' ? `${appData.get('NAME')} <${froma}>` : froma);
         headers.push(`FROM: ${(mailing.from ? mailing.from : from)}`);
         headers.push(`TO: ${mailing.to}`);
@@ -97,8 +97,8 @@ var Message = GObject.registerClass( // eslint-disable-line
         let res = [];
         this.results = [];
         this.App = Gio.Application.get_default();
-        this.curConn = Config.getConnection(appData.get('CONN'));
-        const delay = this.curConn.DELAY;
+        // this.curConn = Config.getConnection(appData.get('CONN'));
+        const delay = Config.getConnection(appData.get('CONN')).DELAY;
         appData.get('MAILINGS').forEach((mailing) => {
           // eslint-disable-next-line max-len
           const mobj = this.build(mailing);
@@ -193,7 +193,8 @@ var Message = GObject.registerClass( // eslint-disable-line
 
         });
 
-        mailing.links.forEach((link) => {
+        const links = appData.get('LINKS');
+        links.forEach((link) => {
           const file = Gio.File.new_for_path(link);
           if (file.query_exists(null)) {
             const [ok, f,] = file.load_contents(null);
@@ -250,10 +251,11 @@ var Message = GObject.registerClass( // eslint-disable-line
       // https://stackoverflow.com/questions/44728855/curl-send-html-email-with-embedded-image-and-attachment
       //
       async send (msgObj, to, cancellable = null) {
+        const curConn = Config.getConnection(appData.get('CONN'))
         this.App = Gio.Application.get_default();
         const ipv4 = Config.getIpv4();
-        const pass = secret.connPasswordGet(this.curConn.ID);
-        const from = (appData.get('FROM') != '' ? appData.get('FROM') : this.curConn.FROM);
+        const pass = secret.connPasswordGet(curConn.ID);
+        const from = (appData.get('FROM') != '' ? appData.get('FROM') : curConn.FROM);
 
         let flagStr = '-svk';
         if (ipv4) {
@@ -264,13 +266,13 @@ var Message = GObject.registerClass( // eslint-disable-line
           flagStr,
           // Option switches and values are separate args
           '--mail-from', from,
-          '--url', this.curConn.HOST,
+          '--url', curConn.HOST,
           '--mail-rcpt', to,
           '-T', '-',
-          '--user', `${this.curConn.USER}:${pass}`,
+          '--user', `${curConn.USER}:${pass}`,
         ];
         
-        if (this.curConn.HOST.toLowerCase().includes('smtps')) {
+        if (curConn.HOST.toLowerCase().includes('smtps')) {
           argv.push('--ssl-reqd');
         }
 

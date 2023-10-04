@@ -71,7 +71,7 @@ var List = GObject.registerClass( // eslint-disable-line
       import (str) {
         this.csva = this.csvToArray(str);
         if (this.csva.length > 501) {
-          const e = new Error(Gettext.gettext('Miling lists are limited to 500 recipients.'));
+          const e = new Error(Gettext.gettext('Mailing lists are limited to 500 recipients.'));
           throw e;
         }
         if (!this.verify(this.csva)) {

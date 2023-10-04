@@ -1,3 +1,4 @@
+const Gio = imports.gi.Gio;
 const myFile = imports.lib.file;
 
 const strings = imports.fixtures.strings;
@@ -14,14 +15,20 @@ function testUnrollFile(path) {
     libdir: 'lib',
   });
 
-  // const data = JSON.parse(strings.fileWithConn);
-  const legacydata = JSON.parse(strings.fileStr);
-  // const HASH = settings.getHash().toString();
-  myFile.unRoll(strings.fileWithConn);
+  const fpath = `${path}/fixtures/unit_test_file`;
 
-  describe('Open a file', () => {
+  const file = Gio.File.new_for_path(fpath);
+  const [, contents] = file.load_contents(null);
+  // const HASH = settings.getHash().toString();
+  // myFile.unRoll(strings.fileWithConn);
+
+  describe('Open and save a file', () => {
+    
+    
+    
     it('Should have correct subject.', () => {
-      expect(appData.get('SUBJECT')).toBe('Test Mailing');
+      myFile.unRoll(myFile.decompress(contents));
+      expect(appData.get('SUBJECT')).toBe('subject');
     });
 
     it('Should create a CSV array.', () => {
@@ -29,9 +36,14 @@ function testUnrollFile(path) {
     });
 
     it('Should have correct first element.', () => {
-      expect(appData.get('CSVA')[0][0]).toBe('recipient1@email.com');
+      expect(appData.get('CSVA')[0][0]).toBe('bob@nowhere.ext');
     });
 
+    it('Should have correct file contents.', () => {
+      const data = myFile.compress(myFile.rollUp());
+      expect(data).toEqual(contents);
+    });
   });
-
+  
+  
 }
