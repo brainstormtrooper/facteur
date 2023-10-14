@@ -92,8 +92,20 @@ var Facteur = GObject.registerClass( // eslint-disable-line
 
         this.connect('dataChanged', () => {
           if (Results.sentLabel) {
-            Results.sentLabel.set_text(Results.defSentStr);
-            Results.sendButton.set_sensitive(true);
+
+            if (
+              appData.get('SUBJECT') != '' &&
+              appData.get('CONN') != '' &&
+              appData.get('TEXT') != '' &&
+              appData.get('HTML') != '' &&
+              appData.get('CSVA') != [] &&
+              appData.get('SENT') == ''
+            ) {
+              
+              Results.sentLabel.set_text(Results.defSentStr);
+              Results.sendButton.set_sensitive(true);
+            }
+
           }
         });
       }

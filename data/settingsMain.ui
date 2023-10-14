@@ -84,11 +84,12 @@
                   <class name="formelement" />
                   <class name="formlabel" />
                 </style>
-                <property name="label" translatable="yes">Mailing Subject</property>
+                <property name="label" translatable="yes">Mailing Subject*</property>
               </object>
             </child>
             <child>
               <object class="GtkEntry" id="subjectField">
+                <property name="tooltip_text" translatable="yes">Required mailing subject</property>
                 <property name="max_length">256</property>
                 <style>
                   <class name="formelement" />
@@ -118,6 +119,7 @@
             </child>
             <child>
               <object class="GtkEntry" id="mailingFromEntry">
+                <property name="tooltip_text" translatable="yes">Optional override to the connection sender e-mail address</property>
                 <property name="max_length">64</property>
                 <property name="placeholder_text">sender@service.ext</property>
                 <style>
@@ -147,6 +149,7 @@
             </child>
             <child>
               <object class="GtkEntry" id="mailingNameEntry">
+                <property name="tooltip_text" translatable="yes">Optional name to use with the sender e-mail address</property>
                 <property name="max_length">128</property>
                 <style>
                   <class name="formelement" />
@@ -175,6 +178,7 @@
             </child>
             <child>
               <object class="GtkEntry" id="mailingReplyEntry">
+                <property name="tooltip_text" translatable="yes">Optional reply-to email address</property>
                 <property name="max_length">64</property>
                 <style>
                   <class name="formelement" />

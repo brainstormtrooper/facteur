@@ -241,6 +241,9 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         });
 
         this.saveButton.connect('clicked', () => {
+          if ((appData.get('SUBJECT') != this.subjectField.get_text()) && (appData.get('SENT') != '')) {
+            appData.set('SENT', '');
+          }
           appData.set('SUBJECT', this.subjectField.get_text());
           appData.set('CONN', this.sselectCombo.get_active_id());
 
