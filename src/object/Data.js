@@ -35,10 +35,14 @@ var Data = class Data { // eslint-disable-line
   }
 
   set (key, value) {
+    let changed = false;
     if (this._data[key] != value && Gio.Application.get_default()) {
-      Gio.Application.get_default().emit('dataChanged', true);
+      changed = true
     }
     this._data[key] = value;
+    if (changed) {
+      Gio.Application.get_default().emit('dataChanged', true);
+    }
   }
 
   get (key) {

@@ -225,8 +225,17 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
 
         this.saveButton.connect('clicked', () => {
           this.saveButton.remove_css_class('suggested-action');
-          appData.set('HTML', this.htmlBuffer.text);
-          appData.set('TEXT', this.textBuffer.text);
+
+          appData.set('HTML', this.htmlBuffer.get_text(
+            this.htmlBuffer.get_start_iter(),
+            this.htmlBuffer.get_end_iter(),
+            true
+          ));
+          appData.set('TEXT', this.textBuffer.get_text(
+            this.textBuffer.get_start_iter(),
+            this.textBuffer.get_end_iter(),
+            true
+          ));
           if (myMessage.weight(this.textBuffer.text, this.htmlBuffer.text) > 20971520) {
             myModal.showOpenModal('Warning', Gettext.gettext('Your mailing exceeds 20MB and may not be received by all reipients.'), this.App);
           }

@@ -32,6 +32,6 @@
 }
 
 .required {
-    color: destructive_color;
+    color: @destructive_color;
     font-weight: bold;
 }

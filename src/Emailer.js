@@ -98,13 +98,11 @@ var Facteur = GObject.registerClass( // eslint-disable-line
               appData.get('CONN') != '' &&
               appData.get('TEXT') != '' &&
               appData.get('HTML') != '' &&
-              appData.get('CSVA') != [] &&
-              appData.get('SENT') == ''
+              appData.get('CSVA') != []
             ) {
-              
               Results.sentLabel.set_text(Results.defSentStr);
               Results.sendButton.set_sensitive(true);
-            }
+            } 
 
           }
         });
