@@ -146,6 +146,8 @@ function rollUp () {
     FROM: appData.get('FROM'),
     NAME: appData.get('NAME'),
     REPLY: appData.get('REPLY'),
+    CC: appData.get('CC'),
+    BCC: appData.get('BCC'),
     HTML: appData.get('HTML'),
     TEXT: appData.get('TEXT'),
     TO: appData.get('TO'),
@@ -194,6 +196,8 @@ function unRoll (str) {
   appData.set('FROM', data.FROM);
   appData.set('NAME', data.NAME);
   appData.set('REPLY', data.REPLY);
+  appData.set('CC', data.CC);
+  appData.set('BCC', data.BCC);
   appData.set('HTML', data.HTML);
   appData.set('TEXT', data.TEXT);
   appData.set('TO', data.TO);

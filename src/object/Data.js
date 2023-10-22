@@ -16,6 +16,8 @@ var Data = class Data { // eslint-disable-line
       FROM: '',
       NAME: '',
       REPLY: '',
+      CC: '',
+      BCC: '',
       HTML: '',
       TEXT: '',
 

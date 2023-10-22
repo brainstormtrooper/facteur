@@ -92,7 +92,12 @@ var Message = GObject.registerClass( // eslint-disable-line
         if (appData.get('REPLY') != '') {  
           headers.push(`REPLY-TO: ${appData.get('REPLY')}`);
         }
-        
+        if (appData.get('CC') != '') {  
+          headers.push(`CC: ${appData.get('CC')}`);
+        }
+        if (appData.get('BCC') != '') {  
+          headers.push(`BCC: ${appData.get('BCC')}`);
+        }
         return headers.join("\r\n");
 
       }

@@ -50,7 +50,8 @@ var settingsMain = GObject.registerClass( // eslint-disable-line
   // Children: [],
   InternalChildren: [
     'form_area', 'sselectCombo', 'snewButton', 'mailingReplyEntry',
-    'subjectField', 'saveButton', 'mailingFromEntry', 'mailingNameEntry'
+    'subjectField', 'saveButton', 'mailingFromEntry', 'mailingNameEntry',
+    'mailingCCEntry', 'mailingBCCEntry'
   ]
 },
 class settingsMain extends Gtk.Box {
@@ -110,19 +111,22 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           const sfrom = (obj.FROM ? obj.FROM : appData.get('FROM'));
           const fname = (obj.NAME ? obj.NAME : appData.get('NAME'));
           const reply = (obj.REPLY ? obj.REPLY : appData.get('REPLY'));
+          const cc = (obj.CC ? obj.CC : appData.get('CC'));
+          const bcc = (obj.BCC ? obj.BCC : appData.get('BCC'));
 
           if (connId || obj.ID) {
+            let cname, from, host, user, pass, delay, ipv4, headers;
             const conn = (obj.ID ? obj.ID : Config.getConnection(connId));
             if (conn) {
-              const cname = (obj.NAME ? obj.NAME : conn.NAME);
-              const from = (obj.FROM ? obj.FROM : conn.FROM);
-              const host = (obj.HOST ? obj.HOST : conn.HOST);
-              const user = (obj.USER ? obj.USER : conn.USER);
+              cname = (obj.NAME ? obj.NAME : conn.NAME);
+              from = (obj.FROM ? obj.FROM : conn.FROM);
+              host = (obj.HOST ? obj.HOST : conn.HOST);
+              user = (obj.USER ? obj.USER : conn.USER);
 
-              const pass = (obj.PASS ? obj.PASS : secret.connPasswordGet(connId));
-              const delay = (obj.DELAY ? obj.DELAY : conn.DELAY);
-              const ipv4 = (obj.IPv4 ? obj.IPv4 : conn.IPv4);
-              const headers = (obj.HEADERS ? obj.HEADERS : conn.HEADERS);
+              pass = (obj.PASS ? obj.PASS : secret.connPasswordGet(connId));
+              delay = (obj.DELAY ? obj.DELAY : conn.DELAY);
+              ipv4 = (obj.IPv4 ? obj.IPv4 : conn.IPv4);
+              headers = (obj.HEADERS ? obj.HEADERS : conn.HEADERS);
             }
             
             if (this.nameField) {
@@ -158,6 +162,12 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           if (reply) {
             this.mailingReplyEntry.set_text(reply);
           }
+          if (cc) {
+            this.mailingCCEntry.set_text(cc);
+          }
+          if (bcc) {
+            this.mailingBCCEntry.set_text(bcc);
+          }
           this.saveButton.remove_css_class('suggested-action');
         } catch (err) {
           logError(err);
@@ -170,7 +180,7 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         const myModal = new Modal.UImodal();
         this.App = Gio.Application.get_default();
         this.App.emit('Logger', '>>> building UI...');
-
+        let vreply, vfrom, vcc, vbcc;
         
         // const css = '#formbox { background-color: #f00; }';
         
@@ -184,6 +194,8 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         this.mailingReplyEntry = this.settingsMain._mailingReplyEntry;
         this.mailingFromEntry = this.settingsMain._mailingFromEntry;
         this.mailingNameEntry = this.settingsMain._mailingNameEntry;
+        this.mailingCCEntry = this.settingsMain._mailingCCEntry;
+        this.mailingBCCEntry = this.settingsMain._mailingBCCEntry;
 
         this.resetConSelect(this.sselectCombo);
 
@@ -231,13 +243,72 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
         });
 
         this.mailingReplyEntry.connect('changed', () => {
-          this.saveButton.add_css_class('suggested-action');
+          vreply = valid.validateEmail(this.mailingReplyEntry.get_text());
+          if (vreply != null) {
+            this.mailingReplyEntry.remove_css_class('error');
+            this.mailingReplyEntry.add_css_class('success');
+            this.saveButton.add_css_class('suggested-action');
+          } else {
+            if (this.mailingReplyEntry.get_text() == '') {
+              this.mailingReplyEntry.remove_css_class('error');
+              this.saveButton.add_css_class('suggested-action');
+            } else {
+              this.mailingReplyEntry.remove_css_class('success');
+              this.mailingReplyEntry.add_css_class('error');
+            }
+          }
+          
         });
         this.mailingFromEntry.connect('changed', () => {
-          this.saveButton.add_css_class('suggested-action');
+          vfrom = valid.validateEmail(this.mailingFromEntry.get_text());
+          if (vfrom != null) {
+            this.mailingFromEntry.remove_css_class('error');
+            this.mailingFromEntry.add_css_class('success');
+            this.saveButton.add_css_class('suggested-action');
+          } else {
+            if (this.mailingFromEntry.get_text() == '') {
+              this.mailingFromEntry.remove_css_class('error');
+              this.saveButton.add_css_class('suggested-action');
+            } else {
+              this.mailingFromEntry.remove_css_class('success');
+              this.mailingFromEntry.add_css_class('error');
+            }
+          }
         });
         this.mailingNameEntry.connect('changed', () => {
           this.saveButton.add_css_class('suggested-action');
+        });
+        this.mailingCCEntry.connect('changed', () => {
+          vcc = valid.validateEmail(this.mailingCCEntry.get_text());
+          if (vcc != null) {
+            this.mailingCCEntry.remove_css_class('error');
+            this.mailingCCEntry.add_css_class('success');
+            this.saveButton.add_css_class('suggested-action');
+          } else {
+            if (this.mailingCCEntry.get_text() == '') {
+              this.mailingCCEntry.remove_css_class('error');
+              this.saveButton.add_css_class('suggested-action');
+            } else {
+              this.mailingCCEntry.remove_css_class('success');
+              this.mailingCCEntry.add_css_class('error');
+            }
+          }
+        });
+        this.mailingBCCEntry.connect('changed', () => {
+          vbcc = valid.validateEmail(this.mailingBCCEntry.get_text());
+          if (vbcc != null) {
+            this.mailingBCCEntry.remove_css_class('error');
+            this.mailingBCCEntry.add_css_class('success');
+            this.saveButton.add_css_class('suggested-action');
+          } else {
+            if (this.mailingBCCEntry.get_text() == '') {
+              this.mailingBCCEntry.remove_css_class('error');
+              this.saveButton.add_css_class('suggested-action');
+            } else {
+              this.mailingBCCEntry.remove_css_class('success');
+              this.mailingBCCEntry.add_css_class('error');
+            }
+          }
         });
 
         this.saveButton.connect('clicked', () => {
@@ -246,10 +317,20 @@ var UIsettings = GObject.registerClass( // eslint-disable-line
           }
           appData.set('SUBJECT', this.subjectField.get_text());
           appData.set('CONN', this.sselectCombo.get_active_id());
-
-          appData.set('FROM', this.mailingFromEntry.get_text());
           appData.set('NAME', this.mailingNameEntry.get_text());
-          appData.set('REPLY', this.mailingReplyEntry.get_text());
+          if (vfrom || this.mailingFromEntry.get_text() == '') {
+            appData.set('FROM', this.mailingFromEntry.get_text());
+          }
+          if (vreply || this.mailingReplyEntry.get_text() == '') {
+            appData.set('REPLY', this.mailingReplyEntry.get_text());
+          }
+          if (vcc || this.mailingCCEntry.get_text() == '') {
+            appData.set('CC', this.mailingCCEntry.get_text());
+          }
+          if (vbcc || this.mailingBCCEntry.get_text() == '') {
+            appData.set('BCC', this.mailingBCCEntry.get_text());
+          }
+          
           // eslint-disable-next-line max-len
           const str = ` >>> Started Mailing "${this.subjectField.get_text()}"...`;
           this.saveButton.remove_css_class('suggested-action');
