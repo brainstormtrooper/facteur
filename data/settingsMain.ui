@@ -84,11 +84,12 @@
                   <class name="formelement" />
                   <class name="formlabel" />
                 </style>
-                <property name="label" translatable="yes">Mailing Subject</property>
+                <property name="label" translatable="yes">Mailing Subject*</property>
               </object>
             </child>
             <child>
               <object class="GtkEntry" id="subjectField">
+                <property name="tooltip_text" translatable="yes">Required mailing subject</property>
                 <property name="max_length">256</property>
                 <style>
                   <class name="formelement" />
@@ -118,6 +119,7 @@
             </child>
             <child>
               <object class="GtkEntry" id="mailingFromEntry">
+                <property name="tooltip_text" translatable="yes">Optional override to the connection sender e-mail address</property>
                 <property name="max_length">64</property>
                 <property name="placeholder_text">sender@service.ext</property>
                 <style>
@@ -147,6 +149,8 @@
             </child>
             <child>
               <object class="GtkEntry" id="mailingNameEntry">
+                <property name="tooltip_text" translatable="yes">Optional name to use with the sender e-mail address</property>
+                <property name="placeholder_text">Name</property>
                 <property name="max_length">128</property>
                 <style>
                   <class name="formelement" />
@@ -175,6 +179,68 @@
             </child>
             <child>
               <object class="GtkEntry" id="mailingReplyEntry">
+                <property name="tooltip_text" translatable="yes">Optional reply-to email address</property>
+                <property name="placeholder_text">reply-to@service.ext</property>
+                <property name="max_length">64</property>
+                <style>
+                  <class name="formelement" />
+                  <class name="forminput" />
+                  <class name="entry" />
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="mailingCCRow">
+            <property name="orientation">vertical</property>
+            <style>
+              <class name="formelementgroup" />
+              <class name="formrow" />
+            </style>
+            <child>
+              <object class="GtkLabel" id="mailingCCLabel">
+                <style>
+                  <class name="formelement" />
+                  <class name="formlabel" />
+                </style>
+                <property name="label" translatable="yes">CC To</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="mailingCCEntry">
+                <property name="tooltip_text" translatable="yes">Optional CC email address</property>
+                <property name="placeholder_text">cc@service.ext</property>
+                <property name="max_length">64</property>
+                <style>
+                  <class name="formelement" />
+                  <class name="forminput" />
+                  <class name="entry" />
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="mailingBCCRow">
+            <property name="orientation">vertical</property>
+            <style>
+              <class name="formelementgroup" />
+              <class name="formrow" />
+            </style>
+            <child>
+              <object class="GtkLabel" id="mailingBCCLabel">
+                <style>
+                  <class name="formelement" />
+                  <class name="formlabel" />
+                </style>
+                <property name="label" translatable="yes">BCC To</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="mailingBCCEntry">
+                <property name="tooltip_text" translatable="yes">Optional BCC email address</property>
+                <property name="placeholder_text">bcc@service.ext</property>
                 <property name="max_length">64</property>
                 <style>
                   <class name="formelement" />

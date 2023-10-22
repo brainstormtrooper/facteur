@@ -31,3 +31,7 @@
     margin-bottom: 0px;
 }
 
+.required {
+    color: @destructive_color;
+    font-weight: bold;
+}

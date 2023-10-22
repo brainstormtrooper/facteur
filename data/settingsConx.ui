@@ -61,11 +61,12 @@
                   <class name="formelement" />
                   <class name="formlabel" />
                 </style>
-                <property name="label" translatable="yes">Connection Name</property>
+                <property name="label" translatable="yes">Connection Name*</property>
               </object>
             </child>
             <child>
               <object class="GtkEntry" id="conxNameEntry">
+                <property name="tooltip_text" translatable="yes">Required unique name for this connection</property>
                 <property name="max_length">64</property>
                 <style>
                   <class name="formelement" />
@@ -89,11 +90,12 @@
                   <class name="formelement" />
                   <class name="formlabel" />
                 </style>
-                <property name="label" translatable="yes">Connection From</property>
+                <property name="label" translatable="yes">Connection From*</property>
               </object>
             </child>
             <child>
               <object class="GtkEntry" id="conxFromEntry">
+                <property name="tooltip_text" translatable="yes">Required default from e-mail address</property>
                 <property name="max_length">64</property>
                 <property name="placeholder_text">sender@service.ext</property>
                 <style>
@@ -118,11 +120,12 @@
                   <class name="formelement" />
                   <class name="formlabel" />
                 </style>
-                <property name="label" translatable="yes">Connection Host Server</property>
+                <property name="label" translatable="yes">Connection Host Server*</property>
               </object>
             </child>
             <child>
               <object class="GtkEntry" id="conxHostEntry">
+                <property name="tooltip_text" translatable="yes">Required SMTP server address</property>
                 <property name="max_length">128</property>
                 <property name="placeholder_text">smtp(s)://sub.service.ext</property>
                 <style>
@@ -147,11 +150,12 @@
                   <class name="formelement" />
                   <class name="formlabel" />
                 </style>
-                <property name="label" translatable="yes">Connection User</property>
+                <property name="label" translatable="yes">Connection User*</property>
               </object>
             </child>
             <child>
               <object class="GtkEntry" id="conxUserEntry">
+                <property name="tooltip_text" translatable="yes">Required SMTP user name</property>
                 <property name="max_length">64</property>
                 <style>
                   <class name="formelement" />
@@ -175,7 +179,7 @@
                   <class name="formelement" />
                   <class name="formlabel" />
                 </style>
-                <property name="label" translatable="yes">Connection Password</property>
+                <property name="label" translatable="yes">Connection Password*</property>
               </object>
             </child>
             <child>
@@ -183,6 +187,7 @@
                 <property name="orientation">horizontal</property>
                 <child>
                   <object class="GtkEntry" id="conxPassEntry">
+                    <property name="tooltip_text" translatable="yes">Required SMTP password</property>
                     <property name="max_length">128</property>
                     <property name="input_purpose">password</property>
                     <property name="visibility">false</property>
@@ -261,6 +266,7 @@
             </child>
             <child>
               <object class="GtkEntry" id="conxHeadersEntry">
+                <property name="tooltip_text" translatable="yes">Optional headers to send with the requests to the SMTP server</property>
                 <property name="max_length">256</property>
                 <style>
                   <class name="formelement" />
@@ -280,6 +286,7 @@
             </style>
             <child>
               <object class="GtkCheckButton" id="conxIPv4Entry">
+                <property name="tooltip_text" translatable="yes">Optional whether to force IPv4 connection</property>
                 <style>
                   <class name="formelement" />
                   <class name="forminput" />

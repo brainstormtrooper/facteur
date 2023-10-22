@@ -114,6 +114,7 @@
             <child>
               <object class="GtkButton" id="sendButton">
                 <property name="label" translatable="yes">Send</property>
+                <property name="sensitive">false</property>
                 <style>
                   <class name="formelement" />
                   <class name="forminput" />

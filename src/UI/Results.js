@@ -91,6 +91,8 @@ var UIresults = GObject.registerClass( // eslint-disable-line
           });
         });
 
+        
+
         this.sendButton.connect('clicked', async () => {
           try {
             const res = await Template.compile();

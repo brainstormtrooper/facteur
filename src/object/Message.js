@@ -54,7 +54,7 @@ var Message = GObject.registerClass( // eslint-disable-line
         let res = 'ok';
         const lines = str.split("\n");
         lines.forEach(line => {
-          if (line[0] == '<' && line.substring(2,5) > 400) {
+          if (line.substring(0,1) == '<' && line.substring(2,5) > 400) {
             // < 250 2.0.0 Ok: queued
             res = line;
 
@@ -78,9 +78,13 @@ var Message = GObject.registerClass( // eslint-disable-line
       headers (mailing) {
         let headers = [];
         // from
-        const froma = (appData.get('FROM') != '' ? appData.get('FROM') : Config.getConnection(appData.get('CONN')).FROM);
-        const from = (appData.get('NAME') != '' ? `${appData.get('NAME')} <${froma}>` : froma);
-        headers.push(`FROM: ${(mailing.from ? mailing.from : from)}`);
+        const cfrom = (Config.getConnection(appData.get('CONN')) ? Config.getConnection(appData.get('CONN')).FROM : null);
+        const froma = (appData.get('FROM') != '' ? appData.get('FROM') : cfrom);
+        if (froma) {
+          const from = (appData.get('NAME') != '' ? `${appData.get('NAME')} <${froma}>` : froma);
+          headers.push(`FROM: ${(mailing.from ? mailing.from : from)}`);
+        }
+        
         headers.push(`TO: ${mailing.to}`);
         headers.push(`DATE: ${GLib.DateTime.new_now_utc().format('%d %b %Y %H:%M:%S %:z')}`);
         headers.push(`SUBJECT: ${mailing.subject}`);
@@ -88,7 +92,12 @@ var Message = GObject.registerClass( // eslint-disable-line
         if (appData.get('REPLY') != '') {  
           headers.push(`REPLY-TO: ${appData.get('REPLY')}`);
         }
-        
+        if (appData.get('CC') != '') {  
+          headers.push(`CC: ${appData.get('CC')}`);
+        }
+        if (appData.get('BCC') != '') {  
+          headers.push(`BCC: ${appData.get('BCC')}`);
+        }
         return headers.join("\r\n");
 
       }
