@@ -211,9 +211,16 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
               const [, contents] = res.load_contents(null);
               const myTemplate = td.decode(contents);
               const len = encodeURI(myTemplate).split(/%..|./).length - 1;
-              if (GLib.utf8_validate(myTemplate).includes(true)) {
-                this.htmlBuffer.set_text(myTemplate, len);
-              } else {
+              
+              try {
+                let [ok, ] = GLib.utf8_validate(myTemplate);
+                if (ok) {
+                  this.htmlBuffer.set_text(myTemplate, len);
+                } else {
+                  myModal.showOpenModal('Error', Gettext.gettext('Template is not a valid utf8 text file.'), this.App);
+                }
+              } catch (error) {
+                console.error(error);
                 myModal.showOpenModal('Error', Gettext.gettext('Template is not a valid utf8 text file.'), this.App);
               }
               
