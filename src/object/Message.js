@@ -56,13 +56,18 @@ var Message = GObject.registerClass( // eslint-disable-line
       }
 
       success (str) {
-        let res = 'ok';
+        let res = 'ko';
+
         const lines = str.split("\n");
         lines.forEach(line => {
-          if (line.substring(0,1) == '<' && line.substring(2,5) > 400) {
+          if (line.substring(0,1) == '<') {
+            if (line.substring(2,5) > 400) {
+              res = line;
+            }
             // < 250 2.0.0 Ok: queued
-            res = line;
-
+            if (line.startsWith('< 250 2.0.0 Ok: queued')) {
+              res = 'ok';
+            } 
           }
         });
 
