@@ -11,13 +11,26 @@ const Message = new myMessage.Message();
 
 // const resultsfile = Gio.File.new_for_path('data/resultsMain.ui');
 // const [, resultstemplate] = resultsfile.load_contents(null);
+var rprtRow = GObject.registerClass(
+  {
+    GTypeName: 'rprtRow',
+  },
+  class rprtRow extends GObject.Object {
+    _init(to, res) {
+      super._init();
+      this.to = to;
+      this.res = res;
+    }
+  }
+);
+
 
 var resultsMain = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'resultsMain',
   Template: 'resource:///io/github/brainstormtrooper/facteur/resultsMain.ui',
   // Children: [],
-  InternalChildren: ['textView', 'mTreeView', 'sentLabel', 'sendButton', 'saveButton']
+  InternalChildren: ['textView', 'scrollText2', 'mTreeView', 'sentLabel', 'sendButton', 'saveButton']
 },
 class resultsMain extends Gtk.Box {
   _init () {
@@ -38,31 +51,53 @@ var UIresults = GObject.registerClass( // eslint-disable-line
       }
 
       report () {
-        this._listStore = new Gtk.ListStore();
-        const coltypes = [GObject.TYPE_STRING, GObject.TYPE_STRING];
-        this._listStore.set_column_types(coltypes);
-        this.mTreeView.set_model(this._listStore);
-        const normal = new Gtk.CellRendererText();
-        const colTo = new Gtk.TreeViewColumn({
-          title: 'To'
-        });
-        colTo.pack_start(normal, true);
-        colTo.add_attribute(normal, 'text', 0);
-        this.mTreeView.insert_column(colTo, 0);
-        const colRes = new Gtk.TreeViewColumn({
-          title: 'Result'
-        });
-        
-        colRes.pack_start(normal, true);
-        colRes.add_attribute(normal, 'text', 1);
-        this.mTreeView.insert_column(colRes, 1);
+        delete (this.rTreeView);
+        const listStore = new Gio.ListStore(rprtRow);
+        const selection = new Gtk.MultiSelection();
+        selection.set_model(listStore);
+        this.rTreeView = new Gtk.ColumnView(selection);
+        this.rScrolledWindow.set_child(this.rTreeView);
+        this.rTreeView.set_model(selection);
 
-        let i;
-        for (i = 0; i < Message.results.length; i++) {
+        const toFact = new Gtk.SignalListItemFactory();
+        toFact.connect("setup", (widget, item) => {
+          const label = new Gtk.Label();
+          item.set_child(label);
+        });
+        toFact.connect("bind", (widget, item) => {
+          const label = item.get_child();
+
+          const obj = item.get_item();
+          label.set_text(obj.to);
+        });
+        const resFact = new Gtk.SignalListItemFactory();
+        resFact.connect("setup", (widget, item) => {
+          const label = new Gtk.Label();
+          item.set_child(label);
+        });
+        resFact.connect("bind", (widget, item) => {
+          const label = item.get_child();
+
+          const obj = item.get_item();
+          label.set_text(obj.res);
+        });
+
+        const toCol = new Gtk.ColumnViewColumn({
+          title: 'To',
+          factory: toFact
+        });
+
+        const resCol = new Gtk.ColumnViewColumn({
+          title: 'Result',
+          factory: resFact
+        });
+
+        this.rTreeView.append_column(toCol);
+        this.rTreeView.append_column(resCol);
+        for (let i = 0; i < Message.results.length; i++) {
           const row = Message.results[i];
-          const iter = this._listStore.append();
-
-          this._listStore.set(iter, [0, 1], row);
+          const trow = new rprtRow(row[0], row[1]);
+          listStore.append(trow);
         }
       }
 
@@ -72,7 +107,8 @@ var UIresults = GObject.registerClass( // eslint-disable-line
 
         // this.textBuffer = '';
         this.textView = this.resultsMain._textView;
-        this.mTreeView = this.resultsMain._mTreeView;
+        this.rScrolledWindow = this.resultsMain._scrollText2;
+        this.rTreeView = this.resultsMain._mTreeView;
         this.sentLabel = this.resultsMain._sentLabel;
         this.sendButton = this.resultsMain._sendButton;
         this.saveButton = this.resultsMain._saveButton;

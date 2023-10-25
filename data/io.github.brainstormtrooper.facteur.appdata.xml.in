@@ -26,6 +26,14 @@
   <url type="homepage">https://www.github.com/brainstormtrooper/facteur</url>
   <updatecontact>brainstormtrooper_AT_free.fr</updatecontact>
   <releases>
+    <release version="0.19.0" type="stable" date="2023-10-25">
+      <description>
+        <p>Add CC and BCC fields</p>
+        <p>Small UI improvements</p>
+        <p>Minor fixes</p>
+        <p>Depend on Gnome 45 platform</p>
+      </description>
+    </release>
     <release version="0.18.2" type="stable" date="2023-10-04">
       <description>
         <p>fix file save bug</p>

@@ -67,7 +67,7 @@
               <class name="scrolledwindow" />
             </style>
             <child>
-              <object class="GtkTreeView" id="mTreeView">
+              <object class="GtkColumnView" id="mTreeView">
                 
               </object>
             </child>

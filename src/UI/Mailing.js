@@ -17,6 +17,22 @@ const appData = new Data.Data();
 // const mailingfile = Gio.File.new_for_path('data/mailingMain.ui');
 // const [, mailingemplate] = mailingfile.load_contents(null);
 
+
+var dataRow = GObject.registerClass(
+  {
+    GTypeName: 'dataRow',
+  },
+  class dataRow extends GObject.Object {
+    _init(keys, vals) {
+      super._init();
+      for (let i = 0; i < keys.length; i++) {
+        this[keys[i]] = vals[i];
+        
+      }
+    }
+  }
+);
+
 var mailingMain = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'mailingMain',
@@ -57,7 +73,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
         this.mailingMain = new mailingMain();
 
         const mnewButton = this.mailingMain._mnewButton;
-        // const mScrolledWindow = this.mailingMain._mScrolledWindow;
+        this.mScrolledWindow = this.mailingMain._mScrolledWindow;
 
         this.mTreeView = this.mailingMain._mTreeView;
 
@@ -108,30 +124,16 @@ var UImailing = GObject.registerClass( // eslint-disable-line
           // app.ui.results._LOG('imported.');
           this.emit('Logger', 'imported...');
 
-          // Data to go in the phonebook
           this.updateTable();
         }));
 
-        this._listStore = new Gtk.ListStore();
+        this.mTreeView.set_model(new Gtk.SingleSelection());
 
-        const coltypes = [GObject.TYPE_STRING];
-        const bold = new Gtk.CellRendererText({
-          weight: Pango.Weight.BOLD,
-        });
-
-        this._listStore.set_column_types(coltypes);
-
-        this.mTreeView.set_model(this._listStore);
-
-        const defCol = new Gtk.TreeViewColumn({
+        const defCol = new Gtk.ColumnViewColumn({
           title: Gettext.gettext('No data'),
         });
-        defCol.pack_start(bold, true);
-        defCol.add_attribute(bold, 'text', 0);
 
-        this.mTreeView.insert_column(defCol, 0);
-
-
+        this.mTreeView.append_column(defCol);
 
         return this.mailingMain;
       }
@@ -144,54 +146,64 @@ var UImailing = GObject.registerClass( // eslint-disable-line
       }
 
       updateTable () {
-        let k;
-        delete (this._listStore);
-        this._listStore = new Gtk.ListStore();
-
-        const coltypes = [];
-
-        for (let index = 0; index < this.list.headers.length; index++) {
-          coltypes.push(GObject.TYPE_STRING);
-        }
-
-        this._listStore.set_column_types(coltypes);
-
-        // Replace the treeview
-        this.mTreeView.get_columns().forEach((col) => {
-          this.mTreeView.remove_column(col);
-        });
-        this.mTreeView.set_model(this._listStore);
+        // delete (this._listStore);
+        delete (this.mTreeView);
+        this.cols = {};
+        this.facts = {};
+        
+        const selection = new Gtk.MultiSelection();
+        const listStore = new Gio.ListStore(dataRow);
+        selection.set_model(listStore);
+        this.mTreeView = new Gtk.ColumnView(selection);
+        this.mScrolledWindow.set_child(this.mTreeView);
+        this.mTreeView.set_model(selection);
         // Create cell renderers
-        const normal = new Gtk.CellRendererText();
+        // const normal = new Gtk.CellRendererText();
 
         // Create the columns for the address book
-
-        for (k = 0; k < this.list.headers.length; k++) {
-          this[`col_${k}`] = new Gtk.TreeViewColumn({
-            title: this.list.headers[k],
-          });
-          this[`col_${k}`].pack_start(normal, true);
-          if (k == 0) {
-            this[`col_${k}`].add_attribute(normal, 'text', k);
-          } else {
-            this[`col_${k}`].add_attribute(normal, 'text', k);
-          }
+        for (let k = 0; k < this.list.headers.length; k++) {
+          // this[`_listStore_${k}`] = new Gio.ListStore(GObject.TYPE_STRING);
           try {
-            this.mTreeView.insert_column(this[`col_${k}`], k);
+            this.facts[`factory_c${k}`] = new Gtk.SignalListItemFactory();
+            this.facts[`factory_c${k}`].connect("setup", (widget, item) => {
+              const label = new Gtk.Label();
+              item.set_child(label);
+            });
+            this.facts[`factory_c${k}`].connect("bind", (widget, item) => {
+              const label = item.get_child();
+    
+              const obj = item.get_item();
+              label.set_text(obj[this.list.headers[k]]);
+              // label.bind_property("text", obj, "text");
+            });
+            
+            this.cols[`col_${k}`] = new Gtk.ColumnViewColumn({
+              title: this.list.headers[k],
+              factory: this.facts[`factory_c${k}`]
+            });
+            
+            this.mTreeView.append_column(this.cols[`col_${k}`]);
           } catch (err) {
-            log(err);
+            console.error(err);
           }
         }
-
+        
         // Put the data in the table
-        let i;
-        for (i = 0; i < this.list.csva.length; i++) {
+        for (let i = 0; i < this.list.csva.length; i++) {
           const row = this.list.csva[i];
-          const iter = this._listStore.append();
-
-          // log('row : ', typeof row);
-          // this._listStore.set(iter, this.list.headers, row);
-          this._listStore.set(iter, Object.keys(this.list.headers), row);
+          
+          try {
+            
+            const trow = new dataRow(this.list.headers, row);
+            
+            if (trow.address) {
+              listStore.append(trow);
+            }
+            
+          } catch (error) {
+            console.error(error);
+          }
+          
         }
       }
     },
