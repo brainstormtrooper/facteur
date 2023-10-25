@@ -63,7 +63,7 @@
                 <property name="vexpand">true</property>
                 <property name="hexpand">true</property>
                 <child>
-                  <object class="GtkTreeView" id="mTreeView">
+                  <object class="GtkColumnView" id="mTreeView">
                     
                   </object>
                 </child>

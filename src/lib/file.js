@@ -193,17 +193,20 @@ function unRoll (str) {
 
   appData.set('CONN', data.CONN);
   appData.set('SUBJECT', data.SUBJECT);
-  appData.set('FROM', data.FROM);
-  appData.set('NAME', data.NAME);
-  appData.set('REPLY', data.REPLY);
-  appData.set('CC', data.CC);
-  appData.set('BCC', data.BCC);
+
   appData.set('HTML', data.HTML);
   appData.set('TEXT', data.TEXT);
   appData.set('TO', data.TO);
   appData.set('CSVA', data.CSVA);
   appData.set('VARS', data.VARS);
   appData.set('FILEID', data.FILEID);
+
+  appData.set('FROM', (data.FROM ? data.FROM : ''));
+  appData.set('NAME', (data.NAME ? data.NAME : ''));
+  appData.set('REPLY', (data.REPLY ? data.REPLY : ''));
+  appData.set('CC', (data.CC ? data.CC : ''));
+  appData.set('BCC', (data.BCC ? data.BCC : ''));
+
   appData.set('SENT', data.SENT);
   if (data.ATTS) {
     appData.set('ATTACHMENTS', data.ATTS);

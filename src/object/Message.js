@@ -40,9 +40,14 @@ var Message = GObject.registerClass( // eslint-disable-line
       // METHODS
 
       weight (text, html) {
-        const testmailing = {text, html, to: 'test@domain.ext'};
-        const payload = this.build(testmailing);
-        return encodeURI(payload).split(/%..|./).length - 1;
+        let res = 0;
+        if (appData.get('CONN') != '') {
+          const testmailing = {text, html, to: 'test@domain.ext'};
+          const payload = this.build(testmailing);
+          res = encodeURI(payload).split(/%..|./).length - 1;
+        }
+        
+        return res;
       }
 
       rule79 (str) {
