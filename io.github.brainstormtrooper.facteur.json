@@ -32,7 +32,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/brainstormtrooper/facteur",
-                    "tag": "0.19.0"
+                    "tag": "0.19.1"
                 }
             ]
         }
