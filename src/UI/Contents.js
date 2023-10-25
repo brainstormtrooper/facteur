@@ -207,7 +207,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           }
           try {
             myFile.fileOpen(props, (res) => {
-              const td = new TextDecoder();
+              const td = new TextDecoder('utf-8');
               const [, contents] = res.load_contents(null);
               const myTemplate = td.decode(contents);
               const len = encodeURI(myTemplate).split(/%..|./).length - 1;
