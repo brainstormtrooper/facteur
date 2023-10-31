@@ -1,0 +1,3 @@
+[submodule "po"]
+	path = po
+	url = git@github.com:brainstormtrooper/facteurTrads.git
