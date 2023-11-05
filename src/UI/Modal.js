@@ -72,7 +72,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
             this._dialog._dialog_action_area.append(this.saveButton);
           }
   
-          this.cancelButton = new Gtk.Button({ label: Gettext.gettext('cancel'), hexpand: true  });
+          this.cancelButton = new Gtk.Button({ label: Gettext.gettext('Cancel'), hexpand: true  });
           
           this._dialog._dialog_action_area.append(this.cancelButton);
           this._dialog._dialog_action_area.add_css_class('linked');
@@ -138,7 +138,7 @@ var UImodal = GObject.registerClass( // eslint-disable-line
                   'Application for sending template based emails',
               ),
               copyright: 'Copyright 2015 Rick Opper',
-              license_type: Gtk.License.GPL_2_0,
+              license_type: Gtk.License.GPL_3_0,
               logo_icon_name: 'io.github.brainstormtrooper.facteur',
               version: pkg.version,
               website: 'https://github.com/brainstormtrooper/facteur/wiki',
@@ -149,9 +149,11 @@ var UImodal = GObject.registerClass( // eslint-disable-line
         );
 
         aboutDialog.show();
+        /*
         aboutDialog.connect('response', () => {
           aboutDialog.destroy();
         });
+        */
       }
     },
 );
