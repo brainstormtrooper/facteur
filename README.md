@@ -65,3 +65,5 @@ To install the application, run the following commands:
 ```ninja``` 
 
 ```meson install```
+
+_Translations by http://hosted.weblate.org_
