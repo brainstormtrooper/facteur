@@ -129,7 +129,7 @@
               </object>
             </child>
 
-            <child>
+            <child type="overlay">
               <object class="GtkExpander" id="attachmentListExpander">
                 <property name="expanded">true</property>
                 <property name="hexpand">false</property>
@@ -140,7 +140,7 @@
                   <object class="GtkBox" id="attachmentsBox">
                     <property name="css-classes">attachments_box</property>
 
-                    <property name="width-request">250</property>
+                    <property name="width-request">350</property>
                     <property name="orientation">vertical</property>
                     <property name="vexpand">true</property>
                     <property name="hexpand">true</property>
