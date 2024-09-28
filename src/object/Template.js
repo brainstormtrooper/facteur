@@ -85,5 +85,121 @@ var Template = GObject.registerClass( // eslint-disable-line
         appData.addAttachment(aObj);
         
       }
-    },
+
+      /**
+       * Attach a string of file contents to mailing
+       * 
+       * @param {string} filename 
+       * @param {string} contents 
+       */
+      attachContents (filename, contents) {
+        const aObj = {};
+        const base64str = GLib.base64_encode(contents);
+        const size = encodeURI(base64str).split(/%..|./).length - 1;
+        if (size > 20971520) {
+          const se = new Error(Gettext.gettext('Cannot attach file greater than 20MB'));
+          throw se;
+        }
+        aObj.contents = base64str;
+        aObj.fileName = filename;
+        const [type, uncertain] = Gio.content_type_guess(aObj.fileName, null);
+        
+        aObj.type = type;
+        aObj.inline = false;
+        aObj.id = '';
+        appData.addAttachment(aObj);
+
+      }
+
+      /**
+       * Sets the attachment as inline 
+       * returns the id of the attachment
+       * 
+       * @param {string} filename 
+       * @returns string
+       */
+      setAttachmentInline(filename) {
+        return appData.setInlineAttachment(filename, true);
+      }
+
+      /**
+       * Replaces path with cid slug in template
+       * 
+       * @param {string} path 
+       * @param {string} cid 
+       */
+      pathToCid (path, cid) {
+        let tplstr = appData.get('HTML');
+        const slug = `cid:${cid}`;
+        tplstr = tplstr.replace(path, slug);
+        appData.set('HTML', tplstr);
+      }
+
+      /**
+       * Link images extracted from a mailing template
+       * attach image
+       * make inline
+       * replace link with slug
+       * 
+       * @param {list} links 
+       */
+      doExtract (links) {
+        const Ps = [];
+        links.forEach((link) => {
+          const myP = new Promise((resolve, reject) => {
+            const decoder = new TextDecoder('utf-8');
+            const lo = JSON.parse(decoder.decode(GLib.base64_decode(link)));
+            const filename = lo.key.split('/').pop();
+            if (lo.path.split('/').shift().includes('http')) {
+              const datap = myFile.getOpen(lo.path);
+              datap.then( datastr => {
+                this.attachContents(filename, datastr);
+                const aid = this.setAttachmentInline(filename);
+                this.pathToCid(lo.key, aid);
+                resolve(lo.key)
+              }).catch(e => {
+                console.log(e);
+                reject(e);
+                // throw e;
+              });
+            } else {
+              // local file
+              const datap = myFile.fopen(lo.path, false);
+              datap.then( datastr => {
+                this.attachContents(filename, datastr);
+                const aid = this.setAttachmentInline(filename);
+                this.pathToCid(lo.key, aid);
+                resolve(lo.key);
+              }).catch(e => {
+                console.log(e);
+                reject(e);
+                // throw e;
+              });
+            }
+          });
+          Ps.push(myP);
+        });
+        return Ps;
+      }
+
+      /**
+       * extract image links and paths from template.
+       * 
+       * @param {string} htmlStr 
+       */
+      extractImages (htmlStr) {
+        const imgs = ['jpg', 'jpeg', 'webp', 'png'];
+        const myImgs = [];
+        const links = myTemplate._links(htmlStr);
+        links.forEach(link => {
+          const ext = link.split('.').pop();
+          if (imgs.includes(ext)) {
+            myImgs.push(link);
+          }
+        });
+
+        return myImgs;
+      }
+
+    }
 );

@@ -70,6 +70,15 @@ function _positions (template) {
 }
 
 
+function _links(template) {
+  res = [];
+  var imgs = /<img\s[^>]*?src=(["']?)([^\s]+?)\1[^>]*?>/ig;
+  template.replace(imgs, function (_anchor, _quote, url) {
+    res.push(url);
+  });
+  return res;
+}
+
 
 var payload = `{{headers}}
 MIME-Version: 1.0

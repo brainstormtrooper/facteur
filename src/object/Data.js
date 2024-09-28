@@ -71,6 +71,7 @@ var Data = class Data { // eslint-disable-line
   }
   setInlineAttachment (fileName, isInline) {
     // log(this._data.ATTACHMENTS);
+    let aid;
     for (let i in this._data.ATTACHMENTS) {
       
       if (this._data.ATTACHMENTS[i].fileName == fileName) {
@@ -78,10 +79,12 @@ var Data = class Data { // eslint-disable-line
         this._data.ATTACHMENTS[i].inline = isInline;
         if (isInline && this._data.ATTACHMENTS[i].id == '') {
           const rid = Math.random().toString(36).slice(2, 7);
-          this._data.ATTACHMENTS[i].id = `${fileName.replace(/\s/g, '_')}@${rid}`
+          this._data.ATTACHMENTS[i].id = `${fileName.replace(/\s/g, '_')}@${rid}`;
+          aid = this._data.ATTACHMENTS[i].id;
         }
         break;
       }
     }
+    return aid;
   }
 };

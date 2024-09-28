@@ -17,7 +17,7 @@ GETTEXT_PACKAGE = app_id
 
 app_configuration = configuration_data()
 
-app_configuration.set('GJS', gjs.path())
+app_configuration.set('GJS', gjs.full_path())
 app_configuration.set('PACKAGE_NAME', app_id)
 app_configuration.set('PACKAGE_VERSION', meson.project_version())
 app_configuration.set('prefix', get_option('prefix'))

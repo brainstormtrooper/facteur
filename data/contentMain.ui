@@ -153,10 +153,9 @@
                           <class name="linked" />
                         </style>
                         <child>
-                          <object class="GtkLabel" id="cAttachLabel">
+                          <object class="GtkButton" id="extractButton">
                             
-                            <property name="label" translatable="yes">New </property>
-                            
+                            <property name="label" translatable="yes">Extract</property>
                           </object>
                         </child>
                         <child>

@@ -3,8 +3,8 @@ UI for displaying html message interface
 */
 const { GLib, Gtk, Gio, GtkSource, WebKit, GObject } = imports.gi;
 const Gettext = imports.gettext;
-const myTemplate = imports.object.Template;
-const Template = new myTemplate.Template();
+const myTemplate = imports.lib.template;
+const Template = new imports.object.Template.Template();
 
 const myMessage = new imports.object.Message.Message();
 const myModal = new imports.UI.Modal.UImodal();
@@ -15,6 +15,38 @@ const myFile = imports.lib.file;
 
 // const contentsfile = Gio.File.new_for_path('data/contentMain.ui');
 // const [, contentTemplate] = contentsfile.load_contents(null);
+
+
+var modalExtract = GObject.registerClass( // eslint-disable-line
+{
+  GTypeName: 'modalExtract',
+  Template: 'resource:///io/github/brainstormtrooper/facteur/modalExtract.ui',
+  // Children: ['attachment', 'contentMain'],
+  InternalChildren: ['extractCheckAllBtn', 'extractScroll']
+},
+class modalExtract extends Gtk.Box {
+  _init () {
+    super._init();
+    // Gtksource.init();
+  }
+
+
+});
+
+var widgetExtract = GObject.registerClass( // eslint-disable-line
+{
+  GTypeName: 'widgetExtract',
+  Template: 'resource:///io/github/brainstormtrooper/facteur/widgetExtract.ui',
+  // Children: ['attachment', 'contentMain'],
+  InternalChildren: ['filenameLabel', 'filestatusLabel']
+},
+class widgetExtract extends Gtk.Box {
+  _init () {
+    super._init();
+    // Gtksource.init();
+    
+  }
+});
 
 var widgetAttachment = GObject.registerClass( // eslint-disable-line
 {
@@ -37,7 +69,7 @@ var contentMain = GObject.registerClass( // eslint-disable-line
   Template: 'resource:///io/github/brainstormtrooper/facteur/contentMain.ui',
   // Children: ['attachment', 'contentMain'],
   InternalChildren: ['textView', 'htmlSourceView', 'htmlPreview', 'saveButton', 'addLinkEntry',
-  'cImportButton', 'addAttachmentButton', 'addLinkButton', 'attachmentsListBox']
+  'cImportButton', 'addAttachmentButton', 'extractButton', 'addLinkButton', 'attachmentsListBox']
 },
 class contentMain extends Gtk.Box {
   _init () {
@@ -65,11 +97,11 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         super._init();
         GObject.type_ensure(GtkSource.View);
         GObject.type_ensure(WebKit.WebView);
-        
-
+        this.assetpath = '~/';
       }
 
       _updateUI () {
+        this.App = Gio.Application.get_default();
         let len = encodeURI(appData.get('HTML')).split(/%..|./).length - 1;
         this.htmlBuffer.set_text(appData.get('HTML'), len);
         len = encodeURI(appData.get('TEXT')).split(/%..|./).length - 1;
@@ -133,9 +165,11 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
             myStr = myStr.replace(slug, inline);
           }
         });
-
+        
         return myStr;
       }
+
+      
 
       _buildUI () {
         this.App = Gio.Application.get_default();
@@ -146,10 +180,26 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.htmlPreview = this.contentMain._htmlPreview;
         this.saveButton = this.contentMain._saveButton;
         this.cImportButton = this.contentMain._cImportButton;
+        this.extractButton = this.contentMain._extractButton;
         this.newAttachmentButton = this.contentMain._addAttachmentButton;
         this.newLinkButton = this.contentMain._addLinkButton;
         this.addLinkEntry = this.contentMain._addLinkEntry;
         this.attachmentsListBox = this.contentMain._attachmentsListBox
+
+        var linkRow = GObject.registerClass(
+          {
+            GTypeName: 'linkRow',
+          },
+          class linkRow extends GObject.Object {
+            _init(chk, info, imgstatus) {
+              super._init();
+              this.status = imgstatus;
+              this.chk = chk;
+              this.info = info;
+            }
+          }
+        );
+
 
         this.textBuffer = new Gtk.TextBuffer();
         const langManager = new GtkSource.LanguageManager();
@@ -175,9 +225,182 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.htmlPreview.load_html(this.htmlBuffer.text, null);
         this.saveButton.remove_css_class('suggested-action');
 
+
         this.newLinkButton.connect('clicked', () => {
           Template.addLink(this.addLinkEntry.get_text());
           this.App.emit('update_attachments', true);
+        });
+
+        /**
+         * Open a modal with a list of found images and allow
+         * user to select which ones to extract.
+         */
+        this.extractButton.connect('clicked', () => {
+          this.extractable = [];
+
+
+          const _saveExtract = async () => {
+            try {
+              const solved = await Template.doExtract(this.extractable);
+              Promise.allSettled(solved).then(reses => {
+                console.log('reses : ', reses);
+                this.App.emit('update_attachments', true);
+                const len = encodeURI(appData.get('HTML')).split(/%..|./).length - 1;
+                this.htmlBuffer.set_text(appData.get('HTML'), len);
+                this.saveButton.remove_css_class('suggested-action');
+              }).catch(e => {
+                console.log(e);
+              });
+              
+            } catch (error) {
+              console.log(error);
+            }
+            
+          }
+
+          
+
+          const listStore = new Gio.ListStore(linkRow);
+          const selection = new Gtk.MultiSelection();
+          selection.set_model(listStore);
+          const lTreeView = new Gtk.ColumnView(selection);
+          // this.rScrolledWindow.set_child(this.rTreeView);
+          lTreeView.set_model(selection);
+
+          const extModal = new modalExtract();
+          // 'extractCheckAllBtn', 'extractScroll'
+          const extractScroll = extModal._extractScroll;
+          extractScroll.set_child(lTreeView);
+          
+          const chkFact = new Gtk.SignalListItemFactory();
+          chkFact.connect("setup", (widget, item) => {
+            const chkbtn = new Gtk.CheckButton();
+            chkbtn.connect("toggled", (w) => {
+              console.log(w.get_active());
+              if (w.get_active()) {
+                this.extractable.push(w.get_name());
+              } else {
+                // const i = this.extractable.indexOf(widget.get_name());
+                this.extractable = this.extractable.filter(link => link !== w.get_name());
+              }
+              console.log(this.extractable);
+            });
+            item.set_child(chkbtn);
+          });
+          chkFact.connect("bind", (widget, item) => {
+            const chkbtn = item.get_child();
+
+            const obj = item.get_item();
+            chkbtn.set_name(obj.chk);
+            if (obj.status == 'notfound') {
+              chkbtn.set_active(true);
+              if (!this.extractable.includes(obj.chk)) {
+                this.extractable.push(obj.chk);
+              }
+            }
+          });
+          
+          const infoFact = new Gtk.SignalListItemFactory();
+          infoFact.connect("setup", (widget, item) => {
+
+            const modalLine = new widgetExtract();
+            // 'checkbutton', 'filenameLabel'
+
+            // const box = new Gtk.Box();
+            item.set_child(modalLine);
+          });
+          infoFact.connect("bind", (widget, item) => {
+            const w = item.get_child();
+            const obj = item.get_item();
+            // const w = box.get_first_cild();
+            const filestatusLabel = w._filestatusLabel;
+            const filenameLabel = w._filenameLabel;
+            filenameLabel.set_text(obj.info);
+            filestatusLabel.set_text(obj.status);
+          });
+
+          const chkCol = new Gtk.ColumnViewColumn({
+            title: 'Select',
+            factory: chkFact
+          });
+
+          const infoCol = new Gtk.ColumnViewColumn({
+            title: 'Image',
+            factory: infoFact
+          });
+
+          lTreeView.append_column(chkCol);
+          lTreeView.append_column(infoCol);
+          const imgLinks = Template.extractImages(appData.get('HTML'));
+          imgLinks.forEach((link) => {
+            let imgstatus = 'remote';
+            let lpath = link;
+            let mylink = new Promise((resolve, reject) => {
+              //
+              // Make sure local links are reachable
+              //
+              console.log('is it remote? : ', myFile.isremote(link));
+              if (myFile.isremote(link) == false) { 
+                const [exists, fullpath] = myFile.localExists(link, this.assetpath);
+                if (exists) {
+                  imgstatus = 'local';
+                  lpath = fullpath;
+                  resolve([imgstatus, {'key': link, 'path': lpath}]);
+                } else {
+                  //
+                  // Prompt to find file
+                  //
+                  const props = {
+                    title: `Locate ${link}`,
+                    foldername: this.assetpath
+                  }
+                  try {
+                    myFile.fileOpen(props, (res) => {
+                      this.assetpath = res.get_parent().get_path();
+                      lpath = res.get_path();
+                      console.log('link after open : ', lpath);
+                      imgstatus = 'local';
+                      resolve([imgstatus, {'key': link, 'path': lpath}]);
+                    });
+                    
+                  } catch (error) {
+                    //
+                    // Need to log error
+                    //
+                    imgstatus = 'notfound';
+                    reject([imgstatus, {'key': link, 'path': lpath}]);
+                  }
+                }
+              } else {
+                resolve(['remote', {'key': link, 'path': lpath}]);
+              }
+            });
+            // console.log('mylink at constructor : ', mylink);
+            mylink.then(l => {
+              console.log('mylink at constructor : ', l[1]);
+              const row = new linkRow(GLib.base64_encode(JSON.stringify(l[1])), myFile.nameFromPath(l[1]['path']), l[0]);
+              listStore.append(row);
+            }).catch(l => {
+              console.log('error link : ', l);
+              const row = new linkRow(GLib.base64_encode(JSON.stringify(l[1])), myFile.nameFromPath(l[1]['path']), l[0]);
+              listStore.append(row);
+            });
+            
+          });
+
+
+          const props = {
+            title: 'Embed Images',
+            label: 'Choose images to embed.',
+            content: extModal,
+            window: this.App._window,
+            saveHandler: _saveExtract
+          };
+          myModal.doModal(props);
+
+          // https://stackoverflow.com/questions/43716020/gjs-synchronous-get-http-request
+          // https://stackoverflow.com/questions/14806981/using-gjs-how-can-you-make-an-async-http-request-to-download-a-file-in-chunks
+          console.log('extract clicked');
         });
 
         this.newAttachmentButton.connect('clicked', () => {
@@ -207,6 +430,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           }
           try {
             myFile.fileOpen(props, (res) => {
+              this.assetpath = res.get_parent().get_path();
               const td = new TextDecoder('utf-8');
               const [, contents] = res.load_contents(null);
               const myTemplate = td.decode(contents);
