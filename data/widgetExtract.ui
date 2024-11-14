@@ -42,6 +42,11 @@
     
               </object>
             </child>
+            <child>
+              <object class="GtkBox" id="filestatusBox">
+    
+              </object>
+            </child>
           </object>
         </child>
 

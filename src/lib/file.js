@@ -239,6 +239,7 @@ function csvFromArray (rows = []) {
   return res;
 }
 
+
 function getOpen (url, decode = false) {
   return new Promise((resolve, reject) => {
     const session = new Soup.Session();
@@ -262,6 +263,27 @@ function getOpen (url, decode = false) {
 function isremote (link) {
   return link.split('/').shift().includes('http');
 }
+
+/**
+ * Checks if a remote resource exists and does not return an error code
+ * Error codes are anything starting with 400 and over.
+ * 
+ * @param {String} url
+ * @returns {Boolean}
+ */
+function remoteExists(url){
+  const session = new Soup.Session();
+  let res = false;
+  try {
+    const msg = Soup.Message.new('HEAD', url);
+    session.send(msg, null);
+    res = msg.status_code < 400;
+  } catch (error) {
+    res = false;
+  }
+  return res;
+}
+
 
 /**
  * Checks if local type path can lead to a file.

@@ -38,7 +38,7 @@ var widgetExtract = GObject.registerClass( // eslint-disable-line
   GTypeName: 'widgetExtract',
   Template: 'resource:///io/github/brainstormtrooper/facteur/widgetExtract.ui',
   // Children: ['attachment', 'contentMain'],
-  InternalChildren: ['filenameLabel', 'filestatusLabel']
+  InternalChildren: ['filenameLabel', 'filestatusLabel', 'filestatusBox']
 },
 class widgetExtract extends Gtk.Box {
   _init () {
@@ -124,11 +124,11 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           aw._inlineButton.set_active(attachment.inline);
           aw._fileId.set_text(attachment.id);
           aw._deleteButton.connect('clicked', () => {
-            appData.deleteAttachment(attachment.fileName);
+            appData.deleteAttachment(attachment.id);
             this.App.emit('update_attachments', true);
           });
           aw._inlineButton.connect('toggled', () => {
-            appData.setInlineAttachment(attachment.fileName, aw._inlineButton.get_active());
+            appData.setInlineAttachment(attachment.id, aw._inlineButton.get_active());
             this.App.emit('update_attachments', true);
           });
           const ext = attachment.fileName.split('.').pop();
@@ -234,6 +234,11 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         /**
          * Open a modal with a list of found images and allow
          * user to select which ones to extract.
+         * Same image may be used several times in template document.
+         *  - First generate list of found images (combine duplicates)
+         *  - User selects images to embed.
+         *  - Walk through and make sure images are available.
+         * 
          */
         this.extractButton.connect('clicked', () => {
           this.extractable = [];
@@ -292,12 +297,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
 
             const obj = item.get_item();
             chkbtn.set_name(obj.chk);
-            if (obj.status == 'notfound') {
-              chkbtn.set_active(true);
-              if (!this.extractable.includes(obj.chk)) {
-                this.extractable.push(obj.chk);
-              }
-            }
+            
           });
           
           const infoFact = new Gtk.SignalListItemFactory();
@@ -315,8 +315,45 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
             // const w = box.get_first_cild();
             const filestatusLabel = w._filestatusLabel;
             const filenameLabel = w._filenameLabel;
+            const filestatusBox = w._filestatusBox;
             filenameLabel.set_text(obj.info);
             filestatusLabel.set_text(obj.status);
+            if (obj.status == 'not found') {
+              const findbutton = new Gtk.Button({label: 'Find'});
+              findbutton.connect('clicked', () => {
+                
+                try {
+                  const props = {
+                    title: `Find ${obj.info}`,
+                    foldername: this.assetpath
+                  }
+                  myFile.fileOpen(props, (res) => {
+                    this.assetpath = res.get_parent().get_path();
+                    const lpath = res.get_path();
+                    console.log('link after open : ', lpath);
+                    const imgstatus = 'local';
+                    if (obj.chk == w.get_parent().get_parent().get_first_child().get_first_child().get_name()) {
+                      const decoder = new TextDecoder('utf-8');
+                      const parts = JSON.parse(decoder.decode(GLib.base64_decode(obj.chk)));
+                      parts.path = lpath;
+                      const newchk = GLib.base64_encode(JSON.stringify(parts));
+                      w.get_parent().get_parent().get_first_child().get_first_child().set_name(newchk);
+                      filestatusLabel.set_text(imgstatus);
+                      findbutton.set_visible(false);
+                    }
+                    return true;
+                  });
+                  
+                } catch (error) {
+                  //
+                  // Need to log error
+                  //
+                  imgstatus = 'notfound';
+                  console.log(error);
+                }
+              });
+              filestatusBox.append(findbutton);
+            }
           });
 
           const chkCol = new Gtk.ColumnViewColumn({
@@ -331,60 +368,14 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
 
           lTreeView.append_column(chkCol);
           lTreeView.append_column(infoCol);
-          const imgLinks = Template.extractImages(appData.get('HTML'));
-          imgLinks.forEach((link) => {
-            let imgstatus = 'remote';
-            let lpath = link;
-            let mylink = new Promise((resolve, reject) => {
-              //
-              // Make sure local links are reachable
-              //
-              console.log('is it remote? : ', myFile.isremote(link));
-              if (myFile.isremote(link) == false) { 
-                const [exists, fullpath] = myFile.localExists(link, this.assetpath);
-                if (exists) {
-                  imgstatus = 'local';
-                  lpath = fullpath;
-                  resolve([imgstatus, {'key': link, 'path': lpath}]);
-                } else {
-                  //
-                  // Prompt to find file
-                  //
-                  const props = {
-                    title: `Locate ${link}`,
-                    foldername: this.assetpath
-                  }
-                  try {
-                    myFile.fileOpen(props, (res) => {
-                      this.assetpath = res.get_parent().get_path();
-                      lpath = res.get_path();
-                      console.log('link after open : ', lpath);
-                      imgstatus = 'local';
-                      resolve([imgstatus, {'key': link, 'path': lpath}]);
-                    });
-                    
-                  } catch (error) {
-                    //
-                    // Need to log error
-                    //
-                    imgstatus = 'notfound';
-                    reject([imgstatus, {'key': link, 'path': lpath}]);
-                  }
-                }
-              } else {
-                resolve(['remote', {'key': link, 'path': lpath}]);
-              }
-            });
-            // console.log('mylink at constructor : ', mylink);
-            mylink.then(l => {
-              console.log('mylink at constructor : ', l[1]);
-              const row = new linkRow(GLib.base64_encode(JSON.stringify(l[1])), myFile.nameFromPath(l[1]['path']), l[0]);
-              listStore.append(row);
-            }).catch(l => {
-              console.log('error link : ', l);
-              const row = new linkRow(GLib.base64_encode(JSON.stringify(l[1])), myFile.nameFromPath(l[1]['path']), l[0]);
-              listStore.append(row);
-            });
+          //
+          // Find and iterate over the image links in the template
+          //
+          const imgLinks = Template.extractImages(appData.get('HTML'), this.assetpath);
+          imgLinks.forEach((lob) => {
+            const row = new linkRow(GLib.base64_encode(JSON.stringify({'key': lob.link, 'path': lob.fullpath})), myFile.nameFromPath(lob.link), lob.imgstatus);
+            listStore.append(row);
+            
             
           });
 
@@ -400,7 +391,6 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
 
           // https://stackoverflow.com/questions/43716020/gjs-synchronous-get-http-request
           // https://stackoverflow.com/questions/14806981/using-gjs-how-can-you-make-an-async-http-request-to-download-a-file-in-chunks
-          console.log('extract clicked');
         });
 
         this.newAttachmentButton.connect('clicked', () => {

@@ -81,9 +81,10 @@ var Template = GObject.registerClass( // eslint-disable-line
         
         aObj.type = type;
         aObj.inline = false;
-        aObj.id = '';
+        aObj.id = appData.doAttachmentId(aObj.fileName);
         appData.addAttachment(aObj);
         
+        return aObj.id;
       }
 
       /**
@@ -106,20 +107,21 @@ var Template = GObject.registerClass( // eslint-disable-line
         
         aObj.type = type;
         aObj.inline = false;
-        aObj.id = '';
+        aObj.id = appData.doAttachmentId(filename);
         appData.addAttachment(aObj);
 
+        return aObj.id;
       }
 
       /**
        * Sets the attachment as inline 
        * returns the id of the attachment
        * 
-       * @param {string} filename 
+       * @param {string} aid 
        * @returns string
        */
-      setAttachmentInline(filename) {
-        return appData.setInlineAttachment(filename, true);
+      setAttachmentInline(aid) {
+        return appData.setInlineAttachment(aid, true);
       }
 
       /**
@@ -131,7 +133,7 @@ var Template = GObject.registerClass( // eslint-disable-line
       pathToCid (path, cid) {
         let tplstr = appData.get('HTML');
         const slug = `cid:${cid}`;
-        tplstr = tplstr.replace(path, slug);
+        tplstr = tplstr.replaceAll(path, slug);
         appData.set('HTML', tplstr);
       }
 
@@ -151,10 +153,11 @@ var Template = GObject.registerClass( // eslint-disable-line
             const lo = JSON.parse(decoder.decode(GLib.base64_decode(link)));
             const filename = lo.key.split('/').pop();
             if (lo.path.split('/').shift().includes('http')) {
+              // remote file
               const datap = myFile.getOpen(lo.path);
               datap.then( datastr => {
-                this.attachContents(filename, datastr);
-                const aid = this.setAttachmentInline(filename);
+                let aid = this.attachContents(filename, datastr);
+                aid = this.setAttachmentInline(aid);
                 this.pathToCid(lo.key, aid);
                 resolve(lo.key)
               }).catch(e => {
@@ -166,8 +169,8 @@ var Template = GObject.registerClass( // eslint-disable-line
               // local file
               const datap = myFile.fopen(lo.path, false);
               datap.then( datastr => {
-                this.attachContents(filename, datastr);
-                const aid = this.setAttachmentInline(filename);
+                let aid = this.attachContents(filename, datastr);
+                aid = this.setAttachmentInline(aid);
                 this.pathToCid(lo.key, aid);
                 resolve(lo.key);
               }).catch(e => {
@@ -187,18 +190,48 @@ var Template = GObject.registerClass( // eslint-disable-line
        * 
        * @param {string} htmlStr 
        */
-      extractImages (htmlStr) {
+      extractImages (htmlStr, basepath = null) {
         const imgs = ['jpg', 'jpeg', 'webp', 'png'];
         const myImgs = [];
         const links = myTemplate._links(htmlStr);
         links.forEach(link => {
           const ext = link.split('.').pop();
           if (imgs.includes(ext)) {
-            myImgs.push(link);
+            let imgstatus = 'not found';
+            if (myFile.isremote(link)) {
+              const exists = myFile.remoteExists(link);
+              if (exists) {
+                imgstatus = 'remote';
+              }
+              const iob = {
+                exists,
+                link,
+                fullpath: link,
+                imgstatus
+              }
+              myImgs.push(iob)
+            } else {
+              const [exists, fullpath] = myFile.localExists(link, basepath);
+              if (exists) {
+                imgstatus = 'local';
+              }
+              const iob = {
+                exists,
+                link,
+                fullpath,
+                imgstatus
+              }
+              myImgs.push(iob);
+            }
           }
         });
 
-        return myImgs;
+        const unique = myImgs.filter(function({exists, link, fullpath, imgstatus}) {
+          var key = `${exists}${link}${fullpath}${imgstatus}`;
+          return !this.has(key) && this.add(key);
+        }, new Set);
+
+        return unique;
       }
 
     }
