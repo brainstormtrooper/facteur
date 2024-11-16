@@ -3,9 +3,12 @@
   <id>io.github.brainstormtrooper.facteur</id>
   <name>Facteur</name>
   <summary>Sends template-based emails to a list of recipients</summary>
+  <launchable type="desktop-id">io.github.brainstormtrooper.facteur.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
-
+  <developer id="io.github.brainstormtrooper">
+    <name>brainstormtrooper</name>
+  </developer>
   <description>
     <p>
       A template-based emailing app for small business offering:
@@ -21,12 +24,14 @@
     <category>Email</category>
   </categories>
   <screenshots>
-    <screenshot type="default" width="1024" height="768">https://github.com/brainstormtrooper/facteur/assets/393030/c3f9a55e-2639-400b-aebe-fd7eabfc118c</screenshot>
+    <screenshot type="default">
+      <image>https://github.com/brainstormtrooper/facteur/assets/393030/c3f9a55e-2639-400b-aebe-fd7eabfc118c</image>
+      <caption>Facture windows</caption>
+    </screenshot>
   </screenshots>
   <url type="homepage">https://www.github.com/brainstormtrooper/facteur</url>
-  <updatecontact>brainstormtrooper_AT_free.fr</updatecontact>
   <releases>
-    <release version="0.20.0" type="stable" date="2024-11-16">
+    <release version="0.20.1" type="stable" date="2024-11-16">
       <description>
         <p>Allow for embedding selected images in template</p>
         <p>Small UI improvements</p>

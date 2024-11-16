@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Facteur
-Categories=Office,Email
+Categories=Office;Email;
 Comment=template based emailing app
 Icon=io.github.brainstormtrooper.facteur
 Exec=gapplication launch io.github.brainstormtrooper.facteur
