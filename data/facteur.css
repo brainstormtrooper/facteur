@@ -31,7 +31,11 @@
     margin-bottom: 0px;
 }
 
+.cRevealer {
+    background-color: @theme_bg_color;
+}
+
 .required {
-    color: @destructive_color;
+    color: @error_color;
     font-weight: bold;
 }

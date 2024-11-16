@@ -68,8 +68,8 @@ var contentMain = GObject.registerClass( // eslint-disable-line
   GTypeName: 'contentMain',
   Template: 'resource:///io/github/brainstormtrooper/facteur/contentMain.ui',
   // Children: ['attachment', 'contentMain'],
-  InternalChildren: ['textView', 'htmlSourceView', 'htmlPreview', 'saveButton', 'addLinkEntry',
-  'cImportButton', 'addAttachmentButton', 'extractButton', 'addLinkButton', 'attachmentsListBox']
+  InternalChildren: ['textView', 'htmlSourceView', 'htmlPreview', 'saveButton', 'addLinkEntry', 'cAttachSideButton',
+  'cImportButton', 'addAttachmentButton', 'extractButton', 'addLinkButton', 'attachmentsListBox', 'attachmentListExpander']
 },
 class contentMain extends Gtk.Box {
   _init () {
@@ -179,11 +179,13 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.htmlSourceView = this.contentMain._htmlSourceView;
         this.htmlPreview = this.contentMain._htmlPreview;
         this.saveButton = this.contentMain._saveButton;
+        this.cAttachSideButton = this.contentMain._cAttachSideButton;
         this.cImportButton = this.contentMain._cImportButton;
         this.extractButton = this.contentMain._extractButton;
         this.newAttachmentButton = this.contentMain._addAttachmentButton;
         this.newLinkButton = this.contentMain._addLinkButton;
         this.addLinkEntry = this.contentMain._addLinkEntry;
+        this.attachmentListExpander = this.contentMain._attachmentListExpander;
         this.attachmentsListBox = this.contentMain._attachmentsListBox
 
         var linkRow = GObject.registerClass(
@@ -225,6 +227,10 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.htmlPreview.load_html(this.htmlBuffer.text, null);
         this.saveButton.remove_css_class('suggested-action');
 
+        this.cAttachSideButton.connect('clicked', () => {
+          this.attachmentListExpander.add_css_class('cRevealer');
+          this.attachmentListExpander.set_reveal_child(!this.attachmentListExpander.get_reveal_child());
+        });
 
         this.newLinkButton.connect('clicked', () => {
           Template.addLink(this.addLinkEntry.get_text());
