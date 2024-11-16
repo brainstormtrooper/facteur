@@ -1,6 +1,7 @@
 const Gtk = imports.gi.Gtk;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
+const Soup = imports.gi.Soup;
 const secret = imports.lib.secret;
 const base64 = imports.lib.base64;
 const Data = imports.object.Data;
@@ -101,7 +102,7 @@ function fileOpen(props, ret) {
   }
 }
 
-function fopen (path) {
+function fopen (path, decode = true) {
   return new Promise((resolve, reject) => {
     const file = Gio.File.new_for_path(path);
     // asynchronous file loading...
@@ -109,13 +110,15 @@ function fopen (path) {
       try {
         // read the file into a variable...
         const contents = file.load_contents_finish(res)[1];
-        const decoder = new TextDecoder('utf-8');
-        const dataString = decoder.decode(contents);
-
+        let dataString = contents;
+        if (decode) {
+          const decoder = new TextDecoder('utf-8');
+          dataString = decoder.decode(contents);
+        }
+        
         resolve(dataString);
       } catch (e) {
         logError(e, 'File error');
-
         reject(e);
       }
     });
@@ -223,7 +226,8 @@ async function open (path) {
 }
 
 function nameFromPath (path) {
-  return path.split('/')[-1];
+  const n = path.split('/').pop();
+  return n;
 }
 
 function csvFromArray (rows = []) {
@@ -233,4 +237,95 @@ function csvFromArray (rows = []) {
   });
   const res = work.join('\n');
   return res;
+}
+
+
+function getOpen (url, decode = false) {
+  return new Promise((resolve, reject) => {
+    const session = new Soup.Session();
+    const msg = Soup.Message.new('GET', url);
+    const bytes = session.send_and_read(msg, null);
+
+    const code = msg.status_code;
+    if (code >= 400) {
+      reject(msg.reason_phrase);
+    }
+
+    if (decode) {
+      const decoder = new TextDecoder('utf-8');
+      resolve(decoder.decode(bytes.get_data()));
+    }
+    resolve(bytes.get_data());
+    
+  });
+}
+
+function isremote (link) {
+  return link.split('/').shift().includes('http');
+}
+
+/**
+ * Checks if a remote resource exists and does not return an error code
+ * Error codes are anything starting with 400 and over.
+ * 
+ * @param {String} url
+ * @returns {Boolean}
+ */
+function remoteExists(url){
+  const session = new Soup.Session();
+  let res = false;
+  try {
+    const msg = Soup.Message.new('HEAD', url);
+    session.send(msg, null);
+    res = msg.status_code < 400;
+  } catch (error) {
+    res = false;
+  }
+  return res;
+}
+
+
+/**
+ * Checks if local type path can lead to a file.
+ * Several possible scenarios are checked
+ * Returns an array [exists(bool), full path(string or undefined)]
+ * 
+ * @param {String} path 
+ * @param {String} root 
+ * @returns {Array}
+ */
+function localExists (path, root = null) {
+  let tmpfile;
+  let fullpath;
+  let exists = false;
+  const isfullpath = path.startsWith('/');
+  const filename = nameFromPath(path);
+  if (!isfullpath) {
+    if (root) {
+      tmpfile = Gio.File.new_for_path(`${root}/${path}`);
+      exists = tmpfile.query_exists(null);
+    } 
+    if (root && !exists) {
+      tmpfile = Gio.File.new_for_path(`${root}/${filename}`);
+      exists = tmpfile.query_exists(null);
+    }
+    if (!root && !exists) {
+      tmpfile = Gio.File.new_for_path(`~/${path}`);
+      exists = tmpfile.query_exists(null);
+    }
+  } else {
+    if (root) {
+      tmpfile = Gio.File.new_for_path(`${root}/${filename}`);
+      exists = tmpfile.query_exists(null);
+    } 
+    if (!exists) {
+      tmpfile = Gio.File.new_for_path(path);
+      exists = tmpfile.query_exists(null);
+    }
+  }
+
+  if (exists) {
+    fullpath = tmpfile.get_path();
+  }
+  return [exists, fullpath];
 }

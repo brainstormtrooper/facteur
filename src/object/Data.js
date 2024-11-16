@@ -66,22 +66,25 @@ var Data = class Data { // eslint-disable-line
   addAttachment (obj) {
     this._data.ATTACHMENTS.push(obj);
   }
-  deleteAttachment (fileName) {
-    this._data.ATTACHMENTS = this._data.ATTACHMENTS.filter( el => el.fileName !== fileName );
+  deleteAttachment (aid) {
+    this._data.ATTACHMENTS = this._data.ATTACHMENTS.filter( el => el.id !== aid );
   }
-  setInlineAttachment (fileName, isInline) {
+  setInlineAttachment (aid, isInline) {
     // log(this._data.ATTACHMENTS);
+    
     for (let i in this._data.ATTACHMENTS) {
       
-      if (this._data.ATTACHMENTS[i].fileName == fileName) {
-        log(`setting active to ${isInline} for ${fileName}`);
+      if (this._data.ATTACHMENTS[i].id == aid) {
+        log(`setting active to ${isInline} for ${aid}`);
         this._data.ATTACHMENTS[i].inline = isInline;
-        if (isInline && this._data.ATTACHMENTS[i].id == '') {
-          const rid = Math.random().toString(36).slice(2, 7);
-          this._data.ATTACHMENTS[i].id = `${fileName.replace(/\s/g, '_')}@${rid}`
-        }
         break;
       }
     }
+    return aid;
+  }
+
+  doAttachmentId(fileName) {
+    const rid = Math.random().toString(36).slice(2, 7);
+    return `${fileName.replace(/\s/g, '_')}@${rid}`;
   }
 };
