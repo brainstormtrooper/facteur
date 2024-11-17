@@ -62,6 +62,7 @@
           <object class="GtkScrolledWindow" id="mScrolledWindow">
             <property name="min_content_height">200</property>
             <property name="min_content_width">400</property>
+            <property name="vexpand">true</property>
             <style>
               <class name="UiArea" />
               <class name="scrolledwindow" />

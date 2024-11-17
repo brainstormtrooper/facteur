@@ -7,8 +7,8 @@
    viewBox="0 0 512 512"
    version="1.1"
    id="svg5"
-   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
-   sodipodi:docname="io.github.brainstormtrooper.facteur.symbolic.svg"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   sodipodi:docname="io.github.brainstormtrooper.facteur-symbolic.svg"
    inkscape:export-filename="/home/rick/Documents/Work/BrainstormTrooper/Gnome_emailer/icon.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
@@ -28,14 +28,17 @@
      inkscape:document-units="px"
      showgrid="false"
      inkscape:zoom="1.515625"
-     inkscape:cx="119.75258"
-     inkscape:cy="256"
+     inkscape:cx="252.70103"
+     inkscape:cy="248.74227"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g7552" />
+     inkscape:current-layer="layer2"
+     showguides="false"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
   <defs
      id="defs2">
     <linearGradient
@@ -52,6 +55,18 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
+       id="linearGradient1235">
+      <stop
+         style="stop-color:#fbfdff;stop-opacity:1"
+         offset="0"
+         id="stop1231" />
+      <stop
+         style="stop-color:#f6f5f4;stop-opacity:1"
+         offset="1"
+         id="stop1233" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
        xlink:href="#linearGradient3388"
        id="linearGradient3390"
        x1="126.07201"
@@ -59,64 +74,29 @@
        x2="285.80435"
        y2="46.383442"
        gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1235"
+       id="linearGradient9"
+       gradientUnits="userSpaceOnUse"
+       x1="424.12628"
+       y1="193.47681"
+       x2="367.53864"
+       y2="501.60568" />
   </defs>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     transform="translate(0,65.319588)">
     <g
-       id="g7542-9"
-       transform="translate(25.858245,-13.796392)"
-       style="fill:#5e5c64;stroke:none">
+       id="g9"
+       transform="translate(9.7706184,-29.376289)"
+       style="display:inline"
+       inkscape:label="white_envelope">
       <rect
-         style="fill:#5e5c64;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect31-5-3"
-         width="454.46133"
-         height="235.91237"
-         x="-23.228088"
-         y="83.711342"
-         rx="5"
-         ry="5" />
-      <rect
-         style="fill:#5e5c64;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-         id="rect5787-2-8"
-         width="196.42268"
-         height="83.301544"
-         x="24.570869"
-         y="195.52319"
-         rx="5"
-         ry="5" />
-    </g>
-    <g
-       id="g7542"
-       transform="translate(50.136597,49.213668)"
-       style="fill:#9a9996">
-      <rect
-         style="fill:#9a9996;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect31-5"
-         width="454.46133"
-         height="235.91237"
-         x="-23.228088"
-         y="83.711342"
-         rx="5"
-         ry="5" />
-      <rect
-         style="fill:#9a9996;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-         id="rect5787-2"
-         width="196.42268"
-         height="83.301544"
-         x="24.570869"
-         y="195.52319"
-         rx="5"
-         ry="5" />
-    </g>
-    <g
-       id="g7552"
-       transform="translate(32.203608,18.128866)"
-       style="fill:#ffffff;fill-opacity:1">
-      <rect
-         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
-         id="rect31"
+         style="fill:url(#linearGradient9);fill-opacity:1"
+         id="rect4"
          width="454.46133"
          height="235.91237"
          x="19.417526"
@@ -126,20 +106,154 @@
          inkscape:export-filename="/home/rick/Documents/Work/BrainstormTrooper/Gnome_emailer/icon.png"
          inkscape:export-xdpi="96"
          inkscape:export-ydpi="96" />
-      <g
-         id="g2213"
-         transform="translate(28.515464,-0.22938144)"
-         style="fill:#ffffff;fill-opacity:1;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none" />
       <rect
-         style="fill:#5e5c64;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-         id="rect5787"
+         style="fill:#3d3846;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="rect7"
          width="196.42268"
          height="83.301544"
          x="67.216492"
          y="288.86597"
          rx="5"
          ry="5" />
+      <rect
+         style="display:inline;fill:#f6f5f4;fill-opacity:1;stroke-width:4.15848;stroke-linecap:round;stroke-linejoin:round"
+         id="rect9"
+         width="185.58633"
+         height="21.043573"
+         x="73.216492"
+         y="302.86597"
+         rx="5.4040618"
+         ry="5" />
     </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="accolades">
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke-width:0.972271;stroke:none;stroke-opacity:1"
+       id="rect10"
+       width="355.62888"
+       height="159.67009"
+       x="77.896904"
+       y="69.257729"
+       rx="5"
+       ry="4.7265625" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:235.371px;font-family:Cabin;-inkscape-font-specification:'Cabin Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#26a269;stroke-width:12.6091"
+       x="86.245537"
+       y="220.56946"
+       id="text9"><tspan
+         sodipodi:role="line"
+         id="tspan9"
+         x="86.245537"
+         y="220.56946"
+         style="stroke-width:12.6091">{</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:235.371px;font-family:Cabin;-inkscape-font-specification:'Cabin Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#26a269;stroke-width:12.6091"
+       x="-426.46881"
+       y="221.04372"
+       id="text9-3"
+       transform="scale(-1,1)"><tspan
+         sodipodi:role="line"
+         id="tspan9-6"
+         x="-426.46881"
+         y="221.04372"
+         style="stroke-width:12.6091">{</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:235.371px;font-family:Cabin;-inkscape-font-specification:'Cabin Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#3d3846;stroke-width:12.6091"
+       x="86.245537"
+       y="220.56946"
+       id="text11"><tspan
+         sodipodi:role="line"
+         id="tspan11"
+         x="86.245537"
+         y="220.56946"
+         style="stroke-width:12.6091;fill:#3d3846">{</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:235.371px;font-family:Cabin;-inkscape-font-specification:'Cabin Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#3d3846;stroke-width:12.6091"
+       x="-426.46881"
+       y="221.04372"
+       id="text12"
+       transform="scale(-1,1)"><tspan
+         sodipodi:role="line"
+         id="tspan12"
+         x="-426.46881"
+         y="221.04372"
+         style="stroke-width:12.6091;fill:#3d3846">{</tspan></text>
+    <rect
+       style="fill:#3d3846;stroke-width:1.47479"
+       id="rect14"
+       width="114.80412"
+       height="20.453608"
+       x="116.12371"
+       y="83.793816"
+       rx="10.875"
+       ry="5" />
+    <rect
+       style="fill:#3d3846;stroke-width:1.45344"
+       id="rect14-3"
+       width="111.50516"
+       height="20.453608"
+       x="276.77322"
+       y="84.402069"
+       rx="10.5625"
+       ry="5" />
+    <path
+       d="m 254.1262,130.24006 11.4215,-23.55685 V 84.554046 h -23.19993 v 24.270694 h 9.10151 l -7.67382,21.41532 z"
+       id="text15"
+       style="font-weight:bold;font-size:178.461px;font-family:Cabin;-inkscape-font-specification:'Cabin Bold';text-align:center;text-anchor:middle;fill:#3d3846;stroke-width:9.56037"
+       aria-label="," />
+    <rect
+       style="fill:#3d3846;stroke-width:1.47479"
+       id="rect15"
+       width="114.80412"
+       height="20.453608"
+       x="116.12371"
+       y="143.17525"
+       rx="10.875"
+       ry="5" />
+    <rect
+       style="fill:#3d3846;stroke-width:1.45344"
+       id="rect16"
+       width="111.50516"
+       height="20.453608"
+       x="276.77322"
+       y="143.78349"
+       rx="10.5625"
+       ry="5" />
+    <path
+       d="m 254.1262,189.6215 11.4215,-23.55685 v -22.12917 h -23.19993 v 24.2707 h 9.10151 l -7.67382,21.41532 z"
+       id="text16"
+       style="font-weight:bold;font-size:178.461px;font-family:Cabin;-inkscape-font-specification:'Cabin Bold';text-align:center;text-anchor:middle;fill:#3d3846;stroke-width:9.56037"
+       aria-label="," />
+    <rect
+       style="fill:#3d3846;stroke-width:1.47479"
+       id="rect17"
+       width="114.80412"
+       height="20.453608"
+       x="116.12371"
+       y="199.25772"
+       rx="10.875"
+       ry="5" />
+    <rect
+       style="fill:#3d3846;stroke-width:1.45344"
+       id="rect18"
+       width="111.50516"
+       height="20.453608"
+       x="276.77322"
+       y="199.86597"
+       rx="10.5625"
+       ry="5" />
+    <path
+       d="m 254.1262,245.70397 11.4215,-23.55685 v -22.12916 h -23.19993 v 24.27069 h 9.10151 l -7.67382,21.41532 z"
+       id="text18"
+       style="font-weight:bold;font-size:178.461px;font-family:Cabin;-inkscape-font-specification:'Cabin Bold';text-align:center;text-anchor:middle;fill:#3d3846;stroke-width:9.56037"
+       aria-label="," />
   </g>
   <g
      inkscape:groupmode="layer"
