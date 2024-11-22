@@ -1,7 +1,17 @@
+![hero_icon_250](https://github.com/user-attachments/assets/5a7e74c1-1a7c-4448-879e-872e9549d2d5)
+
+
 # Facteur (GNOME-Emailer)
-Gnome GTK app for sending template based emails
+Gnome GTK mail-merge application
+
+## Usage Instructions
+Usage instructions are in the wiki here:
+https://github.com/brainstormtrooper/facteur/wiki
 
 ## Getting the program
+
+### Flathub
+https://flathub.org/apps/io.github.brainstormtrooper.facteur
 
 ### Binaries
 OpenSuse binaries are available here:
