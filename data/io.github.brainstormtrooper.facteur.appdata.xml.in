@@ -11,7 +11,7 @@
   </developer>
   <description>
     <p>
-      A template-based emailing app for small business offering:
+      A GTK mail-merge emailing app for small business offering:
     </p>
     <ul>
       <li>Email personalization</li>
@@ -25,12 +25,43 @@
   </categories>
   <screenshots>
     <screenshot type="default">
-      <image>https://github.com/brainstormtrooper/facteur/assets/393030/c3f9a55e-2639-400b-aebe-fd7eabfc118c</image>
-      <caption>Facture windows</caption>
+      <image>https://github.com/user-attachments/assets/cfda633a-f1ef-4f95-895b-837e05f95f35</image>
+      <caption>Facture About</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/user-attachments/assets/9c0445b2-9152-462e-88f8-dd91c4f7a08c</image>
+      <caption>Connection settings</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/user-attachments/assets/556877e7-4a41-4afe-b98a-43ad95b9c49f</image>
+      <caption>Mailing settings</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/user-attachments/assets/e796b9e0-9b76-4c7a-917c-41601632c4ad</image>
+      <caption>Recipients and variables</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/user-attachments/assets/bfcc1c43-582b-4f05-ad89-dfde999cd3cb</image>
+      <caption>HTML preview</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/user-attachments/assets/fe1f3830-d55e-47ee-bce9-bcf519bd88b1</image>
+      <caption>Code view and side panel</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/user-attachments/assets/1ddeaba3-63b4-4dcb-a5a1-053321dd9030</image>
+      <caption>Results view</caption>
     </screenshot>
   </screenshots>
   <url type="homepage">https://www.github.com/brainstormtrooper/facteur</url>
   <releases>
+    <release version="0.20.2" type="stable" date="2024-11-22">
+      <description>
+        <p>New icon</p>
+        <p>Minor UI fix</p>
+        <p>Depend on Gnome 47 platform</p>
+      </description>
+    </release>
     <release version="0.20.1" type="stable" date="2024-11-16">
       <description>
         <p>Allow for embedding selected images in template</p>
