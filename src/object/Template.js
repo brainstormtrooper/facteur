@@ -161,7 +161,7 @@ var Template = GObject.registerClass( // eslint-disable-line
                 this.pathToCid(lo.key, aid);
                 resolve(lo.key)
               }).catch(e => {
-                console.log(e);
+                log(e);
                 reject(e);
                 // throw e;
               });
@@ -174,7 +174,7 @@ var Template = GObject.registerClass( // eslint-disable-line
                 this.pathToCid(lo.key, aid);
                 resolve(lo.key);
               }).catch(e => {
-                console.log(e);
+                log(e);
                 reject(e);
                 // throw e;
               });

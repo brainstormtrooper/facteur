@@ -93,7 +93,8 @@
         <child>
           <object class="GtkOverlay" id="expanderBox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
+            
 
             <child>
               <object class="GtkNotebook" id="contentNotebook">
@@ -174,14 +175,14 @@
 
             <child type="overlay">
               <object class="GtkRevealer" id="attachmentListExpander">
-                <property name="can_focus">False</property>
+                <property name="can_focus">true</property>
                 <property name="transition_type">crossfade</property>
                 <property name="halign">end</property>
                 <child>
                   <object class="GtkBox" id="attachmentsBox">
                     <property name="css-classes">attachments_box</property>
 
-                    <property name="width-request">350</property>
+                    <property name="width_request">350</property>
                     <property name="orientation">vertical</property>
                     <property name="vexpand">true</property>
                     <property name="hexpand">true</property>

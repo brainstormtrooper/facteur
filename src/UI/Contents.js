@@ -13,21 +13,16 @@ const appData = new Data.Data();
 const myFile = imports.lib.file;
 
 
-// const contentsfile = Gio.File.new_for_path('data/contentMain.ui');
-// const [, contentTemplate] = contentsfile.load_contents(null);
-
 
 var modalExtract = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'modalExtract',
   Template: 'resource:///io/github/brainstormtrooper/facteur/modalExtract.ui',
-  // Children: ['attachment', 'contentMain'],
   InternalChildren: ['extractCheckAllBtn', 'extractScroll']
 },
 class modalExtract extends Gtk.Box {
   _init () {
     super._init();
-    // Gtksource.init();
   }
 
 
@@ -37,13 +32,11 @@ var widgetExtract = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'widgetExtract',
   Template: 'resource:///io/github/brainstormtrooper/facteur/widgetExtract.ui',
-  // Children: ['attachment', 'contentMain'],
   InternalChildren: ['filenameLabel', 'filestatusLabel', 'filestatusBox']
 },
 class widgetExtract extends Gtk.Box {
   _init () {
     super._init();
-    // Gtksource.init();
     
   }
 });
@@ -52,13 +45,11 @@ var widgetAttachment = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'widgetAttachment',
   Template: 'resource:///io/github/brainstormtrooper/facteur/widgetAttachment.ui',
-  // Children: ['attachment', 'contentMain'],
   InternalChildren: ['filename', 'deleteButton', 'fileId', 'inlineButton', 'row2']
 },
 class widgetAttachment extends Gtk.Box {
   _init () {
     super._init();
-    // Gtksource.init();
     
   }
 });
@@ -67,14 +58,12 @@ var contentMain = GObject.registerClass( // eslint-disable-line
 {
   GTypeName: 'contentMain',
   Template: 'resource:///io/github/brainstormtrooper/facteur/contentMain.ui',
-  // Children: ['attachment', 'contentMain'],
-  InternalChildren: ['textView', 'htmlSourceView', 'htmlPreview', 'saveButton', 'addLinkEntry', 'cAttachSideButton',
-  'cImportButton', 'addAttachmentButton', 'extractButton', 'addLinkButton', 'attachmentsListBox', 'attachmentListExpander']
+  InternalChildren: ['textView', 'expanderBox', 'htmlSourceView', 'htmlPreview', 'saveButton', 'addLinkEntry', 'cAttachSideButton',
+  'cImportButton', 'addAttachmentButton', 'extractButton', 'addLinkButton', 'attachmentsBox', 'attachmentsListBox', 'attachmentListExpander']
 },
 class contentMain extends Gtk.Box {
   _init () {
     super._init();
-    // Gtksource.init();
     
   }
 });
@@ -175,6 +164,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.App = Gio.Application.get_default();
         this.contentMain = new contentMain();
 
+        this.expanderBox = this.contentMain._expanderBox;
         this.textView = this.contentMain._textView;
         this.htmlSourceView = this.contentMain._htmlSourceView;
         this.htmlPreview = this.contentMain._htmlPreview;
@@ -186,7 +176,8 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.newLinkButton = this.contentMain._addLinkButton;
         this.addLinkEntry = this.contentMain._addLinkEntry;
         this.attachmentListExpander = this.contentMain._attachmentListExpander;
-        this.attachmentsListBox = this.contentMain._attachmentsListBox
+        this.attachmentsListBox = this.contentMain._attachmentsListBox;
+        this.attachmentsBox = this.contentMain._attachmentsBox;
 
         var linkRow = GObject.registerClass(
           {
@@ -227,8 +218,14 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.htmlPreview.load_html(this.htmlBuffer.text, null);
         this.saveButton.remove_css_class('suggested-action');
 
+
+        //
+        // Need to hide revealer box child
+        //
+        this.attachmentsBox.set_visible(false);
         this.cAttachSideButton.connect('clicked', () => {
           this.attachmentListExpander.add_css_class('cRevealer');
+          this.attachmentsBox.set_visible(!this.attachmentsBox.get_visible());
           this.attachmentListExpander.set_reveal_child(!this.attachmentListExpander.get_reveal_child());
         });
 
@@ -254,17 +251,16 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
             try {
               const solved = await Template.doExtract(this.extractable);
               Promise.allSettled(solved).then(reses => {
-                console.log('reses : ', reses);
                 this.App.emit('update_attachments', true);
                 const len = encodeURI(appData.get('HTML')).split(/%..|./).length - 1;
                 this.htmlBuffer.set_text(appData.get('HTML'), len);
                 this.saveButton.remove_css_class('suggested-action');
               }).catch(e => {
-                console.log(e);
+                log(e);
               });
               
             } catch (error) {
-              console.log(error);
+              log(error);
             }
             
           }
@@ -274,7 +270,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           const listStore = new Gio.ListStore(linkRow);
           const selection = new Gtk.MultiSelection();
           selection.set_model(listStore);
-          const lTreeView = new Gtk.ColumnView(selection);
+          const lTreeView = new Gtk.ColumnView({model: selection});
           // this.rScrolledWindow.set_child(this.rTreeView);
           lTreeView.set_model(selection);
 
@@ -287,14 +283,14 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           chkFact.connect("setup", (widget, item) => {
             const chkbtn = new Gtk.CheckButton();
             chkbtn.connect("toggled", (w) => {
-              console.log(w.get_active());
+              
               if (w.get_active()) {
                 this.extractable.push(w.get_name());
               } else {
                 // const i = this.extractable.indexOf(widget.get_name());
                 this.extractable = this.extractable.filter(link => link !== w.get_name());
               }
-              console.log(this.extractable);
+              
             });
             item.set_child(chkbtn);
           });
@@ -336,7 +332,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
                   myFile.fileOpen(props, (res) => {
                     this.assetpath = res.get_parent().get_path();
                     const lpath = res.get_path();
-                    console.log('link after open : ', lpath);
+                    
                     const imgstatus = 'local';
                     if (obj.chk == w.get_parent().get_parent().get_first_child().get_first_child().get_name()) {
                       const decoder = new TextDecoder('utf-8');
@@ -351,11 +347,8 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
                   });
                   
                 } catch (error) {
-                  //
-                  // Need to log error
-                  //
                   imgstatus = 'notfound';
-                  console.log(error);
+                  log(error);
                 }
               });
               filestatusBox.append(findbutton);
@@ -416,7 +409,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
               this.App.emit('update_attachments', true);
             });
           } catch (error) {
-            
+            log(error);
           }
         });
 
