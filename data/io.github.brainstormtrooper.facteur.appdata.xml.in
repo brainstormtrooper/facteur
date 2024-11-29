@@ -55,6 +55,12 @@
   </screenshots>
   <url type="homepage">https://www.github.com/brainstormtrooper/facteur</url>
   <releases>
+    <release version="0.20.3" type="stable" date="2024-11-26">
+      <description>
+        <p>Fix editor UI bug</p>
+        <p>Fix bug in image embed</p>
+      </description>
+    </release>
     <release version="0.20.2" type="stable" date="2024-11-22">
       <description>
         <p>New icon</p>
