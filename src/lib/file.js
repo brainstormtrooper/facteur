@@ -281,6 +281,7 @@ function remoteExists(url){
   } catch (error) {
     res = false;
   }
+
   return res;
 }
 

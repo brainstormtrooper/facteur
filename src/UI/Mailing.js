@@ -154,7 +154,7 @@ var UImailing = GObject.registerClass( // eslint-disable-line
         const selection = new Gtk.MultiSelection();
         const listStore = new Gio.ListStore(dataRow);
         selection.set_model(listStore);
-        this.mTreeView = new Gtk.ColumnView(selection);
+        this.mTreeView = Gtk.ColumnView.new(selection);
         this.mScrolledWindow.set_child(this.mTreeView);
         this.mTreeView.set_model(selection);
         // Create cell renderers

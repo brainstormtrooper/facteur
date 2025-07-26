@@ -66,6 +66,17 @@ var Data = class Data { // eslint-disable-line
   addAttachment (obj) {
     this._data.ATTACHMENTS.push(obj);
   }
+
+  hasAttachment (obj) {
+    let res = null;
+    const lita = this._data.ATTACHMENTS.filter( el => (el.fileName == obj.fileName && el.contents == obj.contents && el.type == obj.type) );
+    if (lita.length > 0) {
+      res = lita[0].id;
+    }
+
+    return res;
+  }
+
   deleteAttachment (aid) {
     this._data.ATTACHMENTS = this._data.ATTACHMENTS.filter( el => el.id !== aid );
   }
