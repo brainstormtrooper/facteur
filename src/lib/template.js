@@ -79,6 +79,15 @@ function _links(template) {
   return res;
 }
 
+function replaceLinkUrl(template, oldUrl, newUrl) {
+  const re = new RegExp(String.raw`<img\s[^>]*?src=(["']?)${oldUrl}\1[^>]*?>`, "gi");
+  // var imgs = /<img\s[^>]*?src=(["']?)([^\s]+?)\1[^>]*?>/i;
+  const res = template.replaceAll(re, function (_anchor, _quote) {
+    return _anchor.replace(oldUrl, newUrl);
+  });
+
+  return res;
+}
 
 var payload = `{{headers}}
 MIME-Version: 1.0

@@ -39,3 +39,16 @@
     color: @error_color;
     font-weight: bold;
 }
+
+notebook.verticalNotebook tab  {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+notebook.verticalNotebook tab label  {
+  font-family: "Adwaita Sans";
+  font-size: 18px;
+  font-weight: 400;
+    /* transform: rotate(270deg); */
+}
+

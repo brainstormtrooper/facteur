@@ -15,8 +15,9 @@
     </p>
     <ul>
       <li>Email personalization</li>
+      <li>Email attachments</li>
       <li>HTML and text emails</li>
-      <li>CSV data import</li>
+      <li>CSV recipient data import</li>
     </ul>
   </description>
   <categories>
@@ -55,6 +56,13 @@
   </screenshots>
   <url type="homepage">https://www.github.com/brainstormtrooper/facteur</url>
   <releases>
+    <release version="0.21.0" type="stable" date="2025-07-26">
+      <description>
+        <p>Improved handling of embedded local images</p>
+        <p>Begin implementation of new side panel on Content screen</p>
+        <p>Depend on Gnome 48 platform</p>
+      </description>
+    </release>
     <release version="0.20.3" type="stable" date="2024-11-26">
       <description>
         <p>Fix editor UI bug</p>

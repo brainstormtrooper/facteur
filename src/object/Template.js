@@ -94,6 +94,7 @@ var Template = GObject.registerClass( // eslint-disable-line
        * @param {string} contents 
        */
       attachContents (filename, contents) {
+        let res;
         const aObj = {};
         const base64str = GLib.base64_encode(contents);
         const size = encodeURI(base64str).split(/%..|./).length - 1;
@@ -106,11 +107,18 @@ var Template = GObject.registerClass( // eslint-disable-line
         const [type, uncertain] = Gio.content_type_guess(aObj.fileName, null);
         
         aObj.type = type;
-        aObj.inline = false;
-        aObj.id = appData.doAttachmentId(filename);
-        appData.addAttachment(aObj);
+        const eid = appData.hasAttachment(aObj);
+        if(eid) {
+          res = eid;
+        } else {
+          aObj.inline = false;
+          aObj.id = appData.doAttachmentId(filename);
+          appData.addAttachment(aObj);
+          res = aObj.id;
+        }
 
-        return aObj.id;
+
+        return res;
       }
 
       /**
@@ -133,7 +141,7 @@ var Template = GObject.registerClass( // eslint-disable-line
       pathToCid (path, cid) {
         let tplstr = appData.get('HTML');
         const slug = `cid:${cid}`;
-        tplstr = tplstr.replaceAll(path, slug);
+        tplstr = myTemplate.replaceLinkUrl(tplstr, path, slug);
         appData.set('HTML', tplstr);
       }
 

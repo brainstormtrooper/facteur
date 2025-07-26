@@ -178,7 +178,49 @@
                 <property name="can_focus">true</property>
                 <property name="transition_type">crossfade</property>
                 <property name="halign">end</property>
+
+
+                <!-- sidebar notebook -->
                 <child>
+                <object class="GtkNotebook" id="contentSidebarNotebook">
+                <property name="tab_pos">right</property>
+                <property name="css-classes">verticalNotebook</property>
+
+
+                <child><!-- Images Page -->
+                  <object class="GtkBox" id="mediaBox">
+                    <property name="css-classes">media_box</property>
+
+                    <property name="width_request">350</property>
+                    <property name="orientation">vertical</property>
+                    <property name="vexpand">true</property>
+                    <property name="hexpand">true</property>
+                    <child>
+                      <object class="GtkScrolledWindow" id="mediaScroll">
+                        <property name="vexpand">true</property>
+                        <property name="hexpand">true</property>
+
+                        <child>
+                          <object class="GtkBox" id="mediaListBox">
+                            <property name="orientation">vertical</property>
+                            <property name="valign">start</property>
+                            <property name="vexpand">true</property>
+                            <property name="hexpand">true</property>
+                            <property name="spacing">6</property>
+                          </object>
+                        </child>
+
+                      </object>
+                    </child>
+                  </object>
+                </child><!-- /Images Page -->
+                <child type="tab">
+                  <object class="GtkDrawingArea" id="mediaTabLabel">
+                    <property name="css-classes">mediaTabLabel</property>
+                  </object>
+
+                </child>
+                <child><!-- Attachments Page -->
                   <object class="GtkBox" id="attachmentsBox">
                     <property name="css-classes">attachments_box</property>
 
@@ -194,12 +236,12 @@
                         <style>
                           <class name="linked" />
                         </style>
-                        <child>
+                        <!-- <child>
                           <object class="GtkButton" id="extractButton">
 
                             <property name="label" translatable="yes">Embed</property>
                           </object>
-                        </child>
+                        </child> -->
                         <child>
                           <object class="GtkButton" id="addAttachmentButton">
 
@@ -272,8 +314,27 @@
                     </child>
 
                   </object>
+                </child><!-- /Attachments Page -->
+                <child type="tab">
+                  <object class="GtkDrawingArea" id="AttachmentsTabLabel">
+                    <property name="css-classes">AttachmentsTabLabel</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Variables: Coming Soon</property>
+                  </object>
+                </child>
+                <child type="tab">
+                  <object class="GtkDrawingArea" id="VariablesTabLabel">
+                    <property name="css-classes">VariablesTabLabel</property>
+                  </object>
                 </child>
 
+
+                </object>
+              </child>
+              <!-- /sidebar notebook -->
 
               </object>
             </child>

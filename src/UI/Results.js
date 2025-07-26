@@ -55,7 +55,7 @@ var UIresults = GObject.registerClass( // eslint-disable-line
         const listStore = new Gio.ListStore(rprtRow);
         const selection = new Gtk.MultiSelection();
         selection.set_model(listStore);
-        this.rTreeView = new Gtk.ColumnView(selection);
+        this.rTreeView = Gtk.ColumnView.new(selection);
         this.rScrolledWindow.set_child(this.rTreeView);
         this.rTreeView.set_model(selection);
 
