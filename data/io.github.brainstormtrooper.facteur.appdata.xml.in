@@ -56,7 +56,7 @@
   </screenshots>
   <url type="homepage">https://www.github.com/brainstormtrooper/facteur</url>
   <releases>
-    <release version="0.21.2" type="stable" date="2025-07-26">
+    <release version="0.21.3" type="stable" date="2025-07-26">
       <description>
         <p>Improved handling of embedded local images</p>
         <p>Begin implementation of new side panel on Content screen</p>
