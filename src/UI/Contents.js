@@ -33,7 +33,7 @@ var contentMain = GObject.registerClass( // eslint-disable-line
   Template: 'resource:///io/github/brainstormtrooper/facteur/contentMain.ui',
   InternalChildren: ['textView', 'expanderBox', 'htmlSourceView', 'htmlPreview', 'saveButton', 'addLinkEntry', 'cAttachSideButton',
   'cImportButton', 'addAttachmentButton', 'mediaScroll', 'mediaListBox', 'addLinkButton', 'attachmentsBox', 'attachmentsListBox', 'attachmentListExpander',
-  'mediaTabLabel', 'AttachmentsTabLabel', 'VariablesTabLabel', 'contentSidebarNotebook']
+  'mediaTabLabel', 'AttachmentsTabLabel', 'VariablesTabLabel', 'variablesScroll', 'contentSidebarNotebook']
 },
 class contentMain extends Gtk.Box {
   _init () {
@@ -199,7 +199,8 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           linkRow.add_css_class('card');
           this.attachmentsListBox.append(linkRow);
         });
-
+        const myVarsList = this.buildVarsList();
+        this.variablesScroll.set_child(myVarsList);
       }
 
       previewAttachments (html) {
@@ -214,6 +215,110 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         });
         
         return myStr;
+      }
+
+      buildVarsList () {
+        var varRow = GObject.registerClass(
+          {
+            GTypeName: 'varRow',
+          },
+          class varRow extends GObject.Object {
+            _init(left, xtxt, xhtml, right) {
+              super._init();
+              this.left = left;
+              this.xtxt = xtxt;
+              this.xhtml = xhtml;
+              this.right = right;
+            }
+          }
+        );
+        const myVars = appData.get('VARS');
+        const listStore = new Gio.ListStore(varRow);
+        const selection = new Gtk.MultiSelection();
+        selection.set_model(listStore);
+        const lTreeView = new Gtk.ColumnView({model: selection});
+        // this.rScrolledWindow.set_child(this.rTreeView);
+        lTreeView.set_model(selection);
+
+        const leftFact = new Gtk.SignalListItemFactory();
+        leftFact.connect("setup", (widget, item) => {
+          const varlabel = new Gtk.Label();
+
+          item.set_child(varlabel);
+        });
+        leftFact.connect("bind", (widget, item) => {
+          const varlabel = item.get_child();
+          const obj = item.get_item();
+          varlabel.set_label(obj.left);
+        });
+        const xtxtFact = new Gtk.SignalListItemFactory();
+        xtxtFact.connect("setup", (widget, item) => {
+          const xtxtlabel = new Gtk.Label();
+
+          item.set_child(xtxtlabel);
+        });
+        xtxtFact.connect("bind", (widget, item) => {
+          const xtxtlabel = item.get_child();
+          const obj = item.get_item();
+          xtxtlabel.set_label(obj.xtxt);
+        });
+        const xhtmlFact = new Gtk.SignalListItemFactory();
+        xhtmlFact.connect("setup", (widget, item) => {
+          const xhtmllabel = new Gtk.Label();
+
+          item.set_child(xhtmllabel);
+        });
+        xhtmlFact.connect("bind", (widget, item) => {
+          const xhtmllabel = item.get_child();
+          const obj = item.get_item();
+          xhtmllabel.set_label(obj.xhtml);
+        });
+        const rightFact = new Gtk.SignalListItemFactory();
+        rightFact.connect("setup", (widget, item) => {
+          const rightlabel = new Gtk.Label();
+
+          item.set_child(rightlabel);
+        });
+        rightFact.connect("bind", (widget, item) => {
+          const rightlabel = item.get_child();
+          const obj = item.get_item();
+          rightlabel.set_label('copy');
+        });
+
+        const varCol = new Gtk.ColumnViewColumn({
+          title: 'Variable',
+          factory: leftFact
+        });
+        const xtxtCol = new Gtk.ColumnViewColumn({
+          title: 'in Text',
+          factory: xtxtFact
+        });
+        const xhtmlCol = new Gtk.ColumnViewColumn({
+          title: 'in HTML',
+          factory: xhtmlFact
+        });
+        const rightCol = new Gtk.ColumnViewColumn({
+          title: '...',
+          factory: rightFact
+        });
+        lTreeView.append_column(varCol);
+        lTreeView.append_column(xtxtCol);
+        lTreeView.append_column(xhtmlCol);
+        lTreeView.append_column(rightCol);
+
+        myVars.forEach( v => {
+          const slug = `{{${v}}}`;
+          const txt = this.textBuffer.get_text(this.textBuffer.get_start_iter(), this.textBuffer.get_end_iter(), true);
+          const html = this.htmlBuffer.get_text(this.htmlBuffer.get_start_iter(), this.htmlBuffer.get_end_iter(), true);
+          const regex = new RegExp(slug, 'g')
+          const xtxt = (txt.match(regex) || []).length;
+          const xhtml = (html.match(regex) || []).length;
+          const row = new varRow(slug, xtxt.toString(), xhtml.toString(), slug);
+          listStore.append(row);
+        });
+
+        return lTreeView;
+        // this.variablesScroll.set_child(listStore);
       }
 
       _buildUI () {
@@ -240,20 +345,8 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.VariablesTabLabel = this.contentMain._VariablesTabLabel;
         this.mediaListBox = this.contentMain._mediaListBox;
         this.mediaScroll = this.contentMain._mediaScroll;
+        this.variablesScroll = this.contentMain._variablesScroll;
 
-        var linkRow = GObject.registerClass(
-          {
-            GTypeName: 'linkRow',
-          },
-          class linkRow extends GObject.Object {
-            _init(chk, info, imgstatus) {
-              super._init();
-              this.status = imgstatus;
-              this.chk = chk;
-              this.info = info;
-            }
-          }
-        );
 
         // drawing area test
 
@@ -317,9 +410,6 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           mytab.widget.set_halign(Gtk.Align.START);
           mytab.widget.set_valign(Gtk.Align.START);
         });
-
-
-
 
 
 

@@ -33,6 +33,8 @@
 
 .cRevealer {
     background-color: @theme_bg_color;
+    border-left: 1px solid black;
+    box-shadow: -5px 0px 2px @theme_bg_color;
 }
 
 .required {
@@ -40,15 +42,5 @@
     font-weight: bold;
 }
 
-notebook.verticalNotebook tab  {
-    margin-left: 0px;
-    margin-right: 0px;
-}
 
-notebook.verticalNotebook tab label  {
-  font-family: "Adwaita Sans";
-  font-size: 18px;
-  font-weight: 400;
-    /* transform: rotate(270deg); */
-}
 

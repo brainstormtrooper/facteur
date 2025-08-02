@@ -179,9 +179,7 @@
                 <property name="transition_type">crossfade</property>
                 <property name="halign">end</property>
 
-
-                <!-- sidebar notebook -->
-                <child>
+                <child><!-- sidebar notebook -->
                 <object class="GtkNotebook" id="contentSidebarNotebook">
                 <property name="tab_pos">right</property>
                 <property name="css-classes">verticalNotebook</property>
@@ -320,11 +318,12 @@
                     <property name="css-classes">AttachmentsTabLabel</property>
                   </object>
                 </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">Variables: Coming Soon</property>
+                <child><!-- Variables Page -->
+                  <object class="GtkScrolledWindow" id="variablesScroll">
+                    <property name="vexpand">true</property>
+                    <property name="hexpand">true</property>
                   </object>
-                </child>
+                </child><!-- /Variables Page -->
                 <child type="tab">
                   <object class="GtkDrawingArea" id="VariablesTabLabel">
                     <property name="css-classes">VariablesTabLabel</property>
@@ -333,8 +332,7 @@
 
 
                 </object>
-              </child>
-              <!-- /sidebar notebook -->
+              </child><!-- /sidebar notebook -->
 
               </object>
             </child>
