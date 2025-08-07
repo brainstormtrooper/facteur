@@ -1,7 +1,7 @@
 /**
 UI for displaying html message interface
 */
-const { GLib, Gtk, Gio, GtkSource, WebKit, GObject, Pango, PangoCairo } = imports.gi;
+const { GLib, Gtk, Gdk, Gio, GtkSource, WebKit, GObject, Pango, PangoCairo } = imports.gi;
 const Cairo = imports.cairo;
 const Gettext = imports.gettext;
 const myTemplate = imports.lib.template;
@@ -42,6 +42,23 @@ class contentMain extends Gtk.Box {
   }
 });
 
+/*
+Widget for the rows in the Variables Panel
+*/
+var varRow = GObject.registerClass(
+  {
+    GTypeName: 'varRow',
+  },
+  class varRow extends GObject.Object {
+    _init(left, xtxt, xhtml, right) {
+      super._init();
+      this.left = left;
+      this.xtxt = xtxt;
+      this.xhtml = xhtml;
+      this.right = right;
+    }
+  }
+);
 
 var UIcontents = GObject.registerClass( // eslint-disable-line
     {
@@ -63,6 +80,10 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.assetpath = '~/';
       }
 
+      /*
+      Updates the contents of the text and html source view widgets
+      with the contents of the appdata object
+      */
       _updateUI () {
         this.App = Gio.Application.get_default();
         let len = encodeURI(appData.get('HTML')).split(/%..|./).length - 1;
@@ -73,6 +94,11 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.saveButton.remove_css_class('suggested-action');
       }
 
+
+      /*
+      Updates the Content Panel Side Panel with the latest attachments, links,
+      and variables (function call)
+      */
       updateAttachments () {
         let widget = this.attachmentsListBox.get_first_child();
         while (widget && widget == this.attachmentsListBox.get_first_child()) {
@@ -89,9 +115,9 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         const imgLinks = Template.extractImages(appData.get('HTML'), this.assetpath);
 
         imgLinks.forEach((lob) => {
-          const imgbox = new Gtk.Box({orientation: 'vertical', spacing: 6});
-          const top = new Gtk.Box({orientation: 'horizontal', spacing: 6});
-          const bottom = new Gtk.Box({orientation: 'horizontal', spacing: 6});
+          const imgbox = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL, spacing: 6});
+          const top = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 6});
+          const bottom = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 6});
           const imgNameLabel = new Gtk.Label({label: myFile.nameFromPath(lob.link)});
           let fptxt;
           if (lob.fullpath) {
@@ -187,7 +213,7 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
           this.attachmentsListBox.append(aw);
         });
         currLinks.forEach(link => {
-          const linkRow = new Gtk.Box({orientation: 'horizontal', spacing: 6});
+          const linkRow = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 6});
           const linkText = new Gtk.Entry({text: link, editable: false});
           const linkDel = new Gtk.Button({ icon_name: 'edit-delete-symbolic'});
           linkDel.connect('clicked', () => {
@@ -203,6 +229,13 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.variablesScroll.set_child(myVarsList);
       }
 
+      /*
+      Given an html string, replaces cid slugs with the corresponding base64
+      content to display in a preview widget
+
+      @param {string} html
+      @returns {string}
+      */
       previewAttachments (html) {
         let myStr = html
         appData._data.ATTACHMENTS.forEach(ao => {
@@ -217,27 +250,67 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         return myStr;
       }
 
+
+      /*
+      Builds and updates the list of variables in the Content Side Panel
+
+      @returns {Widget}
+      */
       buildVarsList () {
-        var varRow = GObject.registerClass(
-          {
-            GTypeName: 'varRow',
-          },
-          class varRow extends GObject.Object {
-            _init(left, xtxt, xhtml, right) {
-              super._init();
-              this.left = left;
-              this.xtxt = xtxt;
-              this.xhtml = xhtml;
-              this.right = right;
-            }
-          }
-        );
+        const posHtml = myTemplate._positions(appData.get('HTML'));
+        const posTxt = myTemplate._positions(appData.get('TEXT'));
         const myVars = appData.get('VARS');
+        const vslugs = myVars.map(v => `{{${v}}}`);
+
+        const slugs = new Set([...posHtml, ...posTxt, ...vslugs]);
+
         const listStore = new Gio.ListStore(varRow);
-        const selection = new Gtk.MultiSelection();
+        const selection = new Gtk.SingleSelection();
         selection.set_model(listStore);
+        selection.set_autoselect(false);
+        selection.connect('selection-changed', (selection, position, n_items) => {
+          console.log(selection.get_selected_item().left);
+          console.log(position);
+          console.log(n_items);
+          let startIter = this.textBuffer.get_start_iter();
+          let startIterH = this.htmlBuffer.get_start_iter();
+          const endIter = this.textBuffer.get_end_iter();
+          const endIterH = this.htmlBuffer.get_end_iter();
+          let ti = 0;
+          let hi = 0;
+          this.textBuffer.remove_tag(this.highlightslugTag, startIter, endIter);
+          this.htmlBuffer.remove_tag(this.highlightslugTagHtml, startIterH, endIterH);
+          let searchString = selection.get_selected_item().left;
+          console.log('tagging text buffer');
+          while (ti < parseInt(selection.get_selected_item().xtxt)) {
+            let match = startIter.forward_search(
+                searchString,
+                0, // Gtk.TextSearchFlags.CASE_INSENSITIVE, // Or 0 for case-sensitive
+                null
+            );
+            if (!match) return;
+            let [b, matchStart, matchEnd] = match;
+            console.log([b, matchStart.get_offset(), matchEnd.get_offset()]);
+            this.textBuffer.apply_tag_by_name('highlightslug', matchStart, matchEnd);
+            startIter = matchEnd;
+            ti++;
+          }
+          console.log('tagging html buffer');
+          while (hi < parseInt(selection.get_selected_item().xhtml)) {
+            let match = startIterH.forward_search(
+                searchString,
+                0, // Gtk.TextSearchFlags.CASE_INSENSITIVE, // Or 0 for case-sensitive
+                null
+            );
+            if (!match) return;
+            let [b, matchStart, matchEnd] = match;
+            console.log([b, matchStart.get_offset(), matchEnd.get_offset()]);
+            this.htmlBuffer.apply_tag_by_name('highlightslugHTML', matchStart, matchEnd);
+            startIterH = matchEnd;
+            hi++;
+          }
+        });
         const lTreeView = new Gtk.ColumnView({model: selection});
-        // this.rScrolledWindow.set_child(this.rTreeView);
         lTreeView.set_model(selection);
 
         const leftFact = new Gtk.SignalListItemFactory();
@@ -275,14 +348,21 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         });
         const rightFact = new Gtk.SignalListItemFactory();
         rightFact.connect("setup", (widget, item) => {
-          const rightlabel = new Gtk.Label();
-
-          item.set_child(rightlabel);
+          const rightbutton = new Gtk.Button({ label: 'Copy' });
+          item.set_child(rightbutton);
         });
         rightFact.connect("bind", (widget, item) => {
-          const rightlabel = item.get_child();
+          const rightbutton = item.get_child();
           const obj = item.get_item();
-          rightlabel.set_label('copy');
+          rightbutton.connect('clicked', () => {
+            const display = Gdk.Display.get_default();
+            const cb = display.get_clipboard();
+            cb.set(obj.left);
+          });
+          if(!obj.right) {
+            rightbutton.set_label('Not Provided');
+            rightbutton.set_sensitive(false);
+          }
         });
 
         const varCol = new Gtk.ColumnViewColumn({
@@ -306,14 +386,14 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         lTreeView.append_column(xhtmlCol);
         lTreeView.append_column(rightCol);
 
-        myVars.forEach( v => {
-          const slug = `{{${v}}}`;
-          const txt = this.textBuffer.get_text(this.textBuffer.get_start_iter(), this.textBuffer.get_end_iter(), true);
-          const html = this.htmlBuffer.get_text(this.htmlBuffer.get_start_iter(), this.htmlBuffer.get_end_iter(), true);
-          const regex = new RegExp(slug, 'g')
+        slugs.forEach( slug => {
+          const txt = appData.get('TEXT');
+          const html = appData.get('HTML');
+          const regex = new RegExp(slug, 'g');
+          const declared = appData.get('VARS').includes(slug.replace('{{', '').replace('}}', ''));
           const xtxt = (txt.match(regex) || []).length;
           const xhtml = (html.match(regex) || []).length;
-          const row = new varRow(slug, xtxt.toString(), xhtml.toString(), slug);
+          const row = new varRow(slug, xtxt.toString(), xhtml.toString(), declared);
           listStore.append(row);
         });
 
@@ -347,6 +427,9 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
         this.mediaScroll = this.contentMain._mediaScroll;
         this.variablesScroll = this.contentMain._variablesScroll;
 
+        //
+        // vertical text for side panel tabs
+        //
 
         // drawing area test
 
@@ -415,11 +498,21 @@ var UIcontents = GObject.registerClass( // eslint-disable-line
 
 
         this.textBuffer = new Gtk.TextBuffer();
+        const [b, selected_bg] = this.textView.get_style_context().lookup_color('theme_selected_bg_color')
+        this.highlightslugTag = new Gtk.TextTag(
+            { "name": "highlightslug",
+            "background": selected_bg.to_string() }
+        );
+        this.highlightslugTagHtml = new Gtk.TextTag(
+            { "name": "highlightslugHTML",
+            "background": selected_bg.to_string() }
+        );
+        this.textBuffer.tag_table.add(this.highlightslugTag);
         const langManager = new GtkSource.LanguageManager();
         this.htmlBuffer = new GtkSource.Buffer(
           { language: langManager.get_language('html') },
         );
-
+        this.htmlBuffer.tag_table.add(this.highlightslugTagHtml);
         this.textView.set_buffer(this.textBuffer);
         this.htmlSourceView.set_buffer(this.htmlBuffer);
 

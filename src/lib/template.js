@@ -61,6 +61,9 @@ function iterRows (data) {
   return data.get('MAILINGS').length;
 }
 
+/*
+Returns an array of slugs (not unique)
+*/
 function _positions (template) {
   const re = /{{([a-zA-Z0-9_]+)}}/g;
   const positions = template.match(re)
